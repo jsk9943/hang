@@ -1,0 +1,173 @@
+<nav th:fragment="loginnav" class="navbar fixed-top hangnav">
+  <!--nav바 전체 : hang_01 -->
+
+
+
+  <div class="col-1"></div>
+  <!-- 검색창 시작-->
+  <div class="col-4 relative hangsearch">
+    <!--nav 검색창 : hang_02 -->
+    <form id="heritagename" method="post">
+      <input id="searchInput" type="text" class="form-control"
+        name="heritagename" placeholder="검색"
+        aria-label="Recipient's username"
+        aria-describedby="button-addon2" maxlength="50"> <a
+        id="searchButton" role="button"><img class="shabsolute"
+        src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+    </form>
+  </div>
+
+
+
+
+
+  <!-- 검색창 끝-->
+
+  <div class="col-1"></div>
+
+  <div class="col-2 nav nav-pills">
+    <form method="POST" action="/member/logout" style="width: 100%;" onsubmit="sessionStorageClear()">
+      <button type="submit" class="btn btn-primary buttonbackimg"
+        style="width: 100%; font-size: 0.8vw;">로그아웃</button>
+    </form>
+  </div>
+
+  <div class="col-1" style="margin-right: 3%;">
+    <!-- 어사이드 와 오른쪽 버튼 : hang_05  -->
+    <button class="navbar-toggler hangtoggler" type="button"
+      data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling"
+      aria-controls="offcanvasDarkNavbar">
+      <span class="navbar-toggler-icon hangtoggler-icon"></span>
+    </button>
+  </div>
+  <!-- 버튼끝 -->
+
+
+
+
+
+  <!-- 어사이드바 내부-->
+  <div class="offcanvas offcanvas-end bug1_1" data-bs-backdrop="false"
+    tabindex="-1" id="offcanvasScrolling"
+    aria-labelledby="offcanvasScrollingLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasScrollingLabel"></h5>
+      <button type="button" class="btn-close"
+        data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+
+    <div class="back color-3 offcanvas-body" style="overflow: hidden;">
+
+    <!-- 프로필 이미지 보여주기 및 등록 -->
+    <div style="width:100%; text-align: center;">
+      <div style="width:30%; display: inline-block;  position:relative;">
+        <img id="myImage" src="/img/user2.png" style="width:auto; height:auto; max-width: 100%; max-height:10vh;"><a type="button" id="profileOption">
+        <img src="/img/option.png" style="width:23%; position:absolute; bottom:0; right:0; "></a>
+      </div>
+    </div>
+      
+      
+
+      <div class="offcanvas-title userimpo" id="offcanvasScrollingLabel">
+        ( <span style="font-size: 0.8em;"
+          th:text="${#session.getAttribute('member').userid}"></span> )
+        <p>
+          <span th:text="${#session.getAttribute('member').username}"></span>님
+          환영합니다
+        </p>
+      </div>
+
+
+
+      <div class="row columns">
+
+        <form method="POST" action="/member/logout" onsubmit="sessionStorageClear()">
+          <button type="submit"
+            class="w-100 btn btn-lg btn-primary buttonbackimg logbtn">로그아웃</button>
+        </form>
+
+        <ul class="menu align-center expanded text-center SMN_effect-13"
+          style="font-family: 'moonhwa'; margin-top: 10px;">
+          <li style="margin: 20px;"><a href="" data-hover="회원정보/변경"
+            data-bs-toggle="modal" data-bs-target="#exampleModal"
+            id="usingProfile"><span>회원정보/변경</span></a></li>
+          <li style="margin: 20px;"><a type="button"
+            data-hover="나의 리뷰" id="myCommentButton"><span>나의
+                리뷰</span></a></li>
+          <li style="margin: 20px;"><a href="" data-hover="즐겨찾기"><span>즐겨찾기</span></a></li>
+        </ul>
+      </div>
+
+
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade usermodal" id="exampleModal" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="margin-top: 150px;">
+      <div class="modal-content edituserbar" style="width: 70%;">
+        <div class="modal-header">
+          <p class="modal-title fs-5" id="exampleModalLabel">회원정보/수정</p>
+        </div>
+        <div class="modal-body edituserbody">
+
+           <form>
+            <div style="font-size: 0.9em; padding: 5px;">email 변경</div>
+            <div class="form-floating mb-2">
+              <input type="email" class="form-control" id="updateEmail"
+                name="email" placeholder="name@example.com"
+                style="height: 40px;" required> <label
+                style="color: rgba(17, 17, 17, 0.39); font-size: 0.8em; line-height: 5px;"
+                for="updateEmail"> <span id="usingEmail"></span>
+              </label>
+            </div>
+
+            <div style="font-size: 0.9em; padding: 5px;">전화번호 변경</div>
+            <div class="form-floating  mb-2">
+              <input type="text" class="form-control" id="updatePhone"
+                name="userph" placeholder="010-1234-5678"
+                style="height: 40px;"> <label
+                style="color: rgba(17, 17, 17, 0.39); font-size: 0.8em; line-height: 5px;"
+                for="phone" class="form-label"> <span
+                id="usingPh"></span></label>
+            </div>
+            <hr role="tournament2">
+            <div style="font-size: 0.9em; padding: 5px;">Password
+              변경</div>
+            <div class="form-floating mb-2">
+              <input type="password" class="form-control"
+                id="updatePassword" name="userpw" placeholder="Password"
+                style="height: 40px;"> <label for="password"
+                style="color: rgba(17, 17, 17, 0.39); font-size: 0.8em; line-height: 5px;">Password</label>
+            </div>
+            <div id="pwMessage"style="font-size: 0.7em; padding: 5px;"></div>
+            <div class="form-floating mb-2">
+              <input type="password" class="form-control"
+                id="updateConfirmPassword" placeholder="Password 확인"
+                style="height: 40px;"> <label for="password2"
+                style="color: rgba(17, 17, 17, 0.39); font-size: 0.8em; line-height: 5px;">Password
+                확인</label>
+            </div>
+            <div style="float: right;">
+              <button type="button" id="updateConfirm"
+                class="btn btn-primary buttonbackimg"
+                data-bs-dismiss="modal">변경하기</button>
+              <button type="button" class="btn btn-secondary"
+                data-bs-dismiss="modal">취소</button>
+            </div>
+          </form>
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 회원정보 변경  나의 리뷰 모아보기  즐겨찾기 -->
+  <!-- 어사이드 끝-->
+
+
+</nav>

@@ -1,0 +1,93 @@
+<div th:fragment="register" class="container">
+  <main>
+    <div class="modal fade" id="regist" tabindex="-1"
+      aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content hanglogcont">
+          <div id="register"
+            class="row g-5 justify-content-md-center p-5">
+            <div class="col-md-5 col-lg-12">
+              <h2 class="mb-3">회원가입 신청서</h2>
+              <div id="essential" class="mb-3">
+                <span class="dp-1">*</span> 는 필수입력
+              </div>
+              <form class="needs-validation" novalidate method="post"
+                id="loginForm">
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label for="lastName" class="form-label">이름<span
+                      class="dp-1">*</span></label> 
+                      <input type="text"
+                      class="form-control" id="username" placeholder=""
+                      value="" required name="username"
+                      autocomplete="off">
+                  </div>
+                  <div class="col-12">
+                    <p style="float: left;">
+                      <label for="username" class="form-label">아이디<span
+                        class="dp-1">*</span></label>
+                    </p>
+                    <div id="id-message" style="float: right";></div>
+                    <div class="input-group has-validation">
+                      <input type="text" class="form-control"
+                        id="useridInput" placeholder="ID" required
+                        name="userid" autocomplete="off">
+                    </div>
+                  </div>
+                  <div class="form-group has-feedback col-12">
+                    <label for="password" class="form-label">
+                    비밀번호
+                    <span class="dp-1">*</span></label>
+                    <div class="input-group has-validation">
+                      <input type="password" class="form-control"
+                        id="userpw" placeholder="Password" required
+                        name="userpw" autocomplete="off">
+                    </div>
+                  </div>
+                  <div class="form-group has-feedback col-12">
+                    <p style="float: left;">
+                      <label for="passwordConfirm" class="form-label">
+                      비밀번호 확인<span class="dp-1">*</span>
+                      </label>
+                    </p>
+                    <div id="pw-message" style="float: right;"></div>
+                    <div class="input-group has-validation">
+                      <input type="password" class="form-control"
+                        id="userpw2" placeholder="Password Confirm"
+                        required name="userpw2" autocomplete="off">
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <label for="phone" class="form-label">연락처</label>
+                    <input type="text"
+                      class="form-control" id="phone"
+                      placeholder="010-1234-5678" required name="userph"
+                      autocomplete="off">
+                  </div>
+                  <div class="col-12">
+                    <label for="email" class="form-label">이메일</label> <input
+                      type="email" class="form-control" id="email"
+                      placeholder="example@google.com" name="email"
+                      autocomplete="off" required>
+                  </div>
+                </div>
+              </form>
+              <div class="mt-2 mx-auto text-wrap">
+                <div class="mt-2 mx-auto text-wrap">
+                  <button
+                    class="w-100 btn btn-secondary btn-lg mt-4 buttonbackimg"
+                    id="registerConfirm">가입</button>
+                  <button
+                    class="w-100 btn btn-secondary btn-lg mt-4 buttonbackimg"
+                    id="registerCancel" data-bs-dismiss="modal">취소</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </main>
+</div>
+<!--회원가입 끝 -->
+
+

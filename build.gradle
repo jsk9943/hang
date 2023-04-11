@@ -1,0 +1,43 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.10'
+	id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'com.ezen.hang'
+version = 'v1'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
+	implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.8'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.projectlombok:lombok:1.18.22'
+	testCompileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.1'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+	
+
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

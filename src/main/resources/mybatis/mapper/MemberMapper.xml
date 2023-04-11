@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="ezen.hang.heritage.domain.member.mapper.MemberMapper">
+
+	<!-- 로그인 -->
+	<select id="login" parameterType="Member" resultType="Member">
+		SELECT *
+		FROM MEMBER
+		WHERE userid = #{userid} AND userpw = #{userpw}
+	</select>
+
+	<!-- 회원가입 -->
+	<insert id="CreateMember" parameterType="Member">
+		INSERT INTO MEMBER
+		(userid, userpw, username, email, userph, regdate, imagefilename)
+		VALUES(#{userid},
+		#{userpw}, #{username}, #{email}, #{userph}, NOW(), '')
+	</insert>
+
+	<!-- 회원가입 아이디 체크 -->
+	<select id="checkUserId" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM MEMBER WHERE userId = #{userId}
+	</select>
+
+	<!-- 회원정보 수정 -->
+	<update id="update" parameterType="Member">
+		UPDATE MEMBER SET
+		<if test="email != null">email = #{email},</if>
+		<if test="userpw != null">userpw = #{userpw},</if>
+		<if test="userph != null">userph = #{userph}</if>
+		WHERE userid = #{userid}
+		AND (email IS NOT NULL OR userpw IS NOT NULL
+		OR userph IS NOT NULL)
+	</update>
+
+	<!-- 유저 아이디로 회원정보 가져오기(회원정보 변경시 사용) -->
+	<select id="usingProfile" parameterType="String"
+		resultType="Member">
+		SELECT USERID, USERPH ,EMAIL
+		FROM MEMBER
+		WHERE userid =
+		#{userid}
+	</select>
+
+	<!-- 프로필 사진 등록하기(이미지 테이블) -->
+	
+	<insert id="profileImgUpload" parameterType="map">
+	    INSERT INTO PROFILEIMAGE (USERID, IMAGEFILENAME, IMAGEFILE)
+	    VALUES (#{userid}, #{imagefilename}, #{imagefile})
+	</insert>
+	
+	<!-- 프로필 사진 등록하기(맴버 테이블) -->
+	<update id="profileImgMemberUpload" parameterType="map">
+		UPDATE MEMBER
+  		SET IMAGEFILENAME = #{imagefilename}
+ 		WHERE USERID = #{userid}
+	</update>
+	
+	<!-- 프로필 사진 가져오기 -->
+	<select id="profileImgLoading" parameterType="map" resultType="map">
+		SELECT USERID, IMAGEFILENAME, IMAGEFILE 
+		FROM PROFILEIMAGE
+		WHERE userid = #{userid} AND IMAGEFILENAME = #{imagefilename};
+	</select>
+</mapper>
+
+	
+	

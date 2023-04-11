@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="ezen.hang.heritage.domain.item.mapper.ItemMapper">
+	<select id="starRatingAvg" parameterType="CommentStarRate"
+		resultType="CommentStarRate">
+		SELECT STARPOINT , USERID , ccbaAsno
+		FROM RATE
+		WHERE ccbaAsno = #{ccbaAsno};
+	</select>
+	<insert id="starRatingCreate" parameterType="CommentStarRate" >
+		INSERT INTO RATE
+		(STARPOINT, USERID, ccbaAsno)
+		VALUES (#{starpoint}, #{userid}, #{ccbaAsno});
+	</insert>
+	<insert id="commentCreate" parameterType="CommentStarRate" >
+		INSERT INTO
+		HERITAGEREVIEW (userid, CCBAASNO, ccbaMnm1, COMMENT, COMMENTDATE)
+		VALUES (#{userid}, #{ccbaAsno}, #{ccbaMnm1}, #{comment}, NOW());
+	</insert>
+	<select id="commentStarRateLoad" parameterType="string" resultType="map">
+		SELECT  H.USERID, H.COMMENT, H.COMMENTDATE, R.STARPOINT
+		FROM HERITAGEREVIEW H
+		JOIN RATE R ON H.USERID  = R.USERID AND H.CCBAASNO = R.CCBAASNO 
+		WHERE H.CCBAASNO = #{ccbaAsno}
+		ORDER BY H.COMMENTDATE DESC;
+	</select>
+	<select id="userHeritageList" parameterType="String" resultType="CommentStarRate">
+		SELECT H.CCBAMNM1, H.CCBAASNO, H.COMMENT, H.COMMENTDATE, R.STARPOINT  
+		FROM HERITAGEREVIEW H
+		JOIN RATE R ON R.CCBAASNO = H.CCBAASNO AND  R.USERID = H.USERID 
+		WHERE H.USERID = #{userid}
+		ORDER BY H.COMMENTDATE DESC;
+	</select>
+	<delete id="deleteCommentStarRateMapper" parameterType="CommentStarRate">
+		DELETE R, H
+		FROM RATE R
+		JOIN HERITAGEREVIEW H ON R.CCBAASNO = H.CCBAASNO AND  R.USERID = H.USERID 
+		WHERE R.CCBAASNO = #{ccbaAsno} AND R.USERID = #{userid} ;
+	</delete>
+</mapper>

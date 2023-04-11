@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/index.css">
+  <title>문화 Hang의 길을 따라..</title>
+  <style>
+    .btn {
+      background-image: url("img/backimg.png");
+      opacity: 0.6;
+    }
+
+    .btn:hover {
+      opacity: 1;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="hangim">
+      <img src="img\hang.png" />
+    </div>
+
+
+
+    <div class="mbd" style="list-style: none;">
+      <ul>
+        <li><img src="img\img12.jpg"></li>
+        <li><img src="img\img2.jpg"></li>
+        <li><img src="img\img3.jpg"></li>
+        <li><img src="img\img4.jpg"></li>
+        <li><img src="img\img5.jpg"></li>
+        <li><img src="img\img6.jpg"></li>
+        <li><img src="img\img7.jpg"></li>
+        <li><img src="img\img8.jpg"></li>
+        <li><img src="img\img9.jpg"></li>
+        <li><img src="img\img10.jpg"></li>
+      </ul>
+      <div class="maintextt02">
+        <p>문화行의 길을 따라</p>
+        <p>문화재를 따라가는 여행</p>
+        <p>여기서 시작</p>
+        <p class="btnp">
+          <button type="button" class="btn" onclick="location.href='/main'">시 작 되 다</button>
+        </p>
+      </div>
+    </div>
+  </div>
+  <script>
+    setTimeout(function() {
+  document.querySelector(".hangim").classList.add("hide");
+}, 2000);
+setTimeout(function() {
+  document.querySelector(".maintextt02").style.opacity = 1;
+}, 3000);
+  </script>
+</body>
+
+</html>
