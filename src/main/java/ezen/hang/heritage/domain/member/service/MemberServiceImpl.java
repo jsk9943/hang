@@ -6,6 +6,7 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import ezen.hang.heritage.domain.member.dto.Member;
 import ezen.hang.heritage.domain.member.mapper.MemberMapper;
@@ -30,15 +32,14 @@ public class MemberServiceImpl implements MemberService {
 
 	// 회원가입
 	@Override
-	public String register(Member member) {
-		String result = null;
-		try {
-			memberMapper.CreateMember(member);
-			result = "true";
-		} catch (Exception e) {
-			result = "false";
-		}
-		return result;
+	public void register(String username, String userid, String userpw, String userph, String email) throws Exception {
+		Member member = new Member();
+		member.setUsername(username);
+		member.setUserid(userid);
+		member.setUserpw(userpw);
+		member.setUserph(userph);
+		member.setEmail(email);
+		memberMapper.CreateMember(member);
 	}
 
 	// 로그인
@@ -134,5 +135,30 @@ public class MemberServiceImpl implements MemberService {
 			}
 		}
 		return null;
+	}
+
+	// 북마크 생성
+	public void createBookmark(Map<String, Object> BookmarkData) throws Exception {
+		memberMapper.createBookmark(BookmarkData);
+	}
+
+	// 북마크 가져오기
+	@Override
+	public List<Map<String, Object>> getBookmarkList(String userid) {
+		return memberMapper.getBookmarkList(userid);
+	}
+
+	// 인포창에서 버튼을 통한 단일 문화재 북마크 삭제
+	@Override
+	public void infoDeleteBookmark(@RequestBody Map<String, Object> BookmarkData) throws Exception {
+		memberMapper.deleteBookmark(BookmarkData);
+	}
+
+	// 북마크 삭제 기능
+	@Override
+	public void deleteBookmark(List<Map<String, Object>> BookmarkList) throws Exception {
+		for (Map<String, Object> map : BookmarkList) {
+			memberMapper.deleteBookmark(map);
+		}
 	}
 }

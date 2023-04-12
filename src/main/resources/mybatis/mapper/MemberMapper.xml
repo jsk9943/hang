@@ -64,6 +64,26 @@
 		FROM PROFILEIMAGE
 		WHERE userid = #{userid} AND IMAGEFILENAME = #{imagefilename};
 	</select>
+	
+	<!--  북마르 생성 -->
+	<insert id="createBookmark" parameterType="map">
+		INSERT INTO BOOKMARK (USERID, CCBAKDCD, CCBAASNO, CCBACTCD , CCBAMNM1)
+		VALUES (#{userid}, #{ccbaKdcd}, #{ccbaAsno}, #{ccbaCtcd}, #{ccbaMnm1});
+	</insert>
+	
+	<!-- 북마크 불러오기 -->
+   <select id="getBookmarkList" parameterType="string" resultType="map">
+       SELECT USERID, CCBAASNO, CCBAMNM1, CCBAKDCD, CCBACTCD
+       FROM BOOKMARK
+       WHERE userid = #{userid}
+   </select>
+	
+	<!-- 북마크 삭제하기 -->
+   <delete id="deleteBookmark" parameterType="map">
+      DELETE
+      FROM BOOKMARK
+      WHERE USERID = #{userid} AND CCBAASNO = #{ccbaAsno};
+   </delete>
 </mapper>
 
 	

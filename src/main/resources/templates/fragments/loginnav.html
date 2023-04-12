@@ -5,7 +5,7 @@
 
   <div class="col-1"></div>
   <!-- 검색창 시작-->
-  <div class="col-4 relative hangsearch">
+  <div class="col-6 relative hangsearch">
     <!--nav 검색창 : hang_02 -->
     <form id="heritagename" method="post">
       <input id="searchInput" type="text" class="form-control"
@@ -26,10 +26,8 @@
   <div class="col-1"></div>
 
   <div class="col-2 nav nav-pills">
-    <form method="POST" action="/member/logout" style="width: 100%;" onsubmit="sessionStorageClear()">
-      <button type="submit" class="btn btn-primary buttonbackimg"
-        style="width: 100%; font-size: 0.8vw;">로그아웃</button>
-    </form>
+      <button class="btn btn-primary buttonbackimg logoutButton"
+        style="width: 100%; font-size: 0.8vw;" onclick="sessionStorageClear()">로그아웃</button>
   </div>
 
   <div class="col-1" style="margin-right: 3%;">
@@ -82,10 +80,7 @@
 
       <div class="row columns">
 
-        <form method="POST" action="/member/logout" onsubmit="sessionStorageClear()">
-          <button type="submit"
-            class="w-100 btn btn-lg btn-primary buttonbackimg logbtn">로그아웃</button>
-        </form>
+          <button class="w-50 mx-auto btn btn-lg btn-primary buttonbackimg logoutButton" onclick="sessionStorageClear()">로그아웃</button>
 
         <ul class="menu align-center expanded text-center SMN_effect-13"
           style="font-family: 'moonhwa'; margin-top: 10px;">
@@ -95,7 +90,7 @@
           <li style="margin: 20px;"><a type="button"
             data-hover="나의 리뷰" id="myCommentButton"><span>나의
                 리뷰</span></a></li>
-          <li style="margin: 20px;"><a href="" data-hover="즐겨찾기"><span>즐겨찾기</span></a></li>
+          <li style="margin: 20px;"><a type="button" id="bookMarkBtn" data-hover="즐겨찾기"><span>즐겨찾기</span></a></li>
         </ul>
       </div>
 

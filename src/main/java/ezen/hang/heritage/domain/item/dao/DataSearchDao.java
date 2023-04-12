@@ -44,7 +44,7 @@ public class DataSearchDao{
 	
 	
 	public List<Heritage> searchHeritage (){
-		String url = "http://www.cha.go.kr/cha/SearchKindOpenapiList.do?ccbaMnm1="+ccbaMnm1Value;
+		String url = "http://www.cha.go.kr/cha/SearchKindOpenapiList.do?ccbaMnm1="+ccbaMnm1Value+"&pageUnit=30";
 		List<Heritage> list = new ArrayList<>();
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();

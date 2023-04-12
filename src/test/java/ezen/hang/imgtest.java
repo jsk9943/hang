@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import ezen.hang.heritage.domain.item.dto.CommentStarRate;
-import ezen.hang.heritage.web.item.controller.ItemInputOutputController;
+import ezen.hang.heritage.web.item.controller.ItemController;
 import ezen.hang.heritage.web.member.controller.MemberController;
 
 

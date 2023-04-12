@@ -19,7 +19,7 @@ if (registerButton !== null) {
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded"
 			},
-			body: "userid=" + encodeURIComponent(userIdRealtimeData)
+			body: `userid=${userIdRealtimeData}`
 		})
 			.then(response => {
 				return response.json();

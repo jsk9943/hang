@@ -41,7 +41,7 @@ if (userUpdateConfirmButton !== null) {
 			userph: updatePhone
 		};
 		fetch('/member/update', {
-			method: 'POST',
+			method: 'PATCH',
 			headers: {
 				'Content-Type': "application/json"
 			},
@@ -49,6 +49,11 @@ if (userUpdateConfirmButton !== null) {
 		})
 			.then(response => {
 				return response.text();
+			})
+			.then(data => {
+				if(data === 'true'){
+					alert('회원정보가 수정되었습니다');
+				}
 			})
 			.catch(error => {
 				alret(`정보 업데이트 도중 오류가 발생했습니다\n관리자에게 문의해주세요\n${error}`);
@@ -85,10 +90,8 @@ function usingpwCheck() {
 	let usingPwRealtime = usingpw.value;
 	let usingPwRealtime2 = usingpw2.value;
 	let pwDiv = document.getElementById("pwMessage");
-	let pwSave = 0; // 초기값 설정
 	if (usingPwRealtime !== usingPwRealtime2 || usingPwRealtime.length < 6 || usingPwRealtime.length > 20 || usingPwRealtime2.length < 6 || usingPwRealtime2.length > 20) {
 		pwDiv.innerHTML = "<span style='padding-left:10px; color:red'>비밀번호가 같지 않거나 6자 이상, 20자 미만이어야 합니다</span>";
-		pwSave = 1;
 	} else {
 		pwDiv.innerHTML = "<span style='padding-left:10px; color:blue'>사용 가능한 비밀번호 입니다</span>";
 	}
@@ -103,7 +106,6 @@ if (usingpw !== null && usingpw2 !== null) {
 if (emailInput !== null) {
 	emailInput.addEventListener('input', function() {
 		let email = emailInput.value;
-
 		if (email === '' || email.includes('@')) {
 			submitButton.disabled = false;
 		} else {
@@ -121,7 +123,6 @@ if (passwordInput !== null && passwordConfirmInput !== null) {
 function validatePassword() {
 	let password = passwordInput.value;
 	let passwordConfirm = passwordConfirmInput.value;
-
 	if (password === '' || password === passwordConfirm && password.length >= 6 && password.length <= 20) {
 		submitButton.disabled = false;
 	} else {

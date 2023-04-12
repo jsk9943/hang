@@ -87,9 +87,10 @@ html, body {
     </ul>
     <!-- 문화재 검색결과 사이드바 -->
     <div class="sidebar scrollBarDesign">
-      <p
-        style="text-align: center; font-size: 2em; font-family: 'moonhwa'; margin: 10px 0px;">검색결과</p>
-      <div id="searchResult"></div>
+      <div style="text-align: center; "><p style="font-size: 2.5em; font-family: 'moonhwa'; margin: 10px 0px;">검색결과 </p><p id="searchCount" style="font-family: 'moonhwa'; font-size:1em; "></p></div>
+      <div id="searchResult">
+      <p style="margin-top:50%; color:rgb(171,17,126); font-weight:bold; text-align: center; font-size: 1.8em;">대기 중</p>
+      </div>
     </div>
   </div>
 
@@ -106,12 +107,14 @@ html, body {
   <div id="modalPoint"></div>
   <div id="modalPoint2"></div>
   <div id="modalPoint3"></div>
+  <div id="modalBookmark"></div>
   <script type="text/javascript" th:src="@{/js/views.js}"></script>
-  <script type="text/javascript" th:src="@{/js/login.js}"></script>
+  <script type="text/javascript" th:src="@{/js/Authentication.js}"></script>
   <script type="text/javascript" th:src="@{/js/register.js}"></script>
   <script type="text/javascript" th:src="@{/js/myreviews.js}"></script>
   <script type="text/javascript" th:src="@{/js/memberUpdate.js}"></script>
   <script type="text/javascript" th:src="@{/js/profileImg.js}"></script>
+  <script type="text/javascript" th:src="@{/js/bookMark.js}"></script>
   <script type="text/javascript">
 			// 지도 구현을 위한 기본 소스값
 			var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스

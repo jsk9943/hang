@@ -71,12 +71,11 @@ if (myCommentButton !== null) {
 		let editDeleteModal = bootstrap.Modal.getOrCreateInstance(editDeleteMyModal);
 		editDeleteModal.show();
 		// 테이블에 올릴 유저가 작성한 문화재 fetch 데이터 요청하기
-		fetch('/heritage/item/writer/heritage.list', {
-			method: "POST",
+		fetch(`/heritage/item?userid=${loginUserid}`, {
+			method: "GET",
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded"
-			},
-			body: "userid=" + encodeURIComponent(loginUserid)
+			}
 		})
 			.then(response => {
 				return response.json();
@@ -254,17 +253,19 @@ if (myCommentButton !== null) {
 				return;
 			}
 			var userCommentDeleteDataArray = [];
-			for (var k = 0; k < checkedCount; k++) {
-				let ccbaAsno = pageCheckboxs[k].value;
-				let userCommentDeleteData = {
-					"userid": loginUserid,
-					"ccbaAsno": ccbaAsno
+			for (var j = 0; j < pageCheckboxs.length; j++) {
+				if (pageCheckboxs[j].checked === true) {
+					let ccbaAsno = pageCheckboxs[j].value;
+					let userCommentDeleteData = {
+						"userid": loginUserid,
+						"ccbaAsno": ccbaAsno
+					}
+					userCommentDeleteDataArray.push(userCommentDeleteData);
 				}
-				userCommentDeleteDataArray.push(userCommentDeleteData);
 			}
 			// 코멘트 삭제 fetch
-			fetch('/heritage/item/writer/heritage.delete', {
-				method: 'POST',
+			fetch('/heritage/item/delete', {
+				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json'
 				},

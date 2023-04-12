@@ -1,40 +1,103 @@
- @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+@import
+	url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
 
-  .rate {
-    display: inline-block;
-    border: 0;
-    margin-right: 15px;
-  }
+.rate {
+	display: inline-block;
+	border: 0;
+	margin-right: 15px;
+}
 
-  .rate>input {
-    display: none;
-  }
+.rate>input {
+	display: none;
+}
 
-  .rate>label {
-    float: right;
-    color: #ddd;
-    font-size: 0.6em; /* 별 크기 0.6em으로 조정 */
-  }
+.rate>label {
+	float: right;
+	color: #ddd;
+	font-size: 0.6em; /* 별 크기 0.6em으로 조정 */
+}
 
-  .rate>label:before {
-    display: inline-block;
-    font-size: 1.2em; /* 별의 크기 */
-    padding: .1rem .1rem;
-    margin: 0;
-    cursor: pointer;
-    font-family: FontAwesome;
-    content: "\f005 ";
-  }
+.rate>label:before {
+	display: inline-block;
+	font-size: 1.2em; /* 별의 크기 */
+	padding: .1rem .1rem;
+	margin: 0;
+	cursor: pointer;
+	font-family: FontAwesome;
+	content: "\f005 ";
+}
 
-  .rate .half:before {
-    content: "\f089 ";
-    position: absolute;
-    padding-right: 0;
-  }
+.rate .half:before {
+	content: "\f089 ";
+	position: absolute;
+	padding-right: 0;
+}
 
-  .rate input:checked~label{
-    color: #f73c32 !important; /* 선택된 별 색깔 */
-  }
-  
-  
-  
+.rate input:checked ~label {
+	color: #f73c32 !important; /* 선택된 별 색깔 */
+}
+
+/* 북마크 */
+.heart-button {
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	outline: none;
+	padding: 0;
+}
+
+.heart-icon {
+	background-image: url("../img/nobookmark.png"); /* 하트 이미지 URL */
+	background-repeat: no-repeat;
+	background-position: center;
+	display: inline-block;
+	height: 25px;
+	width: 25px;
+	background-size: contain; /* 이미지 크기 조절 */
+}
+
+.heart-icon.liked {
+	background-image: url("../img/bookmark.png"); /* 눌렀을 때 하트 이미지 URL */
+	background-size: contain; /* 이미지 크기 조절 */
+}
+
+.form-check {
+	overflow: hidden;
+	height: 10%; /* 높이 조정 */
+	border-bottom: 1px solid rgba(0, 0, 0, 0.151);
+	margin-bottom: 10px;
+	width: 100%;
+	padding:10px 0px;
+	position: relative;
+}
+
+.form-check input[type="checkbox"] {
+	position:absolute;
+	top:25%;
+}
+
+.form-check>div {
+	overflow: hidden;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.form-check>div p.moonhwaName {
+	float: left;
+	margin: 0;
+	margin-right: 10px;
+	color: rgb(0, 0, 0);
+}
+
+.form-check>div button.gobtn {
+	float: right;
+	border: none;
+	background: rgb(180, 160, 235);
+	border-radius: 5px;
+	color: white;
+	font-size: 0.8em;
+	padding: 10px 20px;
+}

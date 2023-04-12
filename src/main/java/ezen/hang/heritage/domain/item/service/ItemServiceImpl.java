@@ -23,17 +23,16 @@ public class ItemServiceImpl implements ItemService {
 	@Autowired
 	private ItemMapper itemMapper;
 
+	// 문화재 검색
 	@Override
-	public List<Heritage> searchHeritageParsing(String heritagename) {
-		dsd.setCcbaMnm1Value(heritagename);
+	public List<Heritage> searchHeritageParsing(String keyword) {
+		dsd.setCcbaMnm1Value(keyword);
 		return dsd.searchHeritage();
 	}
 
+	// 문화재 상세검색
 	@Override
-	public Heritage detailSearchHeritageParsing(Map<String, Object> heritageData) {
-		String ccbaKdcd = heritageData.get("ccbaKdcd").toString();
-		String ccbaAsno = heritageData.get("ccbaAsno").toString();
-		String ccbaCtcd = heritageData.get("ccbaCtcd").toString();
+	public Heritage detailSearchHeritageParsing(String ccbaKdcd, String ccbaAsno, String ccbaCtcd) {
 		Heritage heritage = new Heritage();
 		dsd.setCcbaKdcd(ccbaKdcd);
 		dsd.setCcbaAsno(ccbaAsno);
@@ -91,8 +90,7 @@ public class ItemServiceImpl implements ItemService {
 
 	// 문화재에 등록한 코멘트 및 별점 리스트
 	@Override
-	public List<Map<String, Object>> loadCommentStarRate(Map<String, Object> outputData) {
-		String ccbaAsno = outputData.get("number").toString();
+	public List<Map<String, Object>> loadCommentStarRate(String ccbaAsno) {
 		return itemMapper.commentStarRateLoad(ccbaAsno);
 	}
 

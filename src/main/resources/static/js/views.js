@@ -1,13 +1,31 @@
 /**
  * 
  */
+let loginUseridViews = sessionStorage.getItem("userid"); // 로그인 아이디
 //검색 바
-let heritageSearchWindow = document.querySelector("#searchInput");
+let heritageSearch = document.querySelector("#searchInput");
 //검색 아이콘을 눌렀을 때
 document.querySelector("#searchButton").addEventListener("click", function(event) {
 	event.preventDefault();
-	if (heritageSearchWindow.value == null || heritageSearchWindow.value == '') {
+	keywordSearch();
+});
+
+// 엔터키를 쳤을 때
+document.querySelector("#searchInput").addEventListener("keydown", function(event) {
+	if (event.key === "Enter") {
+		event.preventDefault();
+		keywordSearch();
+	}
+});
+
+// 키워드 검색 유효성 검증
+function keywordSearch() {
+	let searchKeyword = heritageSearch.value;
+	if (searchKeyword == null || searchKeyword == '') {
 		alert('검색단어가 비어있습니다');
+		return;
+	} else if (searchKeyword.length < 2) {
+		alert('검색단어가 2글자 미만입니다');
 		return;
 	} else {
 		let menuicon = document.getElementById('menuicon');
@@ -16,57 +34,82 @@ document.querySelector("#searchButton").addEventListener("click", function(event
 			menuicon.checked = !menuicon.checked;
 		}
 	}
-});
-
-// 엔터키를 쳤을 때
-document.querySelector("#searchInput").addEventListener("keydown", function(event) {
-	if (event.key === "Enter") {
-		event.preventDefault();
-		if (heritageSearchWindow.value == null || heritageSearchWindow.value == '') {
-			alert('검색단어가 비어있습니다');
-			return;
-		} else {
-			const menuicon = document.getElementById('menuicon');
-
-			searchHeritage();
-			if (menuicon.checked == false) {
-				menuicon.checked = !menuicon.checked;
-			}
-
-		}
-	}
-});
+}
 
 // 검색결과 사이드바에 보여지게 하기
 function searchHeritage() {
 	let keyword = document.getElementById("searchInput").value;
-	fetch("/heritage/item/search", {
-		method: "POST",
+	fetch(`/heritage/item/search?keyword=${keyword}`, {
+		method: "GET",
 		headers: {
 			"Content-Type": "application/x-www-form-urlencoded"
-		},
-		body: "heritagename=" + encodeURIComponent(keyword)
+		}
 	})
 		.then(response => response.json())
 		.then(data => {
+			document.querySelector('#searchCount').innerHTML = `${keyword} (${data.length}건)`;
 			let html = '';
-			for (let i = 0; i < data.length; i++) {
-				let item = data[i];
+			if (data.length === 0) {
 				html += `
-        <div class="card">
-        <p class="card-header">${item.ccbaMnm1}(${item.ccbaMnm2})</p>
-        <p>종목 : ${item.ccmaName}</p>
-        <p>위치 : ${item.ccbaCtcdNm} ${item.ccbaAdmin}</p>
-        <a class="detail-link btn btn-primary" onclick="detailContent(event)" style="cursor: pointer;">
-				자세히보기
-				<input type="hidden" id="${item.ccbaKdcd}" name="ccbaKdcd" value="${item.ccbaKdcd}">
-				<input type="hidden" id="${item.ccbaAsno}" name="ccbaAsno" value="${item.ccbaAsno}">
-				<input type="hidden" id="${item.ccbaCtcd}" name="ccbaCtcd" value="${item.ccbaCtcd}">
-				<input type="hidden" id="${item.latitude}" name="latitude" value="${item.latitude}">
-				<input type="hidden" id="${item.longitude}" name="longitude" value="${item.longitude}">
-        </a>
-        </div>
-        `;
+				<div class="card">
+				<p class="card-header">검색결과가 없습니다</p>
+				</div>
+				`
+			} else {
+				for (let i = 0; i < data.length; i++) {
+					let item = data[i];
+					if (item.latitude === 0) { // 좌표값이 없을때
+						html += `
+					        <div class="card">
+					        <p class="card-header" style="font-family:'moonhwa';">${item.ccbaMnm1}<br>(${item.ccbaMnm2})</p>
+					        <p>종목 : ${item.ccmaName}</p>
+					        <p>위치 : ${item.ccbaCtcdNm} ${item.ccbaAdmin}</p>
+					        <p style="font-weight:bold; color:red; font-size:0.7em;">※ 해당 문화재는 위치정보가 확인되지 않아<br>ㅤ정상적으로 지도에 마커되지 않습니다</p>
+					        <a class="detail-link btn btn-primary" onclick="detailContent(event)" style="cursor: pointer;">
+									자세히보기
+									<input type="hidden" id="${item.ccbaKdcd}" name="ccbaKdcd" value="${item.ccbaKdcd}">
+									<input type="hidden" id="${item.ccbaAsno}" name="ccbaAsno" value="${item.ccbaAsno}">
+									<input type="hidden" id="${item.ccbaCtcd}" name="ccbaCtcd" value="${item.ccbaCtcd}">
+									<input type="hidden" id="${item.latitude}" name="latitude" value="${item.latitude}">
+									<input type="hidden" id="${item.longitude}" name="longitude" value="${item.longitude}">
+					        </a>
+					        </div>
+					        `;
+					} else if (item.ccbaMnm2 === null || item.ccbaMnm2 === '') { // 한자명이 없을 때
+						html += `
+					        <div class="card">
+					        <p class="card-header" style="font-family:'moonhwa';">${item.ccbaMnm1}</p>
+					        <p>종목 : ${item.ccmaName}</p>
+					        <p>위치 : ${item.ccbaCtcdNm} ${item.ccbaAdmin}</p>
+					        <p style="font-weight:bold; color:red; font-size:0.7em;">※ 해당 문화재는 위치정보가 확인되지 않아<br>ㅤ정상적으로 지도에 마커되지 않습니다</p>
+					        <a class="detail-link btn btn-primary" onclick="detailContent(event)" style="cursor: pointer;">
+									자세히보기
+									<input type="hidden" id="${item.ccbaKdcd}" name="ccbaKdcd" value="${item.ccbaKdcd}">
+									<input type="hidden" id="${item.ccbaAsno}" name="ccbaAsno" value="${item.ccbaAsno}">
+									<input type="hidden" id="${item.ccbaCtcd}" name="ccbaCtcd" value="${item.ccbaCtcd}">
+									<input type="hidden" id="${item.latitude}" name="latitude" value="${item.latitude}">
+									<input type="hidden" id="${item.longitude}" name="longitude" value="${item.longitude}">
+					        </a>
+					        </div>
+					        `;
+					} else { // 모두 정상일 때
+						html += `
+						        <div class="card">
+						        <p class="card-header" style="font-family:'moonhwa';">${item.ccbaMnm1}<br>(${item.ccbaMnm2})</p>
+						        <p>종목 : ${item.ccmaName}</p>
+						        <p>위치 : ${item.ccbaCtcdNm} ${item.ccbaAdmin}</p>
+						        <a class="detail-link btn btn-primary" onclick="detailContent(event)" style="cursor: pointer;">
+										자세히보기
+										<input type="hidden" id="${item.ccbaKdcd}" name="ccbaKdcd" value="${item.ccbaKdcd}">
+										<input type="hidden" id="${item.ccbaAsno}" name="ccbaAsno" value="${item.ccbaAsno}">
+										<input type="hidden" id="${item.ccbaCtcd}" name="ccbaCtcd" value="${item.ccbaCtcd}">
+										<input type="hidden" id="${item.latitude}" name="latitude" value="${item.latitude}">
+										<input type="hidden" id="${item.longitude}" name="longitude" value="${item.longitude}">
+						        </a>
+						        </div>
+						        `;
+					}
+				}
 			}
 			document.getElementById('searchResult').innerHTML = html;
 		})
@@ -81,8 +124,7 @@ var marker = new kakao.maps.Marker();
 var markerImage = new kakao.maps.MarkerImage('./img/ping.png', new kakao.maps.Size(25, 35));
 // 마커 이미지 변경
 marker.setImage(markerImage);
-var infowindow = new kakao.maps.InfoWindow({ zindex: 1 });
-var customOverlay = new kakao.maps.CustomOverlay();
+var infowindow = new kakao.maps.InfoWindow({ disableAutoPan: true });
 
 
 //자세히 보기 클릭 시 문화재에 대한 세부항목 전송 및 마커 지도에 찍기
@@ -91,21 +133,13 @@ function detailContent(event) {
 	let ccbaKdcd = event.target.querySelector('input[name="ccbaKdcd"]').value;
 	let ccbaAsno = event.target.querySelector('input[name="ccbaAsno"]').value;
 	let ccbaCtcd = event.target.querySelector('input[name="ccbaCtcd"]').value;
-	let detailData = {
-		ccbaKdcd: ccbaKdcd,
-		ccbaAsno: ccbaAsno,
-		ccbaCtcd: ccbaCtcd,
-	}
-	fetch('/heritage/item/search/detail', {
-		method: 'POST',
+	fetch(`/heritage/item/search/detail?ccbaKdcd=${ccbaKdcd}&ccbaAsno=${ccbaAsno}&ccbaCtcd=${ccbaCtcd}`, {
+		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json'
 		},
-		body: JSON.stringify(detailData)
 	})
-		.then(response => {
-			return response.json();
-		})
+		.then(response => response.json())
 		.then(data => {
 			let markerLongitude = Number(data.longitude);
 			let markerLatitude = Number(data.latitude);
@@ -140,12 +174,12 @@ function detailContent(event) {
 			//문화재 설명 컨텐츠 창
 			var content = `
           
-    <div class="bAddr"
-    style="overflow: hidden; width:400px; background-color:#f5f5f5; border:2px solid rgb(140, 145, 236); max-height:370px; padding:10px; z-index:9999;">
+    <div class="bAddr" style="overflow: hidden; width:400px; background-color:#f5f5f5; border:2px solid rgb(140, 145, 236); max-height:400px; padding:10px;">
     <div style="float:left; width: 100%; height:100%;">
       <div style="height:10%; width: 100%; font-size:1.2em; font-weight:800; margin-bottom:5px;">
-        ${data.ccbaMnm1} <button type="button" class="btn-close" onclick="markerClose()" style="float: right;"></button>
+        ${data.ccbaMnm1} <button type="button" class="btn-close infowindowClose" onclick="markerClose()" style="float: right;"></button>
         <p style="font-size:0.8em; font-weight: 800;">${data.ccmaName}</p>
+      </button></p>
       </div>
       <div style="font-size: 0.7em; color:gray; width:100%;">지번 주소 : <span id="address1"></span></div>
       <div style="font-size: 0.7em; color:gray; width:100%; margin-bottom:10px;">도로명 주소 : <span id="address2"></span></div>
@@ -155,7 +189,7 @@ function detailContent(event) {
         ${star}
       </div>
       <div class="scrollBarDesign" style="width:100%; max-height:140px; font-size:0.7em; overflow: auto; border:2px solid rgba(140, 145, 236, 0.5); padding: 1%; text-align: justify;">
-        ${itemContent.replace(/\. /g, ".<br><br>")}
+        ${data.content.replace(/\. /g, ".<br><br>")}
       </div>
       <div style="font-size: 1em; color:gray; text-align:center;">
       <a type="button" class="btn btn-outline-secondary" id="detailContentButton" style="font-family:'moonhwa'; font-size:0.9em; margin-top:10px; padding:5px 20px;">톺아보기</a>
@@ -183,6 +217,7 @@ function detailContent(event) {
 			geocoder.coord2Address(markerLongitude, markerLatitude, callback);
 
 			// 정보창 출력
+			infowindow.setZIndex(10001);
 			infowindow.setContent(content);
 			infowindow.open(map, marker);
 
@@ -197,13 +232,97 @@ function detailContent(event) {
 			};
 
 			// 로그인 시 보여지는 리뷰쓰기 버튼
-			let loginUserid = sessionStorage.getItem("userid");
-			if (loginUserid === null) {
+			if (loginUseridViews === null) {
 				document.querySelector('#buttonPlus').innerHTML = `<a type="button" class="btn btn-warning" style="font-family:'moonhwa'; font-size:0.9em; float: right;">로그인 후 리뷰쓰기</a>`;
 			} else {
-				document.querySelector('#buttonPlus').innerHTML = `<a type="button" class="btn btn-outline-success commentPopup reviewbackimg" data-bs-toggle="modal" data-bs-target="#commentPopupModal" style="font-family:'moonhwa'; font-size:0.9em; float: right; background-color: transparent;">리뷰쓰기 / 보기</a>`;
+				document.querySelector('#buttonPlus').innerHTML = `<a type="button" class="btn btn-outline-success commentPopup reviewbackimg" data-bs-toggle="modal" data-bs-target="#commentPopupModal" style="font-family:'moonhwa'; font-size:0.9em; float: right; background-color: transparent; margin-right:5px;">리뷰쓰기 / 보기</a>
+				<div style="float: right;"><button class="heart-button"><span class="heart-icon"></span></button></div>
+				`;
 			};
 
+			// 북마크 등록
+			var heartButton = document.querySelector('.heart-button'); // 실제 버튼
+			var heartIcon = document.querySelector('.heart-icon'); // 버튼 위 이미지
+			var infowindowCcbaKdcd = data.ccbaKdcd; // 인포윈도우 떠있는 문화재 지정종목번호
+			var infowindowCcbaAsno = data.ccbaAsno; // 인포윈도우 떠있는 문화재 고유번호
+			var infowindowCcbaCtcd = data.ccbaCtcd; // 인포윈도우 떠있는 문화재 시도번호
+			var infowindowCcbaMnm1 = data.ccbaMnm1; // 인포윈도우 떠있는 문화재 고유번호
+			if (heartButton !== null) {
+				fetch(`/member/bookmark?userid=${loginUseridViews}`, {
+					method: "GET",
+					headers: {
+						"Content-Type": "text/plain"
+					}
+				})
+					.then(response => response.json())
+					.then(data => {
+						for(var i = 0; i < data.length; i++){
+							if (data[i].CCBAASNO === infowindowCcbaAsno) {
+								heartIcon.classList.toggle('liked', true);
+							}
+						}
+					})
+					.catch(error => {
+						alert(`즐겨찾기 결과 로드 중 오류가 발생하였습니다\n관리자에게 문의해주세요\n${error}`);
+					})
+				heartButton.addEventListener('click', () => {
+					let myBookmarkAddButton = heartIcon.classList.toggle('liked');
+					if (myBookmarkAddButton === true) {
+						let bookmarkData = {
+							"userid": loginUseridViews,
+							"ccbaKdcd": infowindowCcbaKdcd,
+							"ccbaAsno": data.ccbaAsno,
+							"ccbaCtcd": infowindowCcbaCtcd,
+							"ccbaMnm1": data.ccbaMnm1
+						};
+						fetch('/member/bookmark/add', {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json"
+							},
+							body: JSON.stringify(bookmarkData)
+						})
+							.then(response => response.text())
+							.then(data => {
+								if (data === 'true') {
+									alert(`${infowindowCcbaMnm1}의\n즐겨찾기 등록되었습니다`);
+									document.querySelector('.infowindowClose').click();
+								}
+							})
+							.catch(error => {
+								alert(`즐겨찾기 등록이 실패하였습니다.\n관리자에게 문의해주세요\n${error}`);
+							})
+					} else if (myBookmarkAddButton === false) {
+						let bookmarkData = {
+							"userid": loginUseridViews,
+							"ccbaAsno": data.ccbaAsno,
+							"ccbaMnm1": data.ccbaMnm1
+						};
+						fetch('/member/bookmark/clear', {
+							method: "DELETE",
+							headers: {
+								"Content-Type": "application/json"
+							},
+							body: JSON.stringify(bookmarkData)
+						})
+							.then(response => {
+								return response.text();
+							})
+							.then(data => {
+								if (data === 'true') {
+									alert(`${infowindowCcbaMnm1}의\n즐겨찾기가 해제되었습니다`);
+									document.querySelector('#bookmarktoastCloseButton').click();
+									bookmarkModalCloseButton.click();
+								} else if (data === 'false') {
+									alert('실패!');
+								}
+							})
+							.catch(error => {
+								alert(`삭제 중 문제가 발생하였습니다\n관리자에게 문의해주세요\n${error}`);
+							})
+					}
+				});
+			}
 			// 세부내용 출력
 			var content2 = `
 				
@@ -216,7 +335,8 @@ function detailContent(event) {
       </div>
       <div class="modal-body">
         <p style="font-family: 'moonhwa';">문화재(국문) : ${data.ccbaMnm1}</p>
-        <p style="font-family: 'moonhwa';">문화재(한자) : ${data.ccmaName}</p>
+        <p style="font-family: 'moonhwa';">문화재(한자) : ${data.ccbaMnm2}</p>
+        <p style="font-family: 'moonhwa';">문화재종목 : ${data.ccmaName}</p>
         <p style="font-family: 'moonhwa';">시대 : ${data.ccceName}</p>
         <p style="font-family: 'moonhwa';">소유자 : ${data.ccbaPoss}</p>
         <p style="font-family: 'moonhwa';">분류 : ${data.gcodeName} ${data.scodeName}</p>
@@ -229,7 +349,7 @@ function detailContent(event) {
   
 `;
 
-
+			// 모달 초기화
 			if (document.querySelector('#modalDetail').childElementCount > 0) {
 				document.querySelector('#modalDetail').innerHTML = "";
 			}
@@ -242,9 +362,6 @@ function detailContent(event) {
 				let menuicon = document.getElementById('menuicon');
 				menuicon.checked = false;
 			});
-
-
-
 
 			// 코멘트 및 별점 등록 모달 창 붙이기
 			var commentContentModal = `
@@ -279,7 +396,7 @@ function detailContent(event) {
       </div>
       <hr>
       <div style="margin:0;">
-        <p style="font-weight: bold; font-size:1em; padding-left:10px; font-family:'moonhwa';">${loginUserid}님의 댓글 및 별점 남기기</p>
+        <p style="font-weight: bold; font-size:1em; padding-left:10px; font-family:'moonhwa';">${loginUseridViews}님의 댓글 및 별점 남기기</p>
       </div>
       <div class="modal-body">
         <div class="input-group input-group-sm mb-3">
@@ -314,7 +431,7 @@ function detailContent(event) {
 </div>
      
      `;
-			if (loginUserid !== null) {
+			if (loginUseridViews !== null) {
 				if (document.querySelector('#modalPoint').childElementCount > 0) {
 					document.querySelector('#modalPoint').innerHTML = "";
 				}
@@ -329,15 +446,11 @@ function detailContent(event) {
 					menuicon.checked = false;
 
 					// 문화재에 등록된 코멘트 가져오기
-					let commentFetchData = {
-						"number": data.ccbaAsno
-					};
-					fetch('/heritage/item/output', {
-						method: 'POST',
+					fetch(`/heritage/item/output?ccbaAsno=${data.ccbaAsno}`, {
+						method: 'GET',
 						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify(commentFetchData)
+							'Content-Type': 'application/x-www-form-urlencoded'
+						}
 					})
 						.then(response => {
 							return response.json();
@@ -350,7 +463,7 @@ function detailContent(event) {
 							var page = 1; //생성 시작할 페이지 번호
 							// 댓글 등록자와 로그인 사용자 일치여부 확인
 							for (var k = 0; k < data.length; k++) {
-								if (data[k].USERID === loginUserid) {
+								if (data[k].USERID === loginUseridViews) {
 									document.querySelector('#commentInputText').value = '이미 작성하였습니다';
 									document.querySelector('#commentInputText').disabled = true;
 									document.querySelector('#customRange2').disabled = true;
@@ -528,7 +641,7 @@ function detailContent(event) {
 								commentInputtype.value = '';
 								// 컨트롤러로 전송하는 fetch 작성
 								let commRateData = {
-									"userid": loginUserid,
+									"userid": loginUseridViews,
 									"number": heritageNumberData,
 									"name": heritageNameData,
 									"commentInputResult": commentInputResult,
@@ -577,5 +690,6 @@ function markerClose() {
 	marker.setMap(null);
 	infowindow.close();
 };
+
 
 

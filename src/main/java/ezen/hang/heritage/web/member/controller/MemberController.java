@@ -3,18 +3,18 @@ package ezen.hang.heritage.web.member.controller;
 import ezen.hang.heritage.domain.member.service.MemberService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import ezen.hang.heritage.domain.member.dto.Member;
 
-@Controller
+@RestController
 @RequestMapping("/member")
 public class MemberController {
 
@@ -24,16 +24,20 @@ public class MemberController {
 	// 회원가입
 	@PostMapping("/register")
 	@ResponseBody
-	public String registerMember(@RequestParam("username") String username, @RequestParam("userid") String userid,
-			@RequestParam("userpw") String userpw, @RequestParam("userph") String userph,
+	public String registerMember(
+			@RequestParam("username") String username,
+			@RequestParam("userid") String userid,
+			@RequestParam("userpw") String userpw,
+			@RequestParam("userph") String userph,
 			@RequestParam("email") String email) {
-		Member member = new Member();
-		member.setUsername(username);
-		member.setUserid(userid);
-		member.setUserpw(userpw);
-		member.setUserph(userph);
-		member.setEmail(email);
-		return memberService.register(member);
+		String result = null;
+		try {
+			memberService.register(username, userid, userpw, userph, email);
+			result = "true";
+		} catch (Exception e) {
+			result = "false";
+		}
+		return result;
 	}
 
 	// 회원가입 아이디 체크 컨트롤러
@@ -60,14 +64,14 @@ public class MemberController {
 	}
 
 	// 로그아웃
-	@PostMapping("/logout")
-	public String logout(HttpSession session) {
+	@GetMapping("/logout")
+	public void logout(HttpSession session) {
 		session.removeAttribute("member");
-		return "redirect:/main";
+		session.invalidate();
 	}
 
 	// 회원정보 수정
-	@PostMapping("/update")
+	@PatchMapping("/update")
 	@ResponseBody
 	public String updateMember(@RequestBody Map<String, Object> updateData) {
 		return memberService.updateMember(updateData);
@@ -90,13 +94,60 @@ public class MemberController {
 	// 프로필 사진 불러오기
 	@PostMapping("/profileimg/loading")
 	@ResponseBody
-	public ResponseEntity<byte[]> profileImgLoading(@RequestBody Map<String, Object> imgLoadingData) {
+	public ResponseEntity<byte[]> profileImgLoading(@RequestBody Map<String, Object> imgData) {
 		try {
-			return memberService.profileImgLoading(imgLoadingData);
+			return memberService.profileImgLoading(imgData);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
+	// 북마크 생성
+	@PostMapping("/bookmark/add")
+	@ResponseBody
+	public String createBookmark(@RequestBody Map<String, Object> BookmarkData) {
+		String result = null;
+		try {
+			memberService.createBookmark(BookmarkData);
+			result = "true";
+		} catch (Exception e) {
+			result = "false";
+		}
+		return result;
+	}
+
+	// 북마크 등록 리스트 가져오기
+	@GetMapping("/bookmark")
+	public List<Map<String, Object>> getBookmarkList(@RequestParam("userid") String userid) {
+		return memberService.getBookmarkList(userid);
+	}
+
+	// 인포창에서 버튼을 통한 단일 문화재 북마크 삭제
+	@DeleteMapping("/bookmark/clear")
+	@ResponseBody
+	public String infoDeleteBookmark(@RequestBody Map<String, Object> BookmarkList) {
+		String result = null;
+		try {
+			memberService.infoDeleteBookmark(BookmarkList);
+			result = "true";
+		} catch (Exception e) {
+			result = "false";
+		}
+		return result;
+	}
+
+	// 회원 즐겨찾기를 통한 북마크 삭제
+	@DeleteMapping("/bookmark/delete")
+	@ResponseBody
+	public String deleteBookmark(@RequestBody List<Map<String, Object>> BookmarkList) {
+		String result = null;
+		try {
+			memberService.deleteBookmark(BookmarkList);
+			result = "true";
+		} catch (Exception e) {
+			result = "false";
+		}
+		return result;
+	}
 }
