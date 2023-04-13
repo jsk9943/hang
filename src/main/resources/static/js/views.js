@@ -1,26 +1,33 @@
 /**
- * 
+ * 검색창을 통한 문화재 검색과 좌측 검색결과의 자세히보기를 통한 지도 마커 등록 및 세부내용 안내
  */
+import { heritageKeywordSearch, heritageKeywordSearchDetail, commentStaRateCreate, bookmarkAdd, bookmarkClear, bookmarkConfirmRegistration, heritageCommentList } from './fetch.js';
+
 let loginUseridViews = sessionStorage.getItem("userid"); // 로그인 아이디
-//검색 바
-let heritageSearch = document.querySelector("#searchInput");
+let heritageSearch = document.querySelector("#searchInput"); //검색창
 //검색 아이콘을 눌렀을 때
-document.querySelector("#searchButton").addEventListener("click", function(event) {
+document.querySelector("#searchButton").addEventListener("click", (event) => {
 	event.preventDefault();
-	keywordSearch();
+	keywordSearch(heritageSearch.value);
 });
 
 // 엔터키를 쳤을 때
-document.querySelector("#searchInput").addEventListener("keydown", function(event) {
+document.querySelector("#searchInput").addEventListener("keydown", (event) => {
 	if (event.key === "Enter") {
 		event.preventDefault();
-		keywordSearch();
+		keywordSearch(heritageSearch.value);
 	}
 });
 
+//지도에 찍을 마커 생성
+var marker = new kakao.maps.Marker();
+var markerImage = new kakao.maps.MarkerImage('./img/ping.png', new kakao.maps.Size(25, 35));
+// 마커 이미지 변경
+marker.setImage(markerImage);
+var infowindow = new kakao.maps.InfoWindow({ disableAutoPan: true });
+
 // 키워드 검색 유효성 검증
-function keywordSearch() {
-	let searchKeyword = heritageSearch.value;
+function keywordSearch(searchKeyword) {
 	if (searchKeyword == null || searchKeyword == '') {
 		alert('검색단어가 비어있습니다');
 		return;
@@ -29,7 +36,7 @@ function keywordSearch() {
 		return;
 	} else {
 		let menuicon = document.getElementById('menuicon');
-		searchHeritage();
+		searchHeritage(searchKeyword);
 		if (menuicon.checked == false) {
 			menuicon.checked = !menuicon.checked;
 		}
@@ -37,15 +44,9 @@ function keywordSearch() {
 }
 
 // 검색결과 사이드바에 보여지게 하기
-function searchHeritage() {
-	let keyword = document.getElementById("searchInput").value;
-	fetch(`/heritage/item/search?keyword=${keyword}`, {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/x-www-form-urlencoded"
-		}
-	})
-		.then(response => response.json())
+function searchHeritage(keyword) {
+	// 검색단어로 문화재 검색 기능
+	heritageKeywordSearch(keyword)
 		.then(data => {
 			document.querySelector('#searchCount').innerHTML = `${keyword} (${data.length}건)`;
 			let html = '';
@@ -65,7 +66,7 @@ function searchHeritage() {
 					        <p>종목 : ${item.ccmaName}</p>
 					        <p>위치 : ${item.ccbaCtcdNm} ${item.ccbaAdmin}</p>
 					        <p style="font-weight:bold; color:red; font-size:0.7em;">※ 해당 문화재는 위치정보가 확인되지 않아<br>ㅤ정상적으로 지도에 마커되지 않습니다</p>
-					        <a class="detail-link btn btn-primary" onclick="detailContent(event)" style="cursor: pointer;">
+					        <a class="detail-link btn btn-primary" style="cursor: pointer;">
 									자세히보기
 									<input type="hidden" id="${item.ccbaKdcd}" name="ccbaKdcd" value="${item.ccbaKdcd}">
 									<input type="hidden" id="${item.ccbaAsno}" name="ccbaAsno" value="${item.ccbaAsno}">
@@ -82,7 +83,7 @@ function searchHeritage() {
 					        <p>종목 : ${item.ccmaName}</p>
 					        <p>위치 : ${item.ccbaCtcdNm} ${item.ccbaAdmin}</p>
 					        <p style="font-weight:bold; color:red; font-size:0.7em;">※ 해당 문화재는 위치정보가 확인되지 않아<br>ㅤ정상적으로 지도에 마커되지 않습니다</p>
-					        <a class="detail-link btn btn-primary" onclick="detailContent(event)" style="cursor: pointer;">
+					        <a class="detail-link btn btn-primary" style="cursor: pointer;">
 									자세히보기
 									<input type="hidden" id="${item.ccbaKdcd}" name="ccbaKdcd" value="${item.ccbaKdcd}">
 									<input type="hidden" id="${item.ccbaAsno}" name="ccbaAsno" value="${item.ccbaAsno}">
@@ -98,7 +99,7 @@ function searchHeritage() {
 						        <p class="card-header" style="font-family:'moonhwa';">${item.ccbaMnm1}<br>(${item.ccbaMnm2})</p>
 						        <p>종목 : ${item.ccmaName}</p>
 						        <p>위치 : ${item.ccbaCtcdNm} ${item.ccbaAdmin}</p>
-						        <a class="detail-link btn btn-primary" onclick="detailContent(event)" style="cursor: pointer;">
+						        <a class="detail-link btn btn-primary" style="cursor: pointer;">
 										자세히보기
 										<input type="hidden" id="${item.ccbaKdcd}" name="ccbaKdcd" value="${item.ccbaKdcd}">
 										<input type="hidden" id="${item.ccbaAsno}" name="ccbaAsno" value="${item.ccbaAsno}">
@@ -112,20 +113,20 @@ function searchHeritage() {
 				}
 			}
 			document.getElementById('searchResult').innerHTML = html;
+			// 자세히 보기 버튼 클릭 시 
+			let detailbutton = document.querySelectorAll('.detail-link');
+			if (detailbutton !== null) {
+				detailbutton.forEach(button => {
+					button.addEventListener('click', (event) => {
+						detailContent(event);
+					});
+				});
+			}
 		})
 		.catch(error => {
 			alert(`관리자에게 문의해주세요\n${error}`);
 		});
 }
-
-
-//지도에 찍을 마커 생성
-var marker = new kakao.maps.Marker();
-var markerImage = new kakao.maps.MarkerImage('./img/ping.png', new kakao.maps.Size(25, 35));
-// 마커 이미지 변경
-marker.setImage(markerImage);
-var infowindow = new kakao.maps.InfoWindow({ disableAutoPan: true });
-
 
 //자세히 보기 클릭 시 문화재에 대한 세부항목 전송 및 마커 지도에 찍기
 function detailContent(event) {
@@ -133,13 +134,7 @@ function detailContent(event) {
 	let ccbaKdcd = event.target.querySelector('input[name="ccbaKdcd"]').value;
 	let ccbaAsno = event.target.querySelector('input[name="ccbaAsno"]').value;
 	let ccbaCtcd = event.target.querySelector('input[name="ccbaCtcd"]').value;
-	fetch(`/heritage/item/search/detail?ccbaKdcd=${ccbaKdcd}&ccbaAsno=${ccbaAsno}&ccbaCtcd=${ccbaCtcd}`, {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-	})
-		.then(response => response.json())
+	heritageKeywordSearchDetail(ccbaKdcd, ccbaAsno, ccbaCtcd)
 		.then(data => {
 			let markerLongitude = Number(data.longitude);
 			let markerLatitude = Number(data.latitude);
@@ -201,8 +196,8 @@ function detailContent(event) {
 			// 주소 받기
 			var geocoder = new kakao.maps.services.Geocoder();
 			var callback = function(result, status) {
-				var addressinfo1 = document.querySelector('#address1');
-				var addressinfo2 = document.querySelector('#address2');
+				var addressinfo1 = document.querySelector('#address1'); // 지번주소
+				var addressinfo2 = document.querySelector('#address2'); // 도로명주소
 				if (status === kakao.maps.services.Status.OK) {
 					if (result[0] && result[0].address && result[0].address.address_name) {
 						addressinfo1.innerHTML = result[0].address.address_name;
@@ -233,93 +228,44 @@ function detailContent(event) {
 
 			// 로그인 시 보여지는 리뷰쓰기 버튼
 			if (loginUseridViews === null) {
-				document.querySelector('#buttonPlus').innerHTML = `<a type="button" class="btn btn-warning" style="font-family:'moonhwa'; font-size:0.9em; float: right;">로그인 후 리뷰쓰기</a>`;
+				document.querySelector('#buttonPlus').innerHTML = `<a type="button" class="btn btn-warning loginplease" style="font-family:'moonhwa'; font-size:0.9em; float: right;">로그인 후 리뷰쓰기</a>`;
 			} else {
 				document.querySelector('#buttonPlus').innerHTML = `<a type="button" class="btn btn-outline-success commentPopup reviewbackimg" data-bs-toggle="modal" data-bs-target="#commentPopupModal" style="font-family:'moonhwa'; font-size:0.9em; float: right; background-color: transparent; margin-right:5px;">리뷰쓰기 / 보기</a>
 				<div style="float: right;"><button class="heart-button"><span class="heart-icon"></span></button></div>
 				`;
 			};
-
-			// 북마크 등록
-			var heartButton = document.querySelector('.heart-button'); // 실제 버튼
-			var heartIcon = document.querySelector('.heart-icon'); // 버튼 위 이미지
-			var infowindowCcbaKdcd = data.ccbaKdcd; // 인포윈도우 떠있는 문화재 지정종목번호
-			var infowindowCcbaAsno = data.ccbaAsno; // 인포윈도우 떠있는 문화재 고유번호
-			var infowindowCcbaCtcd = data.ccbaCtcd; // 인포윈도우 떠있는 문화재 시도번호
-			var infowindowCcbaMnm1 = data.ccbaMnm1; // 인포윈도우 떠있는 문화재 고유번호
-			if (heartButton !== null) {
-				fetch(`/member/bookmark?userid=${loginUseridViews}`, {
-					method: "GET",
-					headers: {
-						"Content-Type": "text/plain"
-					}
+			// 로그인 후 리뷰쓰기 버튼 클릭 시 로그인 창 나오기
+			let loginPleaseButton = document.querySelector('.loginplease');
+			if (loginPleaseButton !== null) {
+				document.querySelector('.loginplease').addEventListener('click', () => {
+					document.querySelector('.logbtn').click();
 				})
-					.then(response => response.json())
-					.then(data => {
-						for(var i = 0; i < data.length; i++){
-							if (data[i].CCBAASNO === infowindowCcbaAsno) {
-								heartIcon.classList.toggle('liked', true);
-							}
-						}
-					})
-					.catch(error => {
-						alert(`즐겨찾기 결과 로드 중 오류가 발생하였습니다\n관리자에게 문의해주세요\n${error}`);
-					})
-				heartButton.addEventListener('click', () => {
-					let myBookmarkAddButton = heartIcon.classList.toggle('liked');
+			}
+
+			// 북마크 등록하기 전 버튼이 존재하는지
+			if (document.querySelector('.heart-button') !== null) {
+				// 북마크 등록여부 확인(유저 아이디, 확인 할 문화재 ccbaAsno 번호)
+				bookmarkConfirmRegistration(loginUseridViews, data.ccbaAsno);
+				// 북마크 버튼이 클릭되면
+				document.querySelector('.heart-button').addEventListener('click', () => {
+					// 버튼 위 이미지
+					let myBookmarkAddButton = document.querySelector('.heart-icon').classList.toggle('liked');
 					if (myBookmarkAddButton === true) {
 						let bookmarkData = {
 							"userid": loginUseridViews,
-							"ccbaKdcd": infowindowCcbaKdcd,
+							"ccbaKdcd": data.ccbaKdcd,
 							"ccbaAsno": data.ccbaAsno,
-							"ccbaCtcd": infowindowCcbaCtcd,
+							"ccbaCtcd": data.ccbaCtcd,
 							"ccbaMnm1": data.ccbaMnm1
 						};
-						fetch('/member/bookmark/add', {
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json"
-							},
-							body: JSON.stringify(bookmarkData)
-						})
-							.then(response => response.text())
-							.then(data => {
-								if (data === 'true') {
-									alert(`${infowindowCcbaMnm1}의\n즐겨찾기 등록되었습니다`);
-									document.querySelector('.infowindowClose').click();
-								}
-							})
-							.catch(error => {
-								alert(`즐겨찾기 등록이 실패하였습니다.\n관리자에게 문의해주세요\n${error}`);
-							})
+						bookmarkAdd(bookmarkData);
 					} else if (myBookmarkAddButton === false) {
 						let bookmarkData = {
 							"userid": loginUseridViews,
 							"ccbaAsno": data.ccbaAsno,
 							"ccbaMnm1": data.ccbaMnm1
 						};
-						fetch('/member/bookmark/clear', {
-							method: "DELETE",
-							headers: {
-								"Content-Type": "application/json"
-							},
-							body: JSON.stringify(bookmarkData)
-						})
-							.then(response => {
-								return response.text();
-							})
-							.then(data => {
-								if (data === 'true') {
-									alert(`${infowindowCcbaMnm1}의\n즐겨찾기가 해제되었습니다`);
-									document.querySelector('#bookmarktoastCloseButton').click();
-									bookmarkModalCloseButton.click();
-								} else if (data === 'false') {
-									alert('실패!');
-								}
-							})
-							.catch(error => {
-								alert(`삭제 중 문제가 발생하였습니다\n관리자에게 문의해주세요\n${error}`);
-							})
+						bookmarkClear(bookmarkData);
 					}
 				});
 			}
@@ -333,7 +279,7 @@ function detailContent(event) {
         <h1 style="font-family: 'moonhwa'; " class="modal-title fs-5" id="detailcontentmodaltitle">톺아보기</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body scrollBarDesign">
         <p style="font-family: 'moonhwa';">문화재(국문) : ${data.ccbaMnm1}</p>
         <p style="font-family: 'moonhwa';">문화재(한자) : ${data.ccbaMnm2}</p>
         <p style="font-family: 'moonhwa';">문화재종목 : ${data.ccmaName}</p>
@@ -356,7 +302,7 @@ function detailContent(event) {
 			document.querySelector('#modalDetail').innerHTML += content2;
 			var myModalEl = document.querySelector('#detailcontentmodal');
 			// 톺아보기 버튼 클릭 시
-			document.querySelector('#detailContentButton').addEventListener('click', function() {
+			document.querySelector('#detailContentButton').addEventListener('click', () => {
 				var myModal = bootstrap.Modal.getOrCreateInstance(myModalEl);
 				myModal.show();
 				let menuicon = document.getElementById('menuicon');
@@ -439,22 +385,14 @@ function detailContent(event) {
 				var myModalEl2 = document.querySelector('#commentPopupModal');
 				// 리뷰쓰기 버튼 클릭 시 코멘트 입력 모달
 				let commentPopupButton = document.querySelector('.commentPopup');
-				commentPopupButton.addEventListener('click', function() {
+				commentPopupButton.addEventListener('click', () => {
 					var modal2 = bootstrap.Modal.getOrCreateInstance(myModalEl2);
 					modal2.show();
 					let menuicon = document.getElementById('menuicon');
 					menuicon.checked = false;
 
 					// 문화재에 등록된 코멘트 가져오기
-					fetch(`/heritage/item/output?ccbaAsno=${data.ccbaAsno}`, {
-						method: 'GET',
-						headers: {
-							'Content-Type': 'application/x-www-form-urlencoded'
-						}
-					})
-						.then(response => {
-							return response.json();
-						})
+					heritageCommentList(data.ccbaAsno)
 						.then(data => {
 							var tableList = []; // tableInsert 함수에서 for문을 돌면서 삽입 실시
 							var pageList = 10; // 한개의 페이지에 보여질 목록 개수
@@ -524,8 +462,7 @@ function detailContent(event) {
 									insertSTR = insertSTR + "<a class='page-link' href='javascript:void(0)' onclick = 'newPage(" + "-1" + ");'>";
 									insertSTR = insertSTR + "Previous";
 									insertSTR = insertSTR + "</a></li>";
-									document.getElementById("dyn_ul").innerHTML += insertSTR; // 동적으로 추가 실시      			
-
+									document.getElementById("dyn_ul").innerHTML += insertSTR; // 동적으로 추가 실시
 									// 특정 1, 2, 3 .. 페이지 추가 실시
 									var count = 1;
 									for (var i = startIndex; i <= pageCount; i++) {
@@ -612,7 +549,7 @@ function detailContent(event) {
 					var commentInputResult = "";
 					let commentInputtype = document.querySelector('#commentInputText');
 					if (commentInputtype !== null) {
-						commentInputtype.addEventListener('input', function() {
+						commentInputtype.addEventListener('input', () => {
 							commentInputResult = commentInputtype.value;
 						});
 					}
@@ -620,7 +557,7 @@ function detailContent(event) {
 					// 리뷰내용과 별점을 담아서 전송하는 버튼 실행 스크립트
 					let cspcb = document.querySelector('#commentStarpointConfirmButton');
 					if (commentInputtype !== null) {
-						cspcb.addEventListener("click", function(event) {
+						cspcb.addEventListener("click", (event) => {
 							event.preventDefault()
 							let heritageNumberData = document.querySelector('#heritageNumber').value // 문화재 번호
 							let heritageNameData = document.querySelector('#heritageName').value // 문화재 이름
@@ -634,12 +571,7 @@ function detailContent(event) {
 								alert('별점을 선택해주세요');
 								return;
 							} else {
-								commentStarRateConfirm();
-							}
-
-							function commentStarRateConfirm() {
 								commentInputtype.value = '';
-								// 컨트롤러로 전송하는 fetch 작성
 								let commRateData = {
 									"userid": loginUseridViews,
 									"number": heritageNumberData,
@@ -647,28 +579,8 @@ function detailContent(event) {
 									"commentInputResult": commentInputResult,
 									"starPointInputResult": starPointInputResult
 								};
-								starPointInputResult = 0;
-								fetch('/heritage/item/input', {
-									method: 'POST',
-									headers: {
-										'Content-Type': 'application/json'
-									},
-									body: JSON.stringify(commRateData)
-								})
-									.then(response => {
-										return response.text();
-									})
-									.then(data => {
-										if (data === 'true') {
-											alert('정상적으로 등록되었습니다');
-											markerClose();
-											document.querySelector('#commentStarpointCalcelButton').click();
-											menuicon.checked = !menuicon.checked;
-										}
-									})
-									.catch(error => {
-										alert(`코멘트 등록 중 문제가 발생하였습니다\n관리자에게 문의해주세요\n${error}`);
-									})
+								commentStaRateCreate(commRateData);
+								markerClose();
 							}
 						});
 					}
@@ -681,15 +593,13 @@ function detailContent(event) {
 }
 
 // 마커 클릭 시 마커 지워짐
-kakao.maps.event.addListener(marker, 'click', function() {
+kakao.maps.event.addListener(marker, 'click', () => {
 	// marker 지우기
 	markerClose();
 });
 
+// 마커 닫는 기능
 function markerClose() {
 	marker.setMap(null);
 	infowindow.close();
 };
-
-
-

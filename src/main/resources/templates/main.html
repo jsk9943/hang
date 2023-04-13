@@ -1,65 +1,34 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <script type="text/javascript"
   src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f51f22a3699fa4000697e5b37ae2ffe4&libraries=services,clusterer,drawing"></script>
-
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<link th:href="@{/css/main.css}" rel="stylesheet" />
-<link th:href="@{/css/star.css}" rel="stylesheet" />
-<link th:href="@{/css/map.css}" rel="stylesheet" />
 <link
   th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css}"
   rel="stylesheet"
   integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
   crossorigin="anonymous">
+<link th:href="@{/css/main.css}" rel="stylesheet" />
+<link th:href="@{/css/star.css}" rel="stylesheet" />
+<link th:href="@{/css/map.css}" rel="stylesheet" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script
   th:src="@{https://dapi.kakao.com/v2/maps/sdk.js(appkey=f51f22a3699fa4000697e5b37ae2ffe4)}"
   defer></script>
+<script type="module" th:src="@{/js/views.js}" defer></script>
+<script type="module" th:src="@{/js/register.js}" defer></script>
+<script type="module" th:src="@{/js/Authentication.js}" defer></script>
+<script type="module" th:src="@{/js/profileImg.js}" defer></script>
+<script type="module" th:src="@{/js/myreviews.js}" defer></script>
+<script type="module" th:src="@{/js/memberUpdate.js}"></script>
 <title>문화 Hang의 길을 따라..</title>
-<style>
-/*=================전체 디폴트=================  */
-* {
-	margin: 0;
-	padding: 0;
-}
-
-html, body {
-	width: 100%;
-	height: 100vh;
-}
-
-#map {
-	position: relative;
-	width: 100%;
-	height: 100%;
-}
-
-.buttonbackimg {
-	/*공용 버튼 색*/
-	background: rgb(98, 107, 233);
-	border: none;
-}
-
-.buttonbackimg:hover {
-	background-image: url("img/backimg.png");
-}
-
-.dp-1 {
-	color: rgb(98, 107, 233);
-}
-</style>
-<link th:href="@{/css/main.css}" rel="stylesheet" />
 </head>
-
 <body>
 
-  <!--##################### nav 시작 #######################-->
-
+  <!-- nav 시작 -->
   <div class="container">
     <div class="row" id="navPosition">
 
@@ -74,8 +43,7 @@ html, body {
     </div>
   </div>
 
-
-  <!-- #############nav 끝##################-->
+  <!-- nav 끝 -->
   <div style="z-index: 9999; position: relative;">
 
     <input type="checkbox" id="menuicon">
@@ -87,33 +55,40 @@ html, body {
     </ul>
     <!-- 문화재 검색결과 사이드바 -->
     <div class="sidebar scrollBarDesign">
-      <div style="text-align: center; "><p style="font-size: 2.5em; font-family: 'moonhwa'; margin: 10px 0px;">검색결과 </p><p id="searchCount" style="font-family: 'moonhwa'; font-size:1em; "></p></div>
+      <div style="text-align: center;">
+        <p
+          style="font-size: 2.5em; font-family: 'moonhwa'; margin: 10px 0px;">검색결과
+        </p>
+        <p id="searchCount"
+          style="font-family: 'moonhwa'; font-size: 1em;"></p>
+      </div>
       <div id="searchResult">
-      <p style="margin-top:50%; color:rgb(171,17,126); font-weight:bold; text-align: center; font-size: 1.8em;">대기 중</p>
+        <div style="text-align: center; border: none;">
+          <p
+            style="font-size: 1.8em; color: rgb(171, 17, 126); font-weight: bold; text-align: center; margin-top: 90%;">대기
+            중</p>
+          <img class="nugiimg" alt="" src="./img/nugi.png"
+            style="width: 100px; height: 100px;">
+        </div>
       </div>
     </div>
   </div>
 
-
-
-
-
   <div id="map"></div>
-
-
-
+  <!-- 지도 위치 -->
 
   <div id="modalDetail"></div>
+  <!-- 모달이 붙을 div -->
   <div id="modalPoint"></div>
+  <!-- 모달이 붙을 div -->
   <div id="modalPoint2"></div>
+  <!-- 모달이 붙을 div -->
   <div id="modalPoint3"></div>
+  <!-- 모달이 붙을 div -->
   <div id="modalBookmark"></div>
-  <script type="text/javascript" th:src="@{/js/views.js}"></script>
-  <script type="text/javascript" th:src="@{/js/Authentication.js}"></script>
-  <script type="text/javascript" th:src="@{/js/register.js}"></script>
-  <script type="text/javascript" th:src="@{/js/myreviews.js}"></script>
-  <script type="text/javascript" th:src="@{/js/memberUpdate.js}"></script>
-  <script type="text/javascript" th:src="@{/js/profileImg.js}"></script>
+  <!-- 모달이 붙을 div -->
+
+
   <script type="text/javascript" th:src="@{/js/bookMark.js}"></script>
   <script type="text/javascript">
 			// 지도 구현을 위한 기본 소스값
@@ -135,8 +110,7 @@ html, body {
 			var zoomControl = new kakao.maps.ZoomControl();
 			map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 		</script>
-    
-<!--   세션스토리지 클리어 -->
+  <!--  로그아웃 시 세션스토리지 클리어 -->
   <script th:inline="javascript">
 			function sessionStorageClear() {
 				sessionStorage.clear();
@@ -147,5 +121,4 @@ html, body {
     integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
     crossorigin="anonymous"></script>
 </body>
-
 </html>

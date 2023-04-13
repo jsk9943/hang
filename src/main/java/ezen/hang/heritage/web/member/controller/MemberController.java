@@ -110,7 +110,7 @@ public class MemberController {
 		String result = null;
 		try {
 			memberService.createBookmark(BookmarkData);
-			result = "true";
+			result = BookmarkData.get("ccbaMnm1").toString();
 		} catch (Exception e) {
 			result = "false";
 		}
@@ -130,7 +130,7 @@ public class MemberController {
 		String result = null;
 		try {
 			memberService.infoDeleteBookmark(BookmarkList);
-			result = "true";
+			result = BookmarkList.get("ccbaMnm1").toString();
 		} catch (Exception e) {
 			result = "false";
 		}

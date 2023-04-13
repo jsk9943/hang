@@ -1,6 +1,7 @@
 /**
  * 
  */
+import { profileImgLoad } from './fetch.js';
 let profileUserid = sessionStorage.getItem("userid");
 let profileImgname = sessionStorage.getItem("imagefilename");
 let rightMenuButton = document.querySelector('.hangtoggler'); // 오른쪽 사이드바 불러오는 네비버튼
@@ -45,7 +46,6 @@ var profileImgModalContent = `
 
 `;
 
-
 var modalPoint3 = document.querySelector('#modalPoint3'); // 모달이 붙을 main div
 var profileOptionButton = document.querySelector('#profileOption'); // 모달을 호출할 버튼(톱니바퀴)
 //모달 등록 후 진행
@@ -73,9 +73,8 @@ if (profileUserid !== null) {
 	}
 }
 
-
 // 사진 전송버튼 누르면 반응
-if(document.querySelector('#profileImgSend')){
+if (document.querySelector('#profileImgSend')) {
 	document.querySelector('#profileImgSend').addEventListener('click', () => {
 		// 선택한 파일의 정보를 받아오기
 		let files = document.getElementById('formFileMultiple').files;
@@ -115,14 +114,14 @@ if(document.querySelector('#profileImgSend')){
 								alert('등록에 실패하였습니다');
 							} else {
 								alert('정상적으로 등록되었습니다');
-								profileImgCloseButton.click();
-								rightMenuButton.click();
 								sessionStorage.setItem('imagefilename', data);
 								profileImgname = sessionStorage.getItem('imagefilename');
 								let profileLoadData = {
 									"userid": profileUserid,
 									"imagefilename": profileImgname
 								}
+								profileImgCloseButton.click();
+								rightMenuButton.click();
 								fetch('/member/profileimg/loading', {
 									method: "POST",
 									headers: {
@@ -153,34 +152,9 @@ if(document.querySelector('#profileImgSend')){
 	})
 }
 
-
-
 // 로그인 시 프로필 사진 로드
 if (profileImgname !== null) {
-	let profileLoadData = {
-		"userid": profileUserid,
-		"imagefilename": profileImgname
-	}
-	fetch('/member/profileimg/loading', {
-		method: "POST",
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(profileLoadData)
-	})
-		.then(response => {
-			return response.blob();
-		})
-		.then(blob => {
-			let imageFilenameResult = sessionStorage.getItem('imagefilename');
-			if (imageFilenameResult !== null && imageFilenameResult !== "") {
-				sessionStorage.setItem("profileImage", URL.createObjectURL(blob));
-			}
-		})
-		.catch(error => {
-			alert(`파일확인에 실패하였습니다\n관리자에게 문의해주세요\n${error}`);
-		})
-
+	profileImgLoad(profileUserid, profileImgname); // 프로필 이미지 불러오기
 	// 오른쪽 사이드 프로필 사진 불러오기
 	rightMenuButton.addEventListener('click', () => {
 		if (profileImgname !== null && profileImgname !== "") {
@@ -188,5 +162,3 @@ if (profileImgname !== null) {
 		}
 	})
 }
-
-

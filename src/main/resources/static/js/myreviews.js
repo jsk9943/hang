@@ -1,3 +1,7 @@
+/**
+ * 
+ */
+import { userReviewStarrate, removeUserReviews } from './fetch.js';
 // 로그인 되어있는 유저이름
 let loginUserid = sessionStorage.getItem("userid");
 var editDeleteContent = `
@@ -70,16 +74,7 @@ if (myCommentButton !== null) {
 	myCommentButton.addEventListener('click', function() {
 		let editDeleteModal = bootstrap.Modal.getOrCreateInstance(editDeleteMyModal);
 		editDeleteModal.show();
-		// 테이블에 올릴 유저가 작성한 문화재 fetch 데이터 요청하기
-		fetch(`/heritage/item?userid=${loginUserid}`, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/x-www-form-urlencoded"
-			}
-		})
-			.then(response => {
-				return response.json();
-			})
+		userReviewStarrate(loginUserid) // 유저가 작성한 리뷰와 별점 가져오기
 			.then(data => {
 				var editDeleteTableList = []; // tableInsert 함수에서 for문을 돌면서 삽입 실시
 				var editDeletePageList = 9999; // 한개의 페이지에 보여질 목록 개수
@@ -263,26 +258,7 @@ if (myCommentButton !== null) {
 					userCommentDeleteDataArray.push(userCommentDeleteData);
 				}
 			}
-			// 코멘트 삭제 fetch
-			fetch('/heritage/item/delete', {
-				method: 'DELETE',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(userCommentDeleteDataArray)
-			})
-				.then(response => {
-					return response.text();
-				})
-				.then(data => {
-					if (data === 'true') {
-						alert('정상적으로 삭제되었습니다');
-						document.querySelector('#toastCloseButton').click();
-					}
-				})
-				.catch(error => {
-					alert(`삭제 중 문제가 발생하였습니다\n관리자에게 문의해주세요\n${error}`);
-				})
+			removeUserReviews(userCommentDeleteDataArray); // 등록된 리뷰 및 별점 삭제
 		});
 	}
 }

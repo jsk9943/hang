@@ -1,28 +1,13 @@
 /**
  * 
  */
+import { userInfoUpdate, userInfoDataLoad } from './fetch.js';
 let userid = sessionStorage.getItem("userid");
 // 기존 회원정보 불러오기
 let usingProfileButton = document.querySelector('#usingProfile');
 if (usingProfileButton !== null) {
 	usingProfileButton.addEventListener('click', () => {
-		fetch('/member/usingprofile', {
-			method: 'POST',
-			headers: {
-				"Content-Type": "application/x-www-form-urlencoded"
-			},
-			body: "userid=" + encodeURIComponent(userid)
-		})
-			.then(response => {
-				return response.json();
-			})
-			.then(data => {
-				document.querySelector('#usingEmail').innerHTML = data.email;
-				document.querySelector('#usingPh').innerHTML = data.userph;
-			})
-		$('.usermodal').on('hidden.bs.modal', function(e) {
-			$(this).find('form')[0].reset();
-		})
+		userInfoDataLoad(userid); // 현재 유저 정보 불러오기
 	})
 }
 
@@ -30,103 +15,93 @@ if (usingProfileButton !== null) {
 let userUpdateConfirmButton = document.querySelector('#updateConfirm');
 if (userUpdateConfirmButton !== null) {
 	userUpdateConfirmButton.addEventListener('click', () => {
+		let updateUserid = sessionStorage.getItem('userid');
 		let updateEmail = document.querySelector('#updateEmail').value;
 		let updatePassword = document.querySelector('#updatePassword').value;
 		let updatePhone = document.querySelector('#updatePhone').value;
-		let updateUserid = sessionStorage.getItem('userid');
-		let fetchDate = {
-			userid: updateUserid,
-			email: updateEmail,
-			userpw: updatePassword,
-			userph: updatePhone
-		};
-		fetch('/member/update', {
-			method: 'PATCH',
-			headers: {
-				'Content-Type': "application/json"
-			},
-			body: JSON.stringify(fetchDate)
-		})
-			.then(response => {
-				return response.text();
-			})
-			.then(data => {
-				if(data === 'true'){
-					alert('회원정보가 수정되었습니다');
-				}
-			})
-			.catch(error => {
-				alret(`정보 업데이트 도중 오류가 발생했습니다\n관리자에게 문의해주세요\n${error}`);
-			})
+		userInfoUpdate(updateUserid, updateEmail, updatePassword, updatePhone); // 유저정보 업데이트
 	});
 }
-
-
 
 
 let emailInput = document.getElementById('updateEmail');
 let passwordInput = document.getElementById('updatePassword');
 let passwordConfirmInput = document.getElementById('updateConfirmPassword');
+let phoneInput = document.querySelector('#updatePhone');
 let submitButton = document.getElementById('updateConfirm');
 
-
-if (emailInput !== null) {
-	emailInput.addEventListener('input', function() {
-		const email = emailInput.value;
-
-		if (email === '' || email.includes('@')) {
-			submitButton.disabled = false;
-		} else {
-			submitButton.disabled = true;
-		}
-	});
+//변경하기 디폴트 버튼 평소에 닫혀있음
+if (submitButton !== null) {
+	submitButton.disabled = true;
 }
-// 비밀번호 확인 기능
-let usingpw = document.querySelector('#updatePassword');
-let usingpw2 = document.querySelector('#updateConfirmPassword');
 
-// 비밀번호 이용 가능 여부 확인
-function usingpwCheck() {
-	let usingPwRealtime = usingpw.value;
-	let usingPwRealtime2 = usingpw2.value;
-	let pwDiv = document.getElementById("pwMessage");
-	if (usingPwRealtime !== usingPwRealtime2 || usingPwRealtime.length < 6 || usingPwRealtime.length > 20 || usingPwRealtime2.length < 6 || usingPwRealtime2.length > 20) {
-		pwDiv.innerHTML = "<span style='padding-left:10px; color:red'>비밀번호가 같지 않거나 6자 이상, 20자 미만이어야 합니다</span>";
+
+function checkInputs() {
+	let email = emailInput.value.trim();
+	let password = passwordInput.value.trim();
+	let confirmPassword = passwordConfirmInput.value.trim();
+	let phone = phoneInput.value.trim();
+	//이메일 어노테이션 유효성검증
+	if (email !== '' && !email.includes('@')) {
+		submitButton.disabled = true;
+		return;
+	}
+	// 비밀번호 유효성검증 안내문구
+	function usingpwCheck() {
+		let usingPwRealtime = passwordInput.value;
+		let usingPwRealtime2 = passwordConfirmInput.value;
+		let pwDiv = document.getElementById("pwMessage");
+		if (usingPwRealtime !== usingPwRealtime2 || usingPwRealtime.length < 6 || usingPwRealtime.length > 20 || usingPwRealtime2.length < 6 || usingPwRealtime2.length > 20) {
+			pwDiv.innerHTML = "<span style='padding-left:10px; color:red'>비밀번호가 같지 않거나 6자 이상, 20자 미만이어야 합니다</span>";
+		} else {
+			pwDiv.innerHTML = "<span style='padding-left:10px; color:blue'>사용 가능한 비밀번호 입니다</span>";
+		}
+	}
+
+	// 이벤트 리스너 등록
+	if (passwordInput !== null && passwordConfirmInput !== null) {
+		passwordInput.addEventListener("keyup", usingpwCheck);
+		passwordConfirmInput.addEventListener("keyup", usingpwCheck);
+	}
+
+	//  비밀번호 유효성검증
+	if (password !== '' && (password.length < 6 || password.length > 20 || password !== confirmPassword)) {
+		submitButton.disabled = true;
+		return;
+	}
+	// 전화번호 번호만 가능 유효성 검증
+	if (phone !== '' && isNaN(phone)) {
+		submitButton.disabled = true;
+		return;
+	}
+	// 4개 모두 빈문자열이면 버튼을 막고 아니면 푼다
+	if (email === '' && password === '' && confirmPassword === '' && phone === '') {
+		submitButton.disabled = true;
 	} else {
-		pwDiv.innerHTML = "<span style='padding-left:10px; color:blue'>사용 가능한 비밀번호 입니다</span>";
+		submitButton.disabled = false;
 	}
 }
 
-// 이벤트 리스너 등록
-if (usingpw !== null && usingpw2 !== null) {
-	usingpw.addEventListener("keyup", usingpwCheck);
-	usingpw2.addEventListener("keyup", usingpwCheck);
-}
-
 if (emailInput !== null) {
-	emailInput.addEventListener('input', function() {
-		let email = emailInput.value;
-		if (email === '' || email.includes('@')) {
-			submitButton.disabled = false;
-		} else {
-			submitButton.disabled = true;
-		}
-	});
+	emailInput.addEventListener('input', checkInputs);
 }
 
 if (passwordInput !== null && passwordConfirmInput !== null) {
-	passwordInput.addEventListener('input', validatePassword);
-	passwordConfirmInput.addEventListener('input', validatePassword);
+	passwordInput.addEventListener('input', checkInputs);
+	passwordConfirmInput.addEventListener('input', checkInputs);
 }
 
-// 패스워드 실시간 오류 확인
-function validatePassword() {
-	let password = passwordInput.value;
-	let passwordConfirm = passwordConfirmInput.value;
-	if (password === '' || password === passwordConfirm && password.length >= 6 && password.length <= 20) {
-		submitButton.disabled = false;
-	} else {
-		submitButton.disabled = true;
-	}
+if (phoneInput !== null) {
+	phoneInput.addEventListener('input', checkInputs);
 }
+
+
+// 모달 끄면 초기화
+$('.usermodal').on('hidden.bs.modal', function(e) {
+	$(this).find('form')[0].reset();
+})
+
+
+
+
 

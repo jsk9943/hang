@@ -1,6 +1,6 @@
 <div th:fragment="register" class="container">
   <main>
-    <div class="modal fade" id="regist" tabindex="-1"
+    <div class="modal fade" id="regist" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
       aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content hanglogcont">
@@ -12,12 +12,11 @@
                 <span class="dp-1">*</span> 는 필수입력
               </div>
               <form class="needs-validation" novalidate method="post"
-                id="loginForm">
+                id="registerForm">
                 <div class="row g-3">
                   <div class="col-12">
                     <label for="lastName" class="form-label">이름<span
-                      class="dp-1">*</span></label> 
-                      <input type="text"
+                      class="dp-1">*</span></label> <input type="text"
                       class="form-control" id="username" placeholder=""
                       value="" required name="username"
                       autocomplete="off">
@@ -36,8 +35,8 @@
                   </div>
                   <div class="form-group has-feedback col-12">
                     <label for="password" class="form-label">
-                    비밀번호
-                    <span class="dp-1">*</span></label>
+                      비밀번호 <span class="dp-1">*</span>
+                    </label>
                     <div class="input-group has-validation">
                       <input type="password" class="form-control"
                         id="userpw" placeholder="Password" required
@@ -47,7 +46,7 @@
                   <div class="form-group has-feedback col-12">
                     <p style="float: left;">
                       <label for="passwordConfirm" class="form-label">
-                      비밀번호 확인<span class="dp-1">*</span>
+                        비밀번호 확인<span class="dp-1">*</span>
                       </label>
                     </p>
                     <div id="pw-message" style="float: right;"></div>
@@ -58,9 +57,8 @@
                     </div>
                   </div>
                   <div class="col-12">
-                    <label for="phone" class="form-label">연락처</label>
-                    <input type="text"
-                      class="form-control" id="phone"
+                    <label for="phone" class="form-label">연락처</label> <input
+                      type="text" class="form-control" id="phone"
                       placeholder="010-1234-5678" required name="userph"
                       autocomplete="off">
                   </div>
@@ -86,6 +84,7 @@
           </div>
         </div>
       </div>
+    </div>
   </main>
 </div>
 <!--회원가입 끝 -->

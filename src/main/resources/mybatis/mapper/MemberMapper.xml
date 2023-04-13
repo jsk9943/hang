@@ -76,6 +76,7 @@
        SELECT USERID, CCBAASNO, CCBAMNM1, CCBAKDCD, CCBACTCD
        FROM BOOKMARK
        WHERE userid = #{userid}
+       ORDER BY CCBAMNM1
    </select>
 	
 	<!-- 북마크 삭제하기 -->
