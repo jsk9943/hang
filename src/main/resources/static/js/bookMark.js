@@ -21,7 +21,7 @@ let bookMarkHtml = `
             
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-warning" id="bookmarkCheckboxAll">전체선택</button>
+            <button type="button" class="btn btn-warning" id="bookmarkCheckboxAll">전체선택 / 해제</button>
             <button type="button" class="btn btn-danger" id="bookmarkDelete">삭제</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="bookmarkModalClose">닫기</button>
             
@@ -113,8 +113,20 @@ if (bookMarkBtn !== null) {
 	if (bookmarkCheckboxAllButton !== null) {
 		bookmarkCheckboxAllButton.addEventListener('click', function() {
 			let pageCheckboxs = document.getElementsByClassName('bookmarkCheckBox');
+			let checkboxsCount = 0;
 			for (var i = 0; i < pageCheckboxs.length; i++) {
-				pageCheckboxs[i].checked = !pageCheckboxs[i].checked;
+				if (pageCheckboxs[i].checked === true) {
+					checkboxsCount++;
+				}
+			}
+			for (var i = 0; i < pageCheckboxs.length; i++) {
+				if (checkboxsCount < pageCheckboxs.length) {
+					if (pageCheckboxs[i].checked === false) {
+						pageCheckboxs[i].checked = !pageCheckboxs[i].checked;
+					}
+				} else {
+					pageCheckboxs[i].checked = false;
+				}
 			}
 		});
 	}

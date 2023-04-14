@@ -92,7 +92,7 @@ public class MemberController {
 	}
 
 	// 프로필 사진 불러오기
-	@PostMapping("/profileimg/loading")
+	@PostMapping("/profileimg")
 	@ResponseBody
 	public ResponseEntity<byte[]> profileImgLoading(@RequestBody Map<String, Object> imgData) {
 		try {
@@ -124,7 +124,7 @@ public class MemberController {
 	}
 
 	// 인포창에서 버튼을 통한 단일 문화재 북마크 삭제
-	@DeleteMapping("/bookmark/clear")
+	@DeleteMapping("/bookmark")
 	@ResponseBody
 	public String infoDeleteBookmark(@RequestBody Map<String, Object> BookmarkList) {
 		String result = null;

@@ -53,7 +53,7 @@ public class ItemController {
 	}
 	
 	// 유저의 코멘트 및 별점 삭제 컨트롤러
-	@DeleteMapping("/delete")
+	@DeleteMapping("/input")
 	@ResponseBody
 	public String deleteCommentStarRate(@RequestBody List<Map<String, Object>> deleteData) {
 		return itemService.deleteCommentStarRate(deleteData);

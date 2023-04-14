@@ -34,7 +34,7 @@ var editDeleteContent = `
          </nav>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-warning btn-sm" id="checkBoxAllcheckButton">전체선택</button>
+        <button type="button" class="btn btn-warning btn-sm" id="checkBoxAllcheckButton">전체선택 / 해제</button>
         <button type="button" class="btn btn-danger btn-sm" id="commentDeleteButton">삭제</button>
         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" id="editDeleteModalCloseButton">닫기</button>
         
@@ -227,8 +227,20 @@ if (myCommentButton !== null) {
 	if (allCheckboxButton !== null) {
 		allCheckboxButton.addEventListener('click', function() {
 			let pageCheckboxs = document.getElementsByClassName('checkAll');
+			let checkboxsCount = 0;
 			for (var i = 0; i < pageCheckboxs.length; i++) {
-				pageCheckboxs[i].checked = !pageCheckboxs[i].checked;
+				if (pageCheckboxs[i].checked === true) {
+					checkboxsCount++;
+				}
+			}
+			for (var i = 0; i < pageCheckboxs.length; i++) {
+				if (checkboxsCount < pageCheckboxs.length) {
+					if (pageCheckboxs[i].checked === false) {
+						pageCheckboxs[i].checked = !pageCheckboxs[i].checked;
+					}
+				} else {
+					pageCheckboxs[i].checked = false;
+				}
 			}
 		});
 	}

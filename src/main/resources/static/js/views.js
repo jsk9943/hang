@@ -18,13 +18,6 @@ document.querySelector("#searchInput").addEventListener("keydown", (event) => {
 	}
 });
 
-//지도에 찍을 마커 생성
-var marker = new kakao.maps.Marker();
-var markerImage = new kakao.maps.MarkerImage('./img/ping.png', new kakao.maps.Size(25, 35));
-// 마커 이미지 변경
-marker.setImage(markerImage);
-var infowindow = new kakao.maps.InfoWindow({ disableAutoPan: true });
-
 // 키워드 검색 유효성 검증
 function keywordSearch(searchKeyword) {
 	if (searchKeyword == null || searchKeyword == '') {

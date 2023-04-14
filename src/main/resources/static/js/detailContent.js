@@ -9,12 +9,12 @@ export function detailContentLoad(data) {
 	let moveLatLon; // 마커 이동할 좌표
 	if (markerLongitude === 0) {
 		moveLatLon = new kakao.maps.LatLng(37.559975, 126.975312);
-		var markerImage2 = new kakao.maps.MarkerImage('./img/koreaimg.png', new kakao.maps.Size(31, 35));
+		var markerImage2 = new kakao.maps.MarkerImage('./img/koreaimg.png', new kakao.maps.Size(35, 35));
 		// 마커 이미지 변경
 		marker.setImage(markerImage2);
 	} else {
 		moveLatLon = new kakao.maps.LatLng(markerLatitude, markerLongitude);
-		var markerImage = new kakao.maps.MarkerImage('./img/ping.png', new kakao.maps.Size(25, 35));
+		var markerImage = new kakao.maps.MarkerImage('./img/ping.gif', new kakao.maps.Size(35, 35));
 		marker.setImage(markerImage);
 	}
 	marker.setPosition(moveLatLon);
@@ -137,7 +137,7 @@ export function detailContentLoad(data) {
     <div class="modal-content" style="box-shadow: 1px 1px 5px rgb(98, 107, 233);">
       <div class="modal-header">
         <h1 style="font-family: 'moonhwa'; " class="modal-title fs-5" id="detailcontentmodaltitle">톺아보기</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close content2ModalClose" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <p style="font-family: 'moonhwa';">문화재(국문) : ${data.ccbaMnm1}</p>
@@ -165,9 +165,15 @@ export function detailContentLoad(data) {
 	document.querySelector('#detailContentButton').addEventListener('click', function() {
 		var myModal = bootstrap.Modal.getOrCreateInstance(myModalEl);
 		myModal.show();
-		let menuicon = document.getElementById('menuicon');
-		if (menuicon.checked == true) {
-			menuicon.click();
+		searchResultMenu();
+		let content2ModalCloseButton = document.querySelector('.content2ModalClose');
+		if (content2ModalCloseButton !== null) {
+			content2ModalCloseButton.addEventListener('click', () => {
+				let menuicon = document.getElementById('menuicon');
+				if (menuicon.checked == false) {
+					menuicon.click();
+				}
+			})
 		}
 	});
 
@@ -181,7 +187,7 @@ export function detailContentLoad(data) {
     <div class="modal-content" style="box-shadow: 1px 1px 5px rgb(98, 107, 233);">
       <div class="modal-header">
         <p class="modal-title fs-5" id="staticBackdropLabel" style="font-weight: bold; font-size:1.5em; font-family:'moonhwa';">${data.ccbaMnm1}의 리뷰 내역</p>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close commentCreateTopClose" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" style="max-height:70%;">
         <table class="table table-hover" style="font-size:0.8em; text-align: center;">
@@ -229,7 +235,7 @@ export function detailContentLoad(data) {
       </div>
       <div class="modal-footer">
         <button id="commentStarpointConfirmButton" class="btn btn-primary" style="width:20%;">등록</button>
-        <button id="commentStarpointCalcelButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="width:20%;">닫기</button>
+        <button id="commentStarpointCalcelButton" type="button" class="btn btn-secondary commentCreateClose" data-bs-dismiss="modal" style="width:20%;">닫기</button>
       	<input id="heritageNumber" type="hidden" value="${data.ccbaAsno}">
       	<input id="heritageName" type="hidden" value="${data.ccbaMnm1}">
       </div>
@@ -250,10 +256,7 @@ export function detailContentLoad(data) {
 		commentPopupButton.addEventListener('click', function() {
 			var modal2 = bootstrap.Modal.getOrCreateInstance(myModalEl2);
 			modal2.show();
-			let menuicon = document.getElementById('menuicon');
-			if (menuicon.checked == true) {
-				menuicon.click();
-			}
+			searchResultMenu();
 
 			// 문화재에 등록된 코멘트 가져오기
 			heritageCommentList(data.ccbaAsno)
@@ -400,7 +403,25 @@ export function detailContentLoad(data) {
 				.catch(error => {
 					alert(`관리자에게 문의해주세요\n${error}`);
 				})
-
+			// 별점 등록창 종료 시 검색결과 창 다시 보여주기
+			let commentCreateTopCloseButton = document.querySelector('.commentCreateTopClose');
+			if (commentCreateTopCloseButton !== null) {
+				commentCreateTopCloseButton.addEventListener('click', () => {
+					let menuicon = document.getElementById('menuicon');
+					if (menuicon.checked == false) {
+						menuicon.click();
+					}
+				})
+			}
+			let commentCreateCloseButton = document.querySelector('.commentCreateClose');
+			if (commentCreateCloseButton !== null) {
+				commentCreateCloseButton.addEventListener('click', () => {
+					let menuicon = document.getElementById('menuicon');
+					if (menuicon.checked == false) {
+						menuicon.click();
+					}
+				})
+			}
 			// 리뷰 쓰기 창에서 별점주기 점수 저장 스크립트
 			var starPointInputResult = 0;
 			let starPointInput = document.querySelector('#customRange2');
@@ -439,13 +460,29 @@ export function detailContentLoad(data) {
 						commentInputtype.value = '';
 						commentStaRateCreate(sessionStorage.getItem("userid"), heritageCcbaAsno, heritageCcbaMnm1, commentInputResult, starPointInputResult);
 						markerClose();
+						// 별점 등록창 종료 시 검색결과 창 다시 보여주기
+						commentCreateCloseButton.click();
+						commentCreateCloseButton.addEventListener('click', () => {
+							let menuicon = document.getElementById('menuicon');
+							if (menuicon.checked == false) {
+								menuicon.click();
+							}
+						})
 					}
 				});
 			}
 		});
 	}
+	// 지도 마커 삭제
 	function markerClose() {
 		marker.setMap(null);
 		infowindow.close();
+	}
+	// 검색결과 왼쪽 어사이드 불러오기
+	function searchResultMenu() {
+		let menuicon = document.getElementById('menuicon');
+		if (menuicon.checked == true) {
+			menuicon.click();
+		}
 	}
 }

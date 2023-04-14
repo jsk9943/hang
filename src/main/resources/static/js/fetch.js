@@ -48,8 +48,6 @@ export function commentStaRateCreate(userid, ccbaAsno, ccbaMnm1, comment, starpo
 		.then(data => {
 			if (data === 'true') {
 				alert('정상적으로 등록되었습니다');
-				document.querySelector('#commentStarpointCalcelButton').click();
-				document.getElementById('menuicon').checked = !document.getElementById('menuicon').checked;
 			}
 		})
 		.catch(error => {
@@ -105,7 +103,7 @@ export function bookmarkClear(userid, ccbaAsno, ccbaMnm1) {
 		"ccbaAsno": ccbaAsno,
 		"ccbaMnm1": ccbaMnm1
 	};
-	fetch('/member/bookmark/clear', {
+	fetch('/member/bookmark', {
 		method: "DELETE",
 		headers: {
 			"Content-Type": "application/json"
@@ -286,7 +284,7 @@ export function profileImgLoad(userid, imgFileName) {
 		"userid": userid,
 		"imagefilename": imgFileName
 	}
-	fetch('/member/profileimg/loading', {
+	fetch('/member/profileimg', {
 		method: "POST",
 		headers: {
 			'Content-Type': 'application/json'
@@ -325,7 +323,7 @@ export function userReviewStarrate(userid) {
 
 // 리뷰 및 별점 삭제 fetch (입력 Data는 [{}](json) 구조로 가능)
 export function removeUserReviews(Data) {
-	fetch('/heritage/item/delete', {
+	fetch('/heritage/item/input', {
 		method: 'DELETE',
 		headers: {
 			'Content-Type': 'application/json'
