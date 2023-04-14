@@ -68,10 +68,10 @@ public class ItemServiceImpl implements ItemService {
 	public String createCommentStarRate(Map<String, Object> inputData) {
 		String result = null;
 		String userid = inputData.get("userid").toString();
-		String ccbaAsno = inputData.get("number").toString();
-		String ccbaMnm1 = inputData.get("name").toString();
-		String comment = inputData.get("commentInputResult").toString();
-		int starpoint = Integer.parseInt(inputData.get("starPointInputResult").toString());
+		String ccbaAsno = inputData.get("ccbaAsno").toString();
+		String ccbaMnm1 = inputData.get("ccbaMnm1").toString();
+		String comment = inputData.get("comment").toString();
+		int starpoint = Integer.parseInt(inputData.get("starpoint").toString());
 		try {
 			CommentStarRate commentStarRate = new CommentStarRate();
 			commentStarRate.setUserid(userid);

@@ -73,15 +73,17 @@
 
 .form-check input[type="checkbox"] {
 	position:absolute;
-	top:25%;
+	top:38%;
+	width:10%;
 }
 
 .form-check>div {
 	overflow: hidden;
 	align-items: center;
 	justify-content: space-between;
-	width: 100%;
+	width: 90%;
 	display: flex;
+	float:right;
 	align-items: center;
 }
 

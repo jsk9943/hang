@@ -286,33 +286,30 @@ hr[role="tournament2"]::before {
 
 
 
-
-input[id="menuicon"] {
-	display: none;
-}
-
 input[id="menuicon"]+ul {
 	display: block;
 	position: fixed;
-	left: -32px;
-	top: 50%;
+	padding:0px;
+	left: 0px;
+	top: 20px;
 	transform: translateY(-50%);
 	transition: all .35s;
 	text-align: right;
+	z-index:5;
+   box-shadow: 1px 1px 5px rgb(98, 107, 233);
 }
 
 input[id="menuicon"]+ul>li {
 	display: block;
-	width: 50px;
-	height: 50px;
+	width: 40px;
+	height: 40px;
 	position: relative;
-	margin-top: -1px;
 }
 
 input[id="menuicon"]+ul>li>a {
 	display: block;
 	width: auto;
-	height: 50px;
+	height: 40px;
 	overflow: hidden;
 	transition: all .35s;
 }
@@ -321,7 +318,7 @@ input[id="menuicon"]+ul>li>label {
 	display: block;
 	cursor: pointer;
 	width: auto;
-	height: 50px;
+	height: 40px;
 	background: rgb(135, 119, 236);
 }
 
@@ -354,8 +351,8 @@ input[id="menuicon"]+ul>li:nth-child(1) label span:nth-child(3) {
 }
 
 input[id="menuicon"]:checked+ul {
-	z-index: 2;
-	left: 318px;
+	z-index: 5;
+	left: 305px;
 }
 
 input[id="menuicon"]:checked+ul>li:nth-child(1) label {
@@ -391,12 +388,7 @@ input[id="menuicon"]:checked+ul>li:nth-child(1) label span:nth-child(3)
 	left: -350px;
 	z-index: 1;
 	transition: all .35s;
-	border-right: 4px solid rgb(140, 145, 236);
 	overflow: auto;
-}
-
-input[id="menuicon"]:checked+ul+div {
-	left: 0;
 }
 
 
@@ -504,4 +496,39 @@ input[id="menuicon"]:checked+ul+div {
   100% {
     transform: rotate(360deg) translateY(0px);
   }
+}
+
+
+
+/*==========모바일 nav=========*/
+@media only screen and (max-width: 480px) {
+	@font-face {
+	   font-family: 'moonhwa';
+	   src: url('font/moonhwa-bold.woff') format('truetype');
+	}
+	
+	.hangnav {
+	   /*nav바 전체 : hang_01 */
+	   z-index: 9999;
+	   background-color: rgb(223, 228, 239);
+	   border-bottom: 4px solid rgb(140, 145, 236);
+	   width: 100%;
+	   margin: 0 auto;
+	   border-radius: 0px 0px 30px 30px;
+	   font-family: 'moonhwa';
+	}
+	
+	.navbutton{
+	   font-size:0.4em ;
+	   padding: 15px;
+	}
+}
+
+/*=============================*/
+
+
+
+
+.form-switch > input {
+	margin:0 auto;
 }

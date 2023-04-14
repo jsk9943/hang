@@ -7,8 +7,8 @@ let loginUserid = sessionStorage.getItem("userid");
 var editDeleteContent = `
 
 <div class="modal fade" id="editDeleteModal" tabindex="-1" aria-labelledby="editDeleteModalLabel" aria-hidden="true" style="z-index:10000; ">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg">
-    <div class="modal-content">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+    <div class="modal-content" style="box-shadow: 1px 1px 5px rgb(98, 107, 233); background-color: #f5f5f5;">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="editDeleteModalLabel" style="font-weight: bold;">${loginUserid}님의 댓글 및 별점 관리</h1>
       </div>

@@ -23,8 +23,7 @@ if (userUpdateConfirmButton !== null) {
 	});
 }
 
-
-let emailInput = document.getElementById('updateEmail');
+let emailInput = document.getElementById('updateEmail'); // 네브바 내에 이메일입력창
 let passwordInput = document.getElementById('updatePassword');
 let passwordConfirmInput = document.getElementById('updateConfirmPassword');
 let phoneInput = document.querySelector('#updatePhone');
@@ -35,6 +34,19 @@ if (submitButton !== null) {
 	submitButton.disabled = true;
 }
 
+
+if (emailInput !== null) {
+	emailInput.addEventListener('input', checkInputs);
+}
+
+if (passwordInput !== null && passwordConfirmInput !== null) {
+	passwordInput.addEventListener('input', checkInputs);
+	passwordConfirmInput.addEventListener('input', checkInputs);
+}
+
+if (phoneInput !== null) {
+	phoneInput.addEventListener('input', checkInputs);
+}
 
 function checkInputs() {
 	let email = emailInput.value.trim();
@@ -82,26 +94,8 @@ function checkInputs() {
 	}
 }
 
-if (emailInput !== null) {
-	emailInput.addEventListener('input', checkInputs);
-}
-
-if (passwordInput !== null && passwordConfirmInput !== null) {
-	passwordInput.addEventListener('input', checkInputs);
-	passwordConfirmInput.addEventListener('input', checkInputs);
-}
-
-if (phoneInput !== null) {
-	phoneInput.addEventListener('input', checkInputs);
-}
-
 
 // 모달 끄면 초기화
 $('.usermodal').on('hidden.bs.modal', function(e) {
 	$(this).find('form')[0].reset();
 })
-
-
-
-
-

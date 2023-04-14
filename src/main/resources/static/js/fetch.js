@@ -27,7 +27,14 @@ export function heritageKeywordSearchDetail(ccbaKdcd, ccbaAsno, ccbaCtcd) {
 }
 
 // 코멘트 및 별점 등록 fetch
-export function commentStaRateCreate(Data) {
+export function commentStaRateCreate(userid, ccbaAsno, ccbaMnm1, comment, starpoint) {
+	let Data = {
+		"userid": userid,
+		"ccbaAsno": ccbaAsno,
+		"ccbaMnm1": ccbaMnm1,
+		"comment": comment,
+		"starpoint": starpoint
+	};
 	fetch('/heritage/item/input', {
 		method: 'POST',
 		headers: {
@@ -66,7 +73,14 @@ export function heritageCommentList(ccbaAsno) {
 
 
 // 북마크 추가하는 fetch
-export function bookmarkAdd(Data) {
+export function bookmarkAdd(userid, ccbaKdcd, ccbaAsno, ccbaCtcd, ccbaMnm1) {
+	let Data = {
+		"userid": userid,
+		"ccbaKdcd": ccbaKdcd,
+		"ccbaAsno": ccbaAsno,
+		"ccbaCtcd": ccbaCtcd,
+		"ccbaMnm1": ccbaMnm1
+	};
 	fetch('/member/bookmark/add', {
 		method: "POST",
 		headers: {
@@ -83,8 +97,14 @@ export function bookmarkAdd(Data) {
 		})
 }
 
+
 // 북마크 아이콘으로 해제하는 fetch
-export function bookmarkClear(Data) {
+export function bookmarkClear(userid, ccbaAsno, ccbaMnm1) {
+	let Data = {
+		"userid": userid,
+		"ccbaAsno": ccbaAsno,
+		"ccbaMnm1": ccbaMnm1
+	};
 	fetch('/member/bookmark/clear', {
 		method: "DELETE",
 		headers: {
@@ -122,6 +142,45 @@ export function bookmarkConfirmRegistration(userid, ccbaAsno) {
 		})
 		.catch(error => {
 			alert(`즐겨찾기 결과 로드 중 오류가 발생하였습니다\n관리자에게 문의해주세요\n${error}`);
+		})
+}
+
+
+//북마크한 문화재 목록 가져오기
+export function bookmarkListLoad(userid) {
+	return fetch(`/member/bookmark?userid=${userid}`, {
+		method: "GET",
+		headers: {
+			"Content-Type": "text/plain"
+		}
+	})
+		.then(response => {
+			return response.json()
+		})
+}
+
+
+// 북마크 선택해서 대량 삭제처리 fetch
+export function bookmarkListSelectDelete(Data) {
+	fetch('/member/bookmark/delete', {
+		method: "DELETE",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify(Data)
+	})
+		.then(response => {
+			return response.text();
+		})
+		.then(data => {
+			if (data === 'true') {
+				alert('정상적으로 삭제되었습니다');
+				document.querySelector('#bookmarktoastCloseButton').click();
+				document.querySelector('#bookmarkModalClose').click();
+			}
+		})
+		.catch(error => {
+			alert(`삭제 중 문제가 발생하였습니다\n관리자에게 문의해주세요\n${error}`);
 		})
 }
 
