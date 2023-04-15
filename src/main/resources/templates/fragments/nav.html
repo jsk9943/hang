@@ -11,7 +11,7 @@
     <!--nav 검색창 : hang_02 -->
     <form id="heritagename" method="post">
       <input id="searchInput" type="text" class="form-control"
-        name="heritagename" placeholder="검색"
+        name="heritagename" placeholder="검색 (지역, 문화재명)"
         aria-label="Recipient's username"
         aria-describedby="button-addon2" maxlength="50"> <a
         id="searchButton" role="button"><img class="shabsolute"
@@ -75,7 +75,9 @@
                   </div>
                   <button id="loginBtn"
                     class="w-100 btn btn-lg btn-primary buttonbackimg">로그인</button>
-                  <p class="mt-5 mb-3 text-muted">&copy; 2023</p>
+                  <a type="button" id="lostMyIdSearchButton" style="font-size:0.8em; color:gray; padding:5px; margin:5px;">아이디 찾기</a>
+                  <a type="button" id="lostMyPasswordChangeButton"style="font-size:0.8em; color:gray; padding:5px; margin:5px;">비밀번호 찾기</a>
+                  <p class="mt-5 mb-3 text-muted" style="font-size:0.7em;">&copy; Hang 2023</p>
                 </main>
 
               </div>
@@ -116,17 +118,18 @@
   
   <div class="offcanvas offcanvas-end bug1" data-bs-scroll="true"
     data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling"
-    aria-labelledby="offcanvasScrollingLabel">
+    aria-labelledby="offcanvasScrollingLabel" >
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="offcanvasScrollingLabel"></h5>
-      <button type="button" class="btn-close"
+      <button type="button" class="btn-close offcanvasClose"
         data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
 
     <div class="offcanvas-body">
+      <div style="font-size: 2em; text-align: center; margin-bottom:5%;">회원정보 변경</div>
       <div style="font-size: 1.8em; text-align: center; margin-bottom:5%;">로그인 시 사용가능</div>
       <button type="button"
-        class="btn btn-primary buttonbackimg logbtn navbutton"
+        class="btn btn-primary buttonbackimg logbtn navbutton offcanvasLogin"
         data-bs-toggle="modal" data-bs-target="#login" style="width:50%;">로그인</button>
     </div>
   </div>

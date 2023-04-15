@@ -42,6 +42,7 @@ public class ItemServiceImpl implements ItemService {
 		return heritage;
 	}
 
+	// 평균별점 보여주기
 	@Override
 	public CommentStarRate rateAvgPoint(String ccbaAsno) {
 		CommentStarRate commentStarRate = new CommentStarRate(ccbaAsno);
@@ -64,6 +65,7 @@ public class ItemServiceImpl implements ItemService {
 		return commentStarRate;
 	}
 
+	// 코멘트 및 별점 등록
 	@Override
 	public String createCommentStarRate(Map<String, Object> inputData) {
 		String result = null;

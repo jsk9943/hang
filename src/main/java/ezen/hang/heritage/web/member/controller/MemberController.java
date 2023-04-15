@@ -24,11 +24,8 @@ public class MemberController {
 	// 회원가입
 	@PostMapping("/register")
 	@ResponseBody
-	public String registerMember(
-			@RequestParam("username") String username,
-			@RequestParam("userid") String userid,
-			@RequestParam("userpw") String userpw,
-			@RequestParam("userph") String userph,
+	public String registerMember(@RequestParam("username") String username, @RequestParam("userid") String userid,
+			@RequestParam("userpw") String userpw, @RequestParam("userph") String userph,
 			@RequestParam("email") String email) {
 		String result = null;
 		try {
@@ -45,6 +42,19 @@ public class MemberController {
 	@ResponseBody
 	public int idCheck(@RequestParam("userid") String userid) {
 		return memberService.checkUserId(userid);
+	}
+	
+	// 아이디 찾기
+	@GetMapping("/idCheck")
+	public String lostIdSearch(@RequestParam("userName") String userName, @RequestParam("userPh") String userPh) {
+		return memberService.lostIdSearch(userName, userPh);
+	}
+	
+	// 비밀번호 잃어버려서 변경하기
+	@PatchMapping()
+	@ResponseBody
+	public String lostPasswordChange(@RequestBody Map<String, Object> passwordChangeData) {
+		return memberService.lostPasswordChange(passwordChangeData);
 	}
 
 	// 로그인

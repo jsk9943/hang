@@ -10,4 +10,14 @@ public class WebController {
 	public String main() {
 		return "main";
 	}
+	
+	@GetMapping("/findMyId")
+	public String findMyId() {
+		return "findMyid";
+	}
+	
+	@GetMapping("/changeMyPassword")
+	public String changeMyPassword() {
+		return "changeMyPassword";
+	}
 }

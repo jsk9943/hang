@@ -199,11 +199,11 @@ if (myCommentButton !== null) {
 							// 동적으로 리스트 추가
 							var insertTr = ""; // 변수 선언
 							insertTr += "<tr>"; // body 에 남겨둔 예시처럼 데이터 삽입
-							insertTr += `<td><input type="checkbox" class="checkAll" value="${writerCCBAASNO}"></td>`;
-							insertTr += "<td>" + writerCCBAMNM1 + "</td>";
-							insertTr += "<td>" + writerStarpoint + "</td>";
-							insertTr += "<td>" + writerComment + "</td>";
-							insertTr += "<td>" + writerCommentDate + "</td>";
+							insertTr += `<td><input type="checkbox" id="myreviewCheckbox${writerCCBAASNO}" class="checkAll" value="${writerCCBAASNO}"></td>`;
+							insertTr += `<td><label for="myreviewCheckbox${writerCCBAASNO}">${writerCCBAMNM1}</label></td>`;
+							insertTr += `<td><label for="myreviewCheckbox${writerCCBAASNO}">${writerStarpoint}</label></td>`;
+							insertTr += `<td><label for="myreviewCheckbox${writerCCBAASNO}">${writerComment}</label></td>`;
+							insertTr += `<td><label for="myreviewCheckbox${writerCCBAASNO}">${writerCommentDate}</label></td>`;
 							insertTr += "</tr>";
 							document.getElementById("dyn_tbody2").innerHTML += insertTr;
 							checkCount++;

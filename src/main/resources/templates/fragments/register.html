@@ -22,11 +22,11 @@
                       autocomplete="off">
                   </div>
                   <div class="col-12">
-                    <p style="float: left;">
+                    <p style="float: left; margin:0;">
                       <label for="username" class="form-label">아이디<span
                         class="dp-1">*</span></label>
                     </p>
-                    <div id="id-message" style="float: right";></div>
+                    <div id="id-message" style="float: right; font-size:0.8em;"></div>
                     <div class="input-group has-validation">
                       <input type="text" class="form-control"
                         id="useridInput" placeholder="ID" required
@@ -44,12 +44,12 @@
                     </div>
                   </div>
                   <div class="form-group has-feedback col-12">
-                    <p style="float: left;">
+                    <p style="float: left; margin:0;">
                       <label for="passwordConfirm" class="form-label">
                         비밀번호 확인<span class="dp-1">*</span>
                       </label>
                     </p>
-                    <div id="pw-message" style="float: right;"></div>
+                    <div id="pw-message" style="float: right; font-size:0.8em;"></div>
                     <div class="input-group has-validation">
                       <input type="password" class="form-control"
                         id="userpw2" placeholder="Password Confirm"
@@ -57,13 +57,19 @@
                     </div>
                   </div>
                   <div class="col-12">
-                    <label for="phone" class="form-label">연락처</label> <input
+                    <label for="phone" class="form-label">연락처
+                    <span style="font-size:0.7em; color:gray;">(미 입력시 아이디 찾기 불가)</span>
+                    </label> 
+                    <input
                       type="text" class="form-control" id="phone"
                       placeholder="010-1234-5678" required name="userph"
                       autocomplete="off">
                   </div>
                   <div class="col-12">
-                    <label for="email" class="form-label">이메일</label> <input
+                    <label for="email" class="form-label">이메일
+                    <span style="font-size:0.7em; color:gray;">(미 입력시 비밀번호 찾기 불가)</span>
+                    </label>
+                    <input
                       type="email" class="form-control" id="email"
                       placeholder="example@google.com" name="email"
                       autocomplete="off" required>

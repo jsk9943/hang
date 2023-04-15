@@ -18,12 +18,25 @@ public interface MemberMapper {
 
 	// 아이디 중복체크
 	public int checkUserId(String userid);
+	
+	// 아이디 찾기
+	public Member lostIdSearch(Member member);
+	
+	// 비밀번호 분실 변경
+	public void lostPasswordChange(Member member);
 
 	// 회원정보 수정
 	public void update(Member member);
 
 	// 회원 정보 가져오기
 	public Member usingProfile(String userid);
+	
+	// 프로필 사진 등록 전 등록된 사진이 있는지 확인
+	public int profileUploadBefore(String userid);
+	
+	// 프로필 등록된 사진 삭제처리(맴버테이블, 이미지테이블)
+	public void memberDeleteProfileImg(String userid);
+	public void profileImageDelete(String userid);
 
 	// 프로필 사진 등록하기(이미지 테이블)
 	public void profileImgUpload(Map<String, Object> imgData);

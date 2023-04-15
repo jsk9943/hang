@@ -3,10 +3,7 @@
 // 검색단어로 문화재 검색 기능 fetch
 export function heritageKeywordSearch(keyword) {
 	return fetch(`/heritage/item/search?keyword=${keyword}`, {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/x-www-form-urlencoded"
-		}
+		method: "GET"
 	})
 		.then(response => {
 			return response.json();
@@ -16,10 +13,7 @@ export function heritageKeywordSearch(keyword) {
 // 문화재 상세검색 기능(문화재 지역, 문화재 고유번호, 문화재 종류) fetch
 export function heritageKeywordSearchDetail(ccbaKdcd, ccbaAsno, ccbaCtcd) {
 	return fetch(`/heritage/item/search/detail?ccbaKdcd=${ccbaKdcd}&ccbaAsno=${ccbaAsno}&ccbaCtcd=${ccbaCtcd}`, {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json'
-		},
+		method: 'GET'
 	})
 		.then(response => {
 			return response.json();
@@ -59,10 +53,7 @@ export function commentStaRateCreate(userid, ccbaAsno, ccbaMnm1, comment, starpo
 // 코멘트 및 별점 리스트 가져오는 fetch
 export function heritageCommentList(ccbaAsno) {
 	return fetch(`/heritage/item/output?ccbaAsno=${ccbaAsno}`, {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded'
-		}
+		method: 'GET'
 	})
 		.then(response => {
 			return response.json();
@@ -125,10 +116,7 @@ export function bookmarkClear(userid, ccbaAsno, ccbaMnm1) {
 // 북마크 등록여부 확인(유저 아이디, 확인 할 문화재 ccbaAsno 번호)
 export function bookmarkConfirmRegistration(userid, ccbaAsno) {
 	fetch(`/member/bookmark?userid=${userid}`, {
-		method: "GET",
-		headers: {
-			"Content-Type": "text/plain"
-		}
+		method: "GET"
 	})
 		.then(response => response.json())
 		.then(data => {
@@ -147,10 +135,7 @@ export function bookmarkConfirmRegistration(userid, ccbaAsno) {
 //북마크한 문화재 목록 가져오기
 export function bookmarkListLoad(userid) {
 	return fetch(`/member/bookmark?userid=${userid}`, {
-		method: "GET",
-		headers: {
-			"Content-Type": "text/plain"
-		}
+		method: "GET"
 	})
 		.then(response => {
 			return response.json()
@@ -264,10 +249,7 @@ export function loginDo(useridData, userpwData) {
 // 로그아웃 기능
 export function logoutDo() {
 	fetch('/member/logout', {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/x-www-form-urlencoded"
-		}
+		method: "GET"
 	})
 		.then(() => {
 			window.location.reload(); // 창 새로고침
@@ -310,10 +292,7 @@ export function profileImgLoad(userid, imgFileName) {
 // 유저가 작성한 리뷰 리스트 fetch
 export function userReviewStarrate(userid) {
 	return fetch(`/heritage/item?userid=${userid}`, {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/x-www-form-urlencoded"
-		}
+		method: "GET"
 	})
 		.then(response => {
 			return response.json();

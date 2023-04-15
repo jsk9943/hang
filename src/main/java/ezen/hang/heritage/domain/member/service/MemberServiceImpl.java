@@ -57,6 +57,56 @@ public class MemberServiceImpl implements MemberService {
 		return memberMapper.checkUserId(userid);
 	}
 
+	// 아이디 찾기
+	@Override
+	public String lostIdSearch(String userName, String userPh) {
+		String result = null;
+		Member lostIdMember = new Member();
+		lostIdMember.setUsername(userName);
+		lostIdMember.setUserph(userPh);
+		try {
+			result = memberMapper.lostIdSearch(lostIdMember).getUserid();
+		} catch (Exception e) {
+			result = "false";
+		}
+		return result;
+	}
+
+	// 비밀번호 분실 변경
+	@Override
+	public String lostPasswordChange(Map<String, Object> lostPasswordData) {
+		String result = null;
+		Member member = new Member();
+		String userid = lostPasswordData.get("userid").toString();
+		String username = lostPasswordData.get("username").toString();
+		String userph = lostPasswordData.get("userph").toString();
+		String email = lostPasswordData.get("email").toString();
+		String userpw = lostPasswordData.get("userChangePassword").toString();
+		member = memberMapper.usingProfile(userid);
+		if (member == null) {
+			result = "ID_DENIED";
+		} else if (!member.getUsername().equals(username)) {
+			result = "NAME_DENIED";
+		} else if (!member.getUserph().equals(userph)) {
+			result = "PHONE_DENIED";
+		} else if (!member.getEmail().equals(email)) {
+			result = "EMAIL_DENIED";
+		} else {
+			member.setUserid(userid);
+			member.setUsername(username);
+			member.setUserph(userph);
+			member.setEmail(email);
+			member.setUserpw(userpw);
+			try {
+				memberMapper.lostPasswordChange(member);
+				result = "true";
+			} catch (Exception e) {
+				result = "false";
+			}
+		}
+		return result;
+	}
+
 	// 회원정보 수정
 	@Override
 	public String updateMember(Map<String, Object> updateData) {
@@ -95,7 +145,7 @@ public class MemberServiceImpl implements MemberService {
 		return memberMapper.usingProfile(userid);
 	}
 
-	// 프로필 사진 등록하기
+	// 프로필 사진 등록하기(등록 전 기존 파일 확인 후 삭제처리)
 	@Override
 	public String profileImgUpload(Map<String, Object> imgData) {
 		String result = null;
@@ -109,7 +159,12 @@ public class MemberServiceImpl implements MemberService {
 		map.put("imagefile", bytes);
 		map.put("userid", userid);
 		map.put("imagefilename", uuid);
+		int count = memberMapper.profileUploadBefore(userid);
 		try {
+			if (count != 0) {
+				memberMapper.memberDeleteProfileImg(userid);
+				memberMapper.profileImageDelete(userid);
+			}
 			memberMapper.profileImgUpload(map);
 			memberMapper.profileImgMemberUpload(map);
 			result = uuid;

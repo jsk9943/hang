@@ -3,7 +3,7 @@
  */
 import { loginDo, logoutDo } from './fetch.js';
 let logoutButtons = document.querySelectorAll('.logoutButton'); // 로그아웃 버튼
-let loginBotton = document.querySelector('#loginBtn'); // 로그인버튼
+let loginButton = document.querySelector('#loginBtn'); // 로그인버튼
 let userIdInput = document.querySelector('#floatingInput');// 아이디 입력 창
 let userPasswordInput = document.querySelector('#floatingPassword');// 패스워드 입력 창
 
@@ -24,14 +24,14 @@ inputs.forEach((input, index) => {
 });
 
 // 로그인 아이콘을 눌렀을 때
-if (loginBotton !== null) {
+if (loginButton !== null) {
 	// 아이디 저장버튼 체크
 	let userSaveIdData = localStorage.getItem('saveID');
 	if (userSaveIdData !== null) {
 		userIdInput.value = userSaveIdData;
 		document.querySelector('#userIdSave').checked = true;
 	}
-	loginBotton.addEventListener("click", function(event) {
+	loginButton.addEventListener("click", function(event) {
 		event.preventDefault();
 		// 최종 로그인 시 이중 체크
 		if (document.querySelector('#userIdSave').checked === true) {
@@ -67,5 +67,40 @@ if (userIdSaveCheckBox !== null) {
 			localStorage.clear();
 			userIdInput.value = "";
 		}
+	})
+}
+
+// 아이디 찾기 버튼 눌렀을 때
+let lostMyIdButton = document.querySelector('#lostMyIdSearchButton');// 아이디 찾기 버튼
+if(lostMyIdButton !== null){
+	lostMyIdButton.addEventListener('click', () => {
+		var width = 400; // 팝업 창의 너비
+		var height = 400; // 팝업 창의 높이
+		var left = (window.innerWidth - width) / 2; // 가로 중앙 위치 계산
+		var top = (window.innerHeight - height) / 2; // 세로 중앙 위치 계산
+		// 팝업 창을 화면 중앙에 열기
+		window.open("findMyId", "findMyId.html", "width=" + width + ", height=" + height + ", left=" + left + ", top=" + top);
+	})
+}
+
+//비밀번호 찾기 버튼을 눌렀을 때
+let lostMyPasswordChangeButton = document.querySelector('#lostMyPasswordChangeButton');
+if(lostMyPasswordChangeButton !== null){
+	lostMyPasswordChangeButton.addEventListener('click',() => {
+		var width = 420; // 팝업 창의 너비
+        var height = 710; // 팝업 창의 높이
+        var left = (window.innerWidth - width) / 2; // 가로 중앙 위치 계산
+        var top = (window.innerHeight - height) / 2; // 세로 중앙 위치 계산
+
+        // 팝업 창을 화면 중앙에 열기
+        window.open("changeMyPassword", "changeMyPassword.html", "width=" + width + ", height=" + height + ", left=" + left + ", top=" + top);
+	})
+}
+
+// 어사이드 바에서 로그인 버튼 눌렀을 시 사이드바 닫기
+let logbtnButton = document.querySelector('.offcanvasLogin');
+if (logbtnButton !== null) {
+	logbtnButton.addEventListener('click', () => {
+		document.querySelector('.offcanvasClose').click();
 	})
 }

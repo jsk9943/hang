@@ -21,6 +21,12 @@ public interface MemberService {
 
 	// 아이디 체크
 	public int checkUserId(String userid);
+	
+	// 아이디 찾기
+	public String lostIdSearch(String userName, String userPh);
+	
+	// 비밀번호 분실 변경
+	public String lostPasswordChange(Map<String, Object> lostPasswordData);
 
 	// 회원정보 수정
 	public String updateMember(Map<String, Object> updateData);

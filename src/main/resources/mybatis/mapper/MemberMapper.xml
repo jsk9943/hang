@@ -23,6 +23,19 @@
 	<select id="checkUserId" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM MEMBER WHERE userId = #{userId}
 	</select>
+	
+	<!-- 아이디 찾기 -->
+	<select id="lostIdSearch" parameterType="Member" resultType="Member">
+		SELECT USERID 
+		FROM MEMBER
+		WHERE USERNAME = #{username} AND USERPH = #{userph};
+	</select>
+	<!-- 비밀번호 잃어린경우 확인 후 변경해주기 -->
+	<update id="lostPasswordChange" parameterType="Member">
+		UPDATE MEMBER
+		SET USERPW = #{userpw}
+		WHERE USERID = #{userid} AND USERPH = #{userph} AND EMAIL = #{email} AND USERNAME = #{username};
+	</update>
 
 	<!-- 회원정보 수정 -->
 	<update id="update" parameterType="Member">
@@ -38,14 +51,30 @@
 	<!-- 유저 아이디로 회원정보 가져오기(회원정보 변경시 사용) -->
 	<select id="usingProfile" parameterType="String"
 		resultType="Member">
-		SELECT USERID, USERPH ,EMAIL
+		SELECT *
 		FROM MEMBER
-		WHERE userid =
-		#{userid}
+		WHERE userid = #{userid}
 	</select>
 
-	<!-- 프로필 사진 등록하기(이미지 테이블) -->
+	<!-- 프로필 사진 등록하기 전에 파일 등록 유무 체크 -->
+	<select id="profileUploadBefore" parameterType="string" resultType="int">
+		SELECT COUNT(*) 
+		FROM PROFILEIMAGE
+		WHERE USERID = #{userid};
+	</select>
+	<!-- 기존 등록된 프로필 사진이 있으면 삭제 처리(이미지와 맴버 테이블 -->
+	<delete id="profileImageDelete" parameterType="string">
+		DELETE 
+		FROM PROFILEIMAGE 
+		WHERE USERID = #{userid};
+	</delete>
+	<update id="memberDeleteProfileImg" parameterType="string">
+		UPDATE MEMBER
+		SET IMAGEFILENAME = NULL
+		WHERE userid = #{userid};
+	</update>
 	
+	<!-- 프로필 사진 등록하기(이미지 테이블) -->
 	<insert id="profileImgUpload" parameterType="map">
 	    INSERT INTO PROFILEIMAGE (USERID, IMAGEFILENAME, IMAGEFILE)
 	    VALUES (#{userid}, #{imagefilename}, #{imagefile})

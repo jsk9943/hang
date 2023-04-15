@@ -71,9 +71,9 @@ if (bookMarkBtn !== null) {
 				for (var i = 0; i < data.length; i++) {
 					let bookmarkContent = `
 							<div class="form-check">
-				              <input class="bookmarkCheckBox" type="checkbox" value="${data[i].CCBAASNO}">
+				              <input class="bookmarkCheckBox" type="checkbox" id="bookmarkCheckBox${data[i].CCBAASNO}" value="${data[i].CCBAASNO}">
 				              <div>
-				                <p class="moonhwaName" style="font-size:0.8em;">${data[i].CCBAMNM1}</p>
+				                <label class="moonhwaName" style="font-size:0.8em;" for="bookmarkCheckBox${data[i].CCBAASNO}">${data[i].CCBAMNM1}</label>
 				                <button class="gobtn Shortcut">
 				                  바로가기
 				                  <input type="hidden" value="${data[i].CCBAASNO}" name="bookmarkCCBAASNO">

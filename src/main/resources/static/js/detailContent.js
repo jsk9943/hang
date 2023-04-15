@@ -132,14 +132,14 @@ export function detailContentLoad(data) {
 	// 세부내용 출력
 	var content2 = `
 				
-				<div style="z-index:9999;" class="modal fade scrollBarDesign" id="detailcontentmodal" tabindex="-1" aria-labelledby="detailcontentmodaltitle" aria-hidden="true">
+				<div style="z-index:9999;" class="modal fade" id="detailcontentmodal" tabindex="-1" aria-labelledby="detailcontentmodaltitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg">
     <div class="modal-content" style="box-shadow: 1px 1px 5px rgb(98, 107, 233);">
       <div class="modal-header">
         <h1 style="font-family: 'moonhwa'; " class="modal-title fs-5" id="detailcontentmodaltitle">톺아보기</h1>
         <button type="button" class="btn-close content2ModalClose" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body scrollBarDesign">
         <p style="font-family: 'moonhwa';">문화재(국문) : ${data.ccbaMnm1}</p>
         <p style="font-family: 'moonhwa';">문화재(한자) : ${data.ccbaMnm2}</p>
         <p style="font-family: 'moonhwa';">문화재종목 : ${data.ccmaName}</p>
@@ -166,14 +166,25 @@ export function detailContentLoad(data) {
 		var myModal = bootstrap.Modal.getOrCreateInstance(myModalEl);
 		myModal.show();
 		searchResultMenu();
+		// 톺아보기 창에서 x버튼 눌러서 창 닫을 때
 		let content2ModalCloseButton = document.querySelector('.content2ModalClose');
 		if (content2ModalCloseButton !== null) {
+			// 닫기 버튼 눌렀을 때
 			content2ModalCloseButton.addEventListener('click', () => {
 				let menuicon = document.getElementById('menuicon');
 				if (menuicon.checked == false) {
 					menuicon.click();
 				}
 			})
+			// ESC 키를 눌렀을 때 이벤트 핸들러 등록
+			document.addEventListener('keydown', (event) => {
+				if (event.key === 'Escape') {
+					let menuicon = document.getElementById('menuicon');
+					if (menuicon.checked == false) {
+						menuicon.click();
+					}
+				}
+			});
 		}
 	});
 

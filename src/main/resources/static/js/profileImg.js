@@ -116,31 +116,9 @@ if (document.querySelector('#profileImgSend')) {
 								alert('정상적으로 등록되었습니다');
 								sessionStorage.setItem('imagefilename', data);
 								profileImgname = sessionStorage.getItem('imagefilename');
-								let profileLoadData = {
-									"userid": profileUserid,
-									"imagefilename": profileImgname
-								}
 								profileImgCloseButton.click();
 								rightMenuButton.click();
-								fetch('/member/profileimg/loading', {
-									method: "POST",
-									headers: {
-										'Content-Type': 'application/json'
-									},
-									body: JSON.stringify(profileLoadData)
-								})
-									.then(response => {
-										return response.blob();
-									})
-									.then(blob => {
-										let imageFilenameResult = profileImgname;
-										if (imageFilenameResult !== null && imageFilenameResult !== "") {
-											sessionStorage.setItem("profileImage", URL.createObjectURL(blob));
-										}
-									})
-									.catch(error => {
-										alert(`이미지 재생성에 실패하였습니다\n관리자에게 문의해주세요\n${error}`);
-									})
+								profileImgLoad(profileUserid, profileImgname)
 							}
 						})
 						.catch(error => {
