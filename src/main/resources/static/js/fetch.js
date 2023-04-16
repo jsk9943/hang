@@ -235,6 +235,7 @@ export function loginDo(useridData, userpwData) {
 				sessionStorage.setItem("userid", data.userid);
 				sessionStorage.setItem("username", data.username);
 				sessionStorage.setItem("imagefilename", data.imagefilename);
+				sessionStorage.setItem("admin", data.admin);
 				window.location.reload();
 			}
 		})

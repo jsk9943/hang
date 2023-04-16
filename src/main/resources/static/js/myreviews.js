@@ -12,23 +12,10 @@ var editDeleteContent = `
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="editDeleteModalLabel" style="font-weight: bold;">${loginUserid}님의 댓글 및 별점 관리</h1>
       </div>
-      <div class="modal-body scrollBarDesign" >
-        <table class="table table-hover" style="font-size:0.8em; text-align: center;">
-          <thead>
-               <tr>
-                 <th scope="col" style="width:10%;">선택</th>
-                 <th scope="col" style="width:20%;">문화재명</th>
-                 <th scope="col" style="width:10%;">점수</th>
-                 <th scope="col" style="width:40%;">코멘트</th>
-                 <th scope="col" style="width:20%;">작성일자</th>
-               </tr>
-             </thead>
-             <tbody id="dyn_tbody2">
-         
-             </tbody>
-       </table>
+      <div class="modal-body table-container scrollBarDesign" >
+        
        <nav aria-label="Page navigation example">
-             <ul id="dyn_ul2" class="pagination" style="justify-content:center;" >
+             <ul id="dyn_ul" class="pagination" style="justify-content:center;" >
                 
              </ul>
          </nav>
@@ -51,6 +38,7 @@ var editDeleteContent = `
             </div>
           </div>
         </div>
+        
       </div>
     </div>
     </div>
@@ -76,140 +64,57 @@ if (myCommentButton !== null) {
 		editDeleteModal.show();
 		userReviewStarrate(loginUserid) // 유저가 작성한 리뷰와 별점 가져오기
 			.then(data => {
-				var editDeleteTableList = []; // tableInsert 함수에서 for문을 돌면서 삽입 실시
-				var editDeletePageList = 9999; // 한개의 페이지에 보여질 목록 개수
-				var editDeletePageMax = 5; // 최대 생성될 페이지 개수 (페이지를 더보려면 이전, 다음 버튼 클릭해야함)	
-				var editDeleteIdx = 0; //editDeleteIdx 값 확인 후 동적 페이지 전환 및 데이터 표시
-				var editDeletePage = 1; //생성 시작할 페이지 번호
+				/**
+				 * 모달 내 게시판 페이징 시 새로운 데이터 생길 때 리프래쉬 되지 않아
+				 * table 자체를 삭제 후 새로 생성하게 끔 DOM 형태로 재구성
+				 * */
+				// 테이블 요소와 테이블 컨테이너 요소 가져오기
+				var table = document.querySelector('.table');
+				var tableContainer = document.querySelector('.table-container');
+				if (table) {
+					// 테이블 삭제
+					table.remove();
+				}
+				// 새로운 테이블 요소 생성
+				var newTable = document.createElement('table');
+				newTable.className = 'table table-hover';
+				newTable.style.fontSize = '0.8em';
+				newTable.style.textAlign = 'center';
+				// 테이블 헤더 생성
+				var thead = document.createElement('thead');
+				var tr = document.createElement('tr');
+				tr.innerHTML = `
+						  <th scope="col" style="width:10%;">선택</th>
+						  <th scope="col" style="width:20%;">문화재명</th>
+						  <th scope="col" style="width:10%;">점수</th>
+						  <th scope="col" style="width:40%;">코멘트</th>
+						  <th scope="col" style="width:20%;">작성일자</th>
+						`;
+				thead.appendChild(tr);
+				newTable.appendChild(thead);
+				// 테이블 바디 생성
+				var tbody = document.createElement('tbody');
+				tbody.id = 'dyn_tbody';
+				newTable.appendChild(tbody);
+				// 테이블 컨테이너에 새로운 테이블 추가
+				tableContainer.innerHTML = ''; // 기존의 내용을 비우고 새로 추가
+				tableContainer.appendChild(newTable);
+				// Pagination 요소 가져오기
+				var pagination = document.querySelector('.pagination');
+				// Pagination 삭제
+				if (pagination) {
+					// Pagination 삭제
+					pagination.remove();
+				}
+				// 새로운 Pagination 요소 생성
+				var newPagination = document.createElement('nav');
+				newPagination.setAttribute('aria-label', 'Page navigation example');
+				newPagination.innerHTML = `
+					  <ul id="dyn_ul" class="pagination" style="justify-content:center;"></ul>
+								`;
+				// 테이블 컨테이너에 새로운 Pagination 추가
+				tableContainer.appendChild(newPagination);
 				tableInsert(data);
-
-				function tableInsert(data) {
-					// [for 반복문을 돌려서 tr 데이터 임의로 생성 실시]
-					for (var i = 0; i < data.length; i++) {
-						// JSON 형식으로 리스트에 추가 실시
-						var writerData = {
-							"editDeleteIdx": i,
-							"writerCCBAASNO": data[i].ccbaAsno,
-							"writerCCBAMNM1": data[i].ccbaMnm1,
-							"writerStarpoint": data[i].starpoint,
-							"writerComment": data[i].comment,
-							"writerCommentDate": data[i].commentDate
-						};
-						editDeleteTableList.push(writerData);
-					}
-					pageInsert(editDeletePage);
-				};
-				function pageInsert(value) {
-					document.getElementById('dyn_ul2').innerHTML = "";
-					var startIndex = value; // 생성 시작 페이지    		
-					var endIndex = editDeleteTableList.length; // 배열에 있는 길이 확인
-					var pageCount = 0;
-					var pagePlus = 0;
-					if (endIndex > editDeletePageList) { // tr 행 개수가 5 이상인 경우 (임의로 설정)
-						pageCount = Math.floor(endIndex / editDeletePageList); //생성될 페이지 수 (소수점 버림)
-						pagePlus = endIndex % editDeletePageList; //추가 나머지 자식 수
-						if (pagePlus > 0) { //추가 자식수가 있는경우 >> 페이지 추가
-							pageCount = pageCount + 1;
-						}
-					}
-
-					if (startIndex > pageCount) { //길이 초과 시 기존꺼로 다시 저장
-						startIndex = editDeletePage;
-					}
-					else if (startIndex < 0) { //길이 미만 시 기존꺼로 다시 저장
-						startIndex = editDeletePage;
-					}
-					else {
-						editDeletePage = startIndex;
-					}
-
-					if (pageCount == 1) { //생성해야할 페이지가 1페이지인 경우
-						var insertUl = "<li class='page-item'>"; // 변수 선언
-						insertUl += insertUl + "<a class='page-link' href='javascript:void(0)' onclick = 'newPage(1);'>";
-						insertUl += insertUl + i;
-						insertUl += insertUl + "</a></li>";
-						document.getElementById("dyn_ul2").innerHTML += insertUl; // 동적으로 추가 실시      			
-					}
-					else if (pageCount >= 2) { //생성해야할 페이지가 2페이지 이상인 경우
-						// 이전 페이지 추가 실시 
-						var insertSTR = "<li class='page-item'>"; // 변수 선언
-						insertSTR = insertSTR + "<a class='page-link' href='javascript:void(0)' onclick = 'newPage(" + "-1" + ");'>";
-						insertSTR = insertSTR + "이전";
-						insertSTR = insertSTR + "</a></li>";
-						document.getElementById("dyn_ul2").innerHTML += insertSTR; // 동적으로 추가 실시      			
-
-						// 특정 1, 2, 3 .. 페이지 추가 실시
-						var count = 1;
-						for (var i = startIndex; i <= pageCount; i++) {
-							if (count > editDeletePageMax) { //최대로 생성될 페이지 개수가 된 경우 
-								editDeletePage = i - editDeletePageMax; //생성된 페이지 초기값 저장 (초기 i값 4 탈출 인경우 >> 1값 저장)
-								break; //for 반복문 탈출
-							}
-							var insertUl = "<li class='page-item'>"; // 변수 선언
-							insertUl = insertUl + "<a class='page-link' href='javascript:void(0)' onclick = 'newPage(" + i + ");'>";
-							insertUl = insertUl + String(i);
-							insertUl = insertUl + "</a></li>";
-							document.getElementById("dyn_ul2").innerHTML += insertUl; // 동적으로 추가 실시  
-							count++;
-						}
-
-						// 다음 페이지 추가 실시
-						var insertEND = "<li class='page-item'>"; // 변수 선언
-						insertEND = insertEND + "<a class='page-link' href='javascript:void(0)' onclick = 'newPage(" + "0" + ");'>";
-						insertEND = insertEND + "다음";
-						insertEND = insertEND + "</a></li>";
-						document.querySelector('#dyn_ul2').innerHTML += insertEND; //동적으로 추가 실시
-					}
-					document.getElementById("dyn_tbody2").innerHTML = ""; //tbody tr 전체 삭제 실시
-					newPage(startIndex);
-				};
-
-				function newPage(pageCurrent) {
-					if (pageCurrent == -1) { // 이전 페이지
-						document.getElementById("dyn_tbody2").innerHTML = ""; //tbody tr 전체 삭제 실시
-
-						// [새롭게 페이징 처리 실시]
-						var newIdx = editDeletePage - editDeletePageMax;
-
-						// [테이블 데이터에 따라 페이징 처리 실시]
-						pageInsert(newIdx); //표시될 페이지 번호 전송
-					}
-					else if (pageCurrent == 0) { // 다음 페이지
-						document.getElementById("dyn_tbody2").innerHTML = "";
-						var newIdx = editDeletePage + editDeletePageMax;
-						pageInsert(newIdx); //표시될 페이지 번호 전송
-					}
-					else {
-						document.querySelector('#dyn_tbody2').innerHTML = "";
-						editDeleteIdx = (pageCurrent * editDeletePageList) - editDeletePageList;
-						var checkCount = 1;
-						for (var i = editDeleteIdx; i < editDeleteTableList
-							.length; i++) { //반복문을 수행하면서 tbody에 tr데이터 삽입 실시
-							if (checkCount > editDeletePageList) { //한페이지에 표시될 목록을 초과한 경우
-								return;
-							}
-							// json 데이터 파싱 실시
-							var dataParsingComment = JSON.parse(JSON.stringify(editDeleteTableList
-							[i])); //각 배열에 있는 jsonObject 참조
-							var writerCCBAASNO = dataParsingComment.writerCCBAASNO;
-							var writerCCBAMNM1 = dataParsingComment.writerCCBAMNM1;
-							var writerStarpoint = dataParsingComment.writerStarpoint;
-							var writerComment = dataParsingComment.writerComment;
-							var writerCommentDate = dataParsingComment.writerCommentDate;
-							// 동적으로 리스트 추가
-							var insertTr = ""; // 변수 선언
-							insertTr += "<tr>"; // body 에 남겨둔 예시처럼 데이터 삽입
-							insertTr += `<td><input type="checkbox" id="myreviewCheckbox${writerCCBAASNO}" class="checkAll" value="${writerCCBAASNO}"></td>`;
-							insertTr += `<td><label for="myreviewCheckbox${writerCCBAASNO}">${writerCCBAMNM1}</label></td>`;
-							insertTr += `<td><label for="myreviewCheckbox${writerCCBAASNO}">${writerStarpoint}</label></td>`;
-							insertTr += `<td><label for="myreviewCheckbox${writerCCBAASNO}">${writerComment}</label></td>`;
-							insertTr += `<td><label for="myreviewCheckbox${writerCCBAASNO}">${writerCommentDate}</label></td>`;
-							insertTr += "</tr>";
-							document.getElementById("dyn_tbody2").innerHTML += insertTr;
-							checkCount++;
-						}
-					}
-				};
 			})
 			.catch(error => {
 				alert(`리뷰를 불러오는 도중 문제가 발생하였습니다\n관리자에게 문의해주세요\n${error}`);

@@ -36,7 +36,6 @@ class imgtest {
 		data.put("userName", "김정석");
 		data.put("userPh", "123456");
 		log.info("테스트 시작");
-		log.info(test.lostIdSearch(data));
 	}
 
 }

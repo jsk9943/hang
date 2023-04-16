@@ -1,0 +1,59 @@
+@charset "EUC-KR";
+
+/*코멘트 테이블*/
+.commentTable{
+	font-size:0.9em;	
+}
+.commentTable1 {
+	width: 5%;
+}
+
+.commentTable2 {
+	width: 5%;	
+}
+
+.commentTable3 {
+	width: 10%;
+}
+
+.commentTable4 {
+	width: 45%;
+}
+
+.commentTable5 {
+	width: 10%;
+}
+
+.commentTable6 {
+	width: 15%;
+}
+
+.commentTable7 {
+	width: 10%;
+}
+
+/*유저권한 테이블*/
+.userAuthorityTable{
+	font-size:0.9em;
+}
+.userAuthorityTable1{
+	width: 5%;
+}
+.table-col-2.userAuthorityTable2{
+	width: 5%;
+}
+.userAuthorityTable3{
+	width:10%;
+}
+.userAuthorityTable4{
+	width:20%;
+}
+.userAuthorityTable5{
+	width:20%;
+}
+.userAuthorityTable6{
+	width:20%;
+}
+.userAuthorityTable7{
+	width:20%;
+}

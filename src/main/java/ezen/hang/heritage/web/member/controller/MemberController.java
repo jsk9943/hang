@@ -68,6 +68,7 @@ public class MemberController {
 			userinfo.put("userid", member.getUserid());
 			userinfo.put("username", member.getUsername());
 			userinfo.put("imagefilename", member.getImagefilename());
+			userinfo.put("admin", member.getAdmin());
 			return userinfo;
 		}
 		return userinfo;

@@ -72,7 +72,7 @@ if (userIdSaveCheckBox !== null) {
 
 // 아이디 찾기 버튼 눌렀을 때
 let lostMyIdButton = document.querySelector('#lostMyIdSearchButton');// 아이디 찾기 버튼
-if(lostMyIdButton !== null){
+if (lostMyIdButton !== null) {
 	lostMyIdButton.addEventListener('click', () => {
 		var width = 400; // 팝업 창의 너비
 		var height = 400; // 팝업 창의 높이
@@ -85,15 +85,15 @@ if(lostMyIdButton !== null){
 
 //비밀번호 찾기 버튼을 눌렀을 때
 let lostMyPasswordChangeButton = document.querySelector('#lostMyPasswordChangeButton');
-if(lostMyPasswordChangeButton !== null){
-	lostMyPasswordChangeButton.addEventListener('click',() => {
+if (lostMyPasswordChangeButton !== null) {
+	lostMyPasswordChangeButton.addEventListener('click', () => {
 		var width = 420; // 팝업 창의 너비
-        var height = 710; // 팝업 창의 높이
-        var left = (window.innerWidth - width) / 2; // 가로 중앙 위치 계산
-        var top = (window.innerHeight - height) / 2; // 세로 중앙 위치 계산
+		var height = 710; // 팝업 창의 높이
+		var left = (window.innerWidth - width) / 2; // 가로 중앙 위치 계산
+		var top = (window.innerHeight - height) / 2; // 세로 중앙 위치 계산
 
-        // 팝업 창을 화면 중앙에 열기
-        window.open("changeMyPassword", "changeMyPassword.html", "width=" + width + ", height=" + height + ", left=" + left + ", top=" + top);
+		// 팝업 창을 화면 중앙에 열기
+		window.open("changeMyPassword", "changeMyPassword.html", "width=" + width + ", height=" + height + ", left=" + left + ", top=" + top);
 	})
 }
 

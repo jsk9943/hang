@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="ezen.hang.heritage.domain.admin.mapper.AdminMapper">
+
+	<!-- 관리자가 맞는지 확인 -->
+	<select id="adminIdConfirm" parameterType="string" resultType="java.lang.String">
+		SELECT ADMIN 
+		FROM MEMBER
+		WHERE userid = #{userid};
+	</select>
+	
+	<!-- 모든 댓글 가져오기 -->
+	<select id="allCommentList" resultType="map">
+		SELECT USERID , COMMENT ,CCBAASNO ,CCBAMNM1 ,COMMENTDATE 
+		FROM HERITAGEREVIEW
+		ORDER BY COMMENTDATE DESC;
+	</select>
+	
+	<!-- 검색창을 통해 등록된 코멘트 조회하기 -->
+	<select id="keywordCommentFind" parameterType="map" resultType="map">
+		SELECT USERID, COMMENT ,CCBAASNO ,CCBAMNM1 ,COMMENTDATE 
+		FROM HERITAGEREVIEW
+		WHERE 1=1
+		    <if test="userid != null">
+		      AND userid LIKE CONCAT('%', #{userid}, '%')
+		    </if>
+		    <if test="commentKeyword != null">
+		      AND COMMENT LIKE CONCAT('%', #{commentKeyword}, '%')
+		    </if>
+		    <if test="ccbaAsno != null">
+		      AND CCBAASNO LIKE CONCAT('%', #{ccbaAsno}, '%')
+		    </if>
+		    <if test="ccbaMnm1 != null">
+		      AND CCBAMNM1 LIKE CONCAT('%', #{ccbaMnm1}, '%')
+		    </if>
+	</select>
+	
+	<!-- 선택한 리뷰 삭제하기 -->
+	<delete id="checkCommentDelete" parameterType="map">
+		DELETE R, H
+		FROM RATE R
+		JOIN HERITAGEREVIEW H ON R.CCBAASNO = H.CCBAASNO AND  R.USERID = H.USERID 
+		WHERE R.CCBAASNO = #{ccbaAsno} AND R.USERID = #{userid} ;
+	</delete>
+	
+	<!-- 가입된 유저의 관리자권한과 댓글쓰기권한 가져오기 -->
+	<select id="allUserAuthority" resultType="map">
+		SELECT USERID, ADMIN, ACCESS
+		FROM MEMBER;
+	</select>
+
+</mapper>
+
+	
+	

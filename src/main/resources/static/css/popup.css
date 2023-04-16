@@ -1,0 +1,7 @@
+@font-face {
+	font-family: 'moonhwa';
+	src: url('font/moonhwa-bold.woff') format('truetype');
+}
+*{
+	font-family: 'moonhwa';
+}
