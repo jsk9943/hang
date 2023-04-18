@@ -55,5 +55,12 @@ public interface MemberMapper {
 
 	// 북마크 삭제기능
 	public void deleteBookmark(Map<String, Object> BookmarkList);
+	
+	//회원탈퇴 기능
+	public void userWithdrawal1(String userid);
+	public void userWithdrawal2(String userid);
+	public void userWithdrawal3(String userid);
+	public void userWithdrawal4(String userid);
+	public void userWithdrawal5(String userid);
 
 }

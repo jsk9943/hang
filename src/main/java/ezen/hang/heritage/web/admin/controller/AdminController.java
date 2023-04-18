@@ -61,4 +61,29 @@ public class AdminController {
 		} catch (Exception e) {}
 		return map;
 	}
+
+	// 검색단어로 필요한 유저정보 가져오기
+	@PostMapping("/ulist/search")
+	@ResponseBody
+	public List<Map<String, Object>> keywordUserAuthorityFind(@RequestBody Map<String, Object> keyword) {
+		List<Map<String, Object>> map = null;
+		try {
+			map = adminService.keywordUserAuthorityFind(keyword);
+		} catch (Exception e) {}
+		return map;
+	}
+
+	// 유저의 관리자 권한 및 댓글쓰기 권한 변경
+	@PatchMapping("/ulist")
+	@ResponseBody
+	public String userAuthorityChange(@RequestBody List<Map<String, Object>> userData) {
+		String result = null;
+		try {
+			adminService.userAuthorityChange(userData);
+			result = "true";
+		} catch (Exception e) {
+			result = "false";
+		}
+		return result;
+	}
 }

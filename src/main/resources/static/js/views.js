@@ -3,6 +3,27 @@
  */
 import { heritageKeywordSearch, heritageKeywordSearchDetail } from './fetch.js';
 import { detailContentLoad } from './detailContent.js';
+
+// 알아보기 버튼 누르면 소개창 나오게 하기
+if (document.querySelector('.introduce') !== null) {
+	document.querySelector('.introduce').addEventListener('click', () => {
+		fetch('/introduce')
+			.then(response => {
+				if (response.ok) {
+					var width = 600; // 팝업 창의 너비
+					var height = 560; // 팝업 창의 높이
+					var left = (window.innerWidth - width) / 2; // 가로 중앙 위치 계산
+					var top = (window.innerHeight - height) / 2; // 세로 중앙 위치 계산
+					// 팝업 창을 화면 중앙에 열기
+					window.open("/introduce", "introducePage.html", "width=" + width + ", height=" + height + ", left=" + left + ", top=" + top);
+				}
+			})
+			.catch(error => {
+				alert(`관리자 페이지 접속에 문제가 발생하였습니다\n${error}`);
+			});
+	})
+}
+
 let heritageSearch = document.querySelector("#searchInput"); //검색창
 //검색 아이콘을 눌렀을 때
 document.querySelector("#searchButton").addEventListener("click", (event) => {

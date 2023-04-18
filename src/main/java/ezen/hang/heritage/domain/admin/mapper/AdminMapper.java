@@ -23,4 +23,10 @@ public interface AdminMapper {
 	
 	// 가입된 유저의 관리자권한과 댓글쓰기권한 가져오기
 	public List<Map<String, Object>> allUserAuthority();
+	
+	// 검색단어로 유저 찾아오기
+	public List<Map<String, Object>> keywordUserAuthorityFind(Map<String, Object> keyword);
+	
+	// 유저의 관리자 권한 및 댓글쓰기 권한 변경
+	public void userAuthorityChange(Map<String, Object> userData);
 }

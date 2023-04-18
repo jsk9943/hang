@@ -216,4 +216,20 @@ public class MemberServiceImpl implements MemberService {
 			memberMapper.deleteBookmark(map);
 		}
 	}
+	
+	// 회원탈퇴 기능
+	@Override
+	public void userWithdrawal(Map<String, Object> userData) throws Exception {
+		String sessionUserid = userData.get("sessionUserid").toString();
+		String userid = userData.get("userid").toString();
+		if(sessionUserid.equals(userid)) {
+			memberMapper.userWithdrawal1(userid);
+			memberMapper.userWithdrawal2(userid);
+			memberMapper.userWithdrawal3(userid);
+			memberMapper.userWithdrawal4(userid);
+			memberMapper.userWithdrawal5(userid);			
+		} else {
+			throw new Exception();
+		}
+	};
 }

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hang이란?</title>
+  <style type="text/css">
+    @font-face {
+      font-family: 'moonhwa';
+      src: url('/css/font/moonhwa-bold.woff') format('truetype');
+    }
+    @font-face {
+      font-family: 'moonhwa-r';
+      src: url('/css/font/moonhwa-regular.woff') format('truetype');
+    }
+    .overlay {
+        position: relative; /* 추가: relative 포지션 설정 */
+        background-image: url("/img/introduceImg.png");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0.3;
+        z-index: 1;
+    }
+    
+    .inner {
+        font-family: 'moonhwa-r';
+        opacity: 1;
+        position: relative; /* 추가: relative 포지션 설정 */
+        z-index: 1; /* 추가: z-index 설정으로 텍스트가 오버레이 위로 올라오도록 설정 */
+    }
+    
+    h1{
+      letter-spacing: 5px;
+    }
+    
+    h2 {
+      padding-left:10px;
+      letter-spacing: 20px;
+    }
+    
+    p {
+      padding-left:20px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="overlay"></div>
+  <header class="inner">
+    <h1 style="font-family: 'moonhwa';">Hang이란?</h1>
+  </header>
+  <section class="inner">
+    <h2 style="font-family: 'moonhwa';">목적</h2>
+    <article>
+      <p>여행(旅行)을 하는 여행객들이,</p>
+      <p>대한민국에 내 주변에 존재하는 문화재를 손 쉽게 찾고,</p>
+      <p>한줄평으로 사용자가 감상 및 방문 소감을 남기며,</p>
+      <p>원하는 지역의 문화재를 알아볼 수 있는 서비스 입니다.</p>
+    </article>
+  </section>
+  <section class="inner">
+    <h2 style="font-family: 'moonhwa';">기능</h2>
+    <article>
+      <p>1. 카카오 지도를 기반으로 위치를 확인할 수 있는 서비스를 제공</p>
+      <p>2. 문화재에 대한 다양한 유저들의 의견과 소감을 한눈에 보는 댓글 및 별점 서비스</p>
+      <p>3. 방문했거나 방문할 예정인 문화재에 대한 즐겨찾기 기능으로 저장하고 기록</p>
+      <p>4. 문화재청에서 제공하는 정확한 문화재에 대한 사진과 설명 제공</p>
+      <p>5. 검색 시 지역명으로만 검색해도 관련 문화재를 검색할 수 있는 기능 제공</p>
+    </article>
+  </section>
+  </div>
+</body>
+</html>

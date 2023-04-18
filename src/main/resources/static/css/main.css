@@ -35,6 +35,11 @@ html, body {
 	src: url('font/moonhwa-bold.woff') format('truetype');
 }
 
+@font-face {
+	font-family: 'moonhwa-r';
+	src: url('font/moonhwa-regular.woff') format('truetype');
+}
+
 .hangnav {
 	/*nav바 전체 : hang_01 */
 	z-index: 9999;
@@ -174,9 +179,8 @@ html, body {
 
 .bug1 {
   	text-align: center;
-  	height:30%;
-  	margin-top: 70vh;
-  	box-shadow: -1px -1px 5px rgb(98, 107, 233);
+  	height:65%;
+  	box-shadow: -1px 1px 5px rgb(98, 107, 233);
 }
 
 /*로그인후 loginnav */
@@ -184,13 +188,10 @@ html, body {
 
 /*오른쪽 aside 내부*/
 .bug1_1{
-   text-align: center; padding: 5px; height: 500px; margin-top: 50vh;
-    box-shadow: -1px -1px 5px rgb(98, 107, 233); background-color: #f5f5f5;
-}
-
-.bug2{
-	overflow:hidden;
-	border:2px solid red;
+   text-align: center; padding: 5px;
+   height: 550px;
+    box-shadow: -1px 1px 5px rgb(98, 107, 233);
+    background-color: #f5f5f5;
 }
 
 .userimpo{

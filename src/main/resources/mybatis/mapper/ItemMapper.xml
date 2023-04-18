@@ -5,33 +5,36 @@
 <mapper
 	namespace="ezen.hang.heritage.domain.item.mapper.ItemMapper">
 	<!-- 평균 별점 가져오기 -->
-	<select id="starRatingAvg" parameterType="CommentStarRate"
-		resultType="CommentStarRate">
-		SELECT STARPOINT , USERID , ccbaAsno
+	<select id="rateAvgPoint" parameterType="CommentStarRate" resultType="CommentStarRate">
+		SELECT STARPOINT , USERID , ccbaKdcd, ccbaAsno, ccbaCtcd
 		FROM RATE
-		WHERE ccbaAsno = #{ccbaAsno};
+		WHERE CCBAKDCD = #{ccbaKdcd} AND CCBAASNO = #{ccbaAsno} AND CCBACTCD = #{ccbaCtcd};
+	</select>
+	
+	<!-- 데이터 등록 전 이용가능여부 체크 -->
+	<select id="userAccess" parameterType="string" resultType="string">
+	SELECT ACCESS FROM MEMBER WHERE USERID = #{userid};
 	</select>
 	
 	<!-- 신규 별점 등록 -->
 	<insert id="starRatingCreate" parameterType="CommentStarRate" >
-		INSERT INTO RATE
-		(STARPOINT, USERID, ccbaAsno)
-		VALUES (#{starpoint}, #{userid}, #{ccbaAsno});
+		INSERT INTO RATE (STARPOINT, USERID, ccbaKdcd, ccbaAsno, ccbaCtcd)
+		VALUES (#{starpoint}, #{userid}, #{ccbaKdcd}, #{ccbaAsno}, #{ccbaCtcd});
 	</insert>
 	
 	<!-- 신규 코멘트 등록 -->
 	<insert id="commentCreate" parameterType="CommentStarRate" >
 		INSERT INTO
-		HERITAGEREVIEW (userid, CCBAASNO, ccbaMnm1, COMMENT, COMMENTDATE)
-		VALUES (#{userid}, #{ccbaAsno}, #{ccbaMnm1}, #{comment}, NOW());
+		HERITAGEREVIEW (userid, ccbaKdcd, ccbaAsno, ccbaCtcd, ccbaMnm1, COMMENT, COMMENTDATE)
+		VALUES (#{userid}, #{ccbaKdcd}, #{ccbaAsno}, #{ccbaCtcd}, #{ccbaMnm1}, #{comment}, NOW());
 	</insert>
 	
 	<!-- 등록된 코멘트와 별점 불러오기 -->
-	<select id="commentStarRateLoad" parameterType="string" resultType="map">
-		SELECT  H.USERID, H.COMMENT, H.COMMENTDATE, R.STARPOINT
+	<select id="commentStarRateLoad" parameterType="map" resultType="map">
+		SELECT DISTINCT H.USERID, H.COMMENT, H.COMMENTDATE, R.STARPOINT
 		FROM HERITAGEREVIEW H
-		JOIN RATE R ON H.USERID  = R.USERID AND H.CCBAASNO = R.CCBAASNO 
-		WHERE H.CCBAASNO = #{ccbaAsno}
+		JOIN RATE R ON H.USERID  = R.USERID AND H.CCBAASNO = R.CCBAASNO AND H.CCBAKDCD = R.CCBAKDCD AND H.CCBACTCD = R.CCBACTCD 
+		WHERE H.CCBAKDCD = #{ccbaKdcd} AND H.CCBAASNO = #{ccbaAsno} AND H.CCBACTCD = #{ccbaCtcd}
 		ORDER BY H.COMMENTDATE DESC;
 	</select>
 	
@@ -39,7 +42,7 @@
 	<select id="userHeritageList" parameterType="String" resultType="CommentStarRate">
 		SELECT H.CCBAMNM1, H.CCBAASNO, H.COMMENT, H.COMMENTDATE, R.STARPOINT  
 		FROM HERITAGEREVIEW H
-		JOIN RATE R ON R.CCBAASNO = H.CCBAASNO AND  R.USERID = H.USERID 
+		JOIN RATE R ON H.USERID  = R.USERID AND H.CCBAASNO = R.CCBAASNO AND H.CCBAKDCD = R.CCBAKDCD  AND H.CCBACTCD = R.CCBACTCD
 		WHERE H.USERID = #{userid}
 		ORDER BY H.COMMENTDATE DESC;
 	</select>

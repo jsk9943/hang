@@ -21,7 +21,7 @@ if (document.getElementById('adminButton') !== null) {
 			.then(response => {
 				if (response.ok) {
 					var width = 1000; // 팝업 창의 너비
-					var height = 750; // 팝업 창의 높이
+					var height = 800; // 팝업 창의 높이
 					var left = (window.innerWidth - width) / 2; // 가로 중앙 위치 계산
 					var top = (window.innerHeight - height) / 2; // 세로 중앙 위치 계산
 					// 팝업 창을 화면 중앙에 열기

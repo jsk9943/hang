@@ -3,7 +3,6 @@
  */
 import { bookmarkConfirmRegistration, heritageCommentList, commentStaRateCreate, bookmarkAdd, bookmarkClear } from './fetch.js';
 export function detailContentLoad(data) {
-
 	let markerLongitude = Number(data.longitude);
 	let markerLatitude = Number(data.latitude);
 	let moveLatLon; // 마커 이동할 좌표
@@ -200,24 +199,7 @@ export function detailContentLoad(data) {
         <p class="modal-title fs-5" id="staticBackdropLabel" style="font-weight: bold; font-size:1.5em; font-family:'moonhwa';">${data.ccbaMnm1}의 리뷰 내역</p>
         <button type="button" class="btn-close commentCreateTopClose" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body" style="max-height:70%;">
-        <table class="table table-hover" style="font-size:0.8em; text-align: center;">
- 			<thead>
-            <tr>
-              <th scope="col" style="width:20%;">아이디</th>
-              <th scope="col" style="width:10%;">점수</th>
-              <th scope="col" style="width:50%;">코멘트</th>
-              <th scope="col" style="width:20%;">작성일자</th>
-            </tr>
-          </thead>
-          <tbody id="dyn_tbody">
-          </tbody>
-		</table>
-		<nav aria-label="Page navigation example">
-	        <ul id="dyn_ul" class="pagination justify-content-center" >
-	            
-	        </ul>
-      </nav>
+      <div class="modal-body table-container" style="max-height:70%;">
       </div>
       <hr>
       <div style="margin:0;">
@@ -247,8 +229,10 @@ export function detailContentLoad(data) {
       <div class="modal-footer">
         <button id="commentStarpointConfirmButton" class="btn btn-primary" style="width:20%;">등록</button>
         <button id="commentStarpointCalcelButton" type="button" class="btn btn-secondary commentCreateClose" data-bs-dismiss="modal" style="width:20%;">닫기</button>
-      	<input id="heritageNumber" type="hidden" value="${data.ccbaAsno}">
-      	<input id="heritageName" type="hidden" value="${data.ccbaMnm1}">
+      	<input id="heritageccbaKdcd" type="hidden" value="${data.ccbaKdcd}">
+      	<input id="heritageccbaAsno" type="hidden" value="${data.ccbaAsno}">
+      	<input id="heritageccbaCtcd" type="hidden" value="${data.ccbaCtcd}">
+      	<input id="heritageccbaMnm1" type="hidden" value="${data.ccbaMnm1}">
       </div>
     </div>
   </div>
@@ -268,148 +252,60 @@ export function detailContentLoad(data) {
 			var modal2 = bootstrap.Modal.getOrCreateInstance(myModalEl2);
 			modal2.show();
 			searchResultMenu();
-
 			// 문화재에 등록된 코멘트 가져오기
-			heritageCommentList(data.ccbaAsno)
+			heritageCommentList(data.ccbaKdcd, data.ccbaAsno, data.ccbaCtcd)
 				.then(data => {
-					var tableList = []; // tableInsert 함수에서 for문을 돌면서 삽입 실시
-					var pageList = 10; // 한개의 페이지에 보여질 목록 개수
-					var pageMax = 5; // 최대 생성될 페이지 개수 (페이지를 더보려면 이전, 다음 버튼 클릭해야함)	
-					var idx = 0; //idx 값 확인 후 동적 페이지 전환 및 데이터 표시
-					var page = 1; //생성 시작할 페이지 번호
-					// 댓글 등록자와 로그인 사용자 일치여부 확인
-					for (var k = 0; k < data.length; k++) {
-						if (data[k].USERID === sessionStorage.getItem("userid")) {
-							document.querySelector('#commentInputText').value = '이미 작성하였습니다';
-							document.querySelector('#commentInputText').disabled = true;
-							document.querySelector('#customRange2').disabled = true;
-							document.querySelector('#commentStarpointConfirmButton').disabled = true;
-						}
+					/**
+					 * 모달 내 게시판 페이징 시 새로운 데이터 생길 때 리프래쉬 되지 않아
+					 * table 자체를 삭제 후 새로 생성하게 끔 DOM 형태로 재구성
+					 * */
+
+					// 테이블 요소와 테이블 컨테이너 요소 가져오기
+					var table = document.querySelector('.table');
+					var tableContainer = document.querySelector('.table-container');
+					if (table) {
+						// 테이블 삭제
+						table.remove();
 					}
-					tableInsert(data);
-					function tableInsert(data) {
-						// [for 반복문을 돌려서 tr 데이터 임의로 생성 실시]
-						for (var i = 0; i < data.length; i++) {
-							// JSON 형식으로 리스트에 추가 실시
-							var writerData = {
-								"idx": i,
-								"writer": data[i].USERID,
-								"writerStarpoint": data[i].STARPOINT,
-								"writerComment": data[i].COMMENT,
-								"writerCommentDate": data[i].COMMENTDATE
-							};
-							tableList.push(writerData);
-						}
-						pageInsert(page);
-					};
-
-					function pageInsert(value) {
-						document.getElementById("dyn_ul").innerHTML = "";
-						var startIndex = value; // 생성 시작 페이지    		
-						var endIndex = tableList.length; // 배열에 있는 길이 확인
-						var pageCount = 0;
-						var pagePlus = 0;
-						if (endIndex > pageList) { // tr 행 개수가 5 이상인 경우 (임의로 설정)
-							pageCount = Math.floor(endIndex / pageList); //생성될 페이지 수 (소수점 버림)
-							pagePlus = endIndex % pageList; //추가 나머지 자식 수
-							if (pagePlus > 0) { //추가 자식수가 있는경우 >> 페이지 추가
-								pageCount = pageCount + 1;
-							}
-						}
-
-						if (startIndex > pageCount) { //길이 초과 시 기존꺼로 다시 저장
-							startIndex = page;
-						}
-						else if (startIndex < 0) { //길이 미만 시 기존꺼로 다시 저장
-							startIndex = page;
-						}
-						else {
-							page = startIndex;
-						}
-
-						if (pageCount == 1) { //생성해야할 페이지가 1페이지인 경우
-							var insertUl = "<li class='page-item'>"; // 변수 선언
-							insertUl += insertUl + "<a class='page-link' href='javascript:void(0)' onclick = 'newPage(1);'>";
-							insertUl += insertUl + i;
-							insertUl += insertUl + "</a></li>";
-							document.getElementById("dyn_ul").innerHTML += insertUl; // 동적으로 추가 실시      			
-						}
-						else if (pageCount >= 2) { //생성해야할 페이지가 2페이지 이상인 경우
-							// 이전 페이지 추가 실시 
-							var insertSTR = "<li class='page-item'>"; // 변수 선언
-							insertSTR = insertSTR + "<a class='page-link' href='javascript:void(0)' onclick = 'newPage(" + "-1" + ");'>";
-							insertSTR = insertSTR + "Previous";
-							insertSTR = insertSTR + "</a></li>";
-							document.getElementById("dyn_ul").innerHTML += insertSTR; // 동적으로 추가 실시      			
-
-							// 특정 1, 2, 3 .. 페이지 추가 실시
-							var count = 1;
-							for (var i = startIndex; i <= pageCount; i++) {
-								if (count > pageMax) { //최대로 생성될 페이지 개수가 된 경우 
-									page = i - pageMax; //생성된 페이지 초기값 저장 (초기 i값 4 탈출 인경우 >> 1값 저장)
-									break; //for 반복문 탈출
-								}
-								var insertUl = "<li class='page-item'>"; // 변수 선언
-								insertUl = insertUl + "<a class='page-link' href='javascript:void(0)' onclick = 'newPage(" + i + ");'>";
-								insertUl = insertUl + String(i);
-								insertUl = insertUl + "</a></li>";
-								document.getElementById("dyn_ul").innerHTML += insertUl; // 동적으로 추가 실시  
-								count++;
-							}
-
-							// 다음 페이지 추가 실시
-							var insertEND = "<li class='page-item'>"; // 변수 선언
-							insertEND = insertEND + "<a class='page-link' href='javascript:void(0)' onclick = 'newPage(" + "0" + ");'>";
-							insertEND = insertEND + "Next";
-							insertEND = insertEND + "</a></li>";
-							document.querySelector('#dyn_ul').innerHTML += insertEND; //동적으로 추가 실시
-						}
-						document.getElementById("dyn_tbody").innerHTML = ""; //tbody tr 전체 삭제 실시
-						newPage(startIndex);
-					};
-
-					function newPage(pageCurrent) {
-						if (pageCurrent == -1) { // 이전 페이지
-							document.getElementById("dyn_tbody").innerHTML = ""; //tbody tr 전체 삭제 실시
-
-							// [새롭게 페이징 처리 실시]
-							var newIdx = page - pageMax;
-
-							// [테이블 데이터에 따라 페이징 처리 실시]
-							pageInsert(newIdx); //표시될 페이지 번호 전송
-						}
-						else if (pageCurrent == 0) { // 다음 페이지
-							document.getElementById("dyn_tbody").innerHTML = "";
-							var newIdx = page + pageMax;
-							pageInsert(newIdx); //표시될 페이지 번호 전송
-						}
-						else {
-							document.querySelector('#dyn_tbody').innerHTML = "";
-							idx = (pageCurrent * pageList) - pageList;
-							var checkCount = 1;
-							for (var i = idx; i < tableList.length; i++) { //반복문을 수행하면서 tbody에 tr데이터 삽입 실시
-								if (checkCount > pageList) { //한페이지에 표시될 목록을 초과한 경우
-									return;
-								}
-								// json 데이터 파싱 실시
-								var dataParsingComment = JSON.parse(JSON.stringify(tableList[i])); //각 배열에 있는 jsonObject 참조
-								var writer = dataParsingComment.writer;
-								var writerStarpoint = dataParsingComment.writerStarpoint;
-								var writerComment = dataParsingComment.writerComment;
-								var writerCommentDate = dataParsingComment.writerCommentDate;
-								// 동적으로 리스트 추가
-								var insertTr = ""; // 변수 선언
-								insertTr += "<tr>"; // body 에 남겨둔 예시처럼 데이터 삽입
-								insertTr += "<td>" + writer + "</td>";
-								insertTr += "<td>" + writerStarpoint + "</td>";
-								insertTr += "<td>" + writerComment + "</td>";
-								insertTr += "<td>" + writerCommentDate + "</td>";
-								insertTr += "</tr>";
-								document.getElementById("dyn_tbody").innerHTML += insertTr;
-								checkCount++;
-							}
-						}
-					};
+					// 새로운 테이블 요소 생성
+					var newTable = document.createElement('table');
+					newTable.className = 'table table-hover';
+					newTable.style.fontSize = '0.8em';
+					newTable.style.textAlign = 'center';
+					// 테이블 헤더 생성
+					var thead = document.createElement('thead');
+					var tr = document.createElement('tr');
+					tr.innerHTML = `
+							  <th scope="col" style="width:20%;">아이디</th>
+				              <th scope="col" style="width:10%;">점수</th>
+				              <th scope="col" style="width:50%;">코멘트</th>
+				              <th scope="col" style="width:20%;">작성일자</th>
+							`;
+					thead.appendChild(tr);
+					newTable.appendChild(thead);
+					// 테이블 바디 생성
+					var tbody = document.createElement('tbody');
+					tbody.id = 'dyn_tbody';
+					newTable.appendChild(tbody);
+					// 테이블 컨테이너에 새로운 테이블 추가
+					tableContainer.innerHTML = ''; // 기존의 내용을 비우고 새로 추가
+					tableContainer.appendChild(newTable);
+					// Pagination 요소 가져오기
+					var pagination = document.querySelector('.pagination');
+					// Pagination 삭제
+					if (pagination) {
+						// Pagination 삭제
+						pagination.remove();
+					}
+					// 새로운 Pagination 요소 생성
+					var newPagination = document.createElement('nav');
+					newPagination.setAttribute('aria-label', 'Page navigation example');
+					newPagination.innerHTML = `
+						  <ul id="dyn_ul" class="pagination" style="justify-content:center;"></ul>
+									`;
+					// 테이블 컨테이너에 새로운 Pagination 추가
+					tableContainer.appendChild(newPagination);
+					heritageCommentStart(data);
 				})
 				.catch(error => {
 					alert(`관리자에게 문의해주세요\n${error}`);
@@ -456,8 +352,10 @@ export function detailContentLoad(data) {
 			if (commentInputtype !== null) {
 				cspcb.addEventListener("click", function(event) {
 					event.preventDefault()
-					let heritageCcbaAsno = document.querySelector('#heritageNumber').value // 문화재 번호
-					let heritageCcbaMnm1 = document.querySelector('#heritageName').value // 문화재 이름
+					let heritageCcbaKdcd = document.querySelector('#heritageccbaKdcd').value // 문화재 번호
+					let heritageCcbaAsno = document.querySelector('#heritageccbaAsno').value // 문화재 번호
+					let heritageCcbaCtcd = document.querySelector('#heritageccbaCtcd').value // 문화재 번호
+					let heritageCcbaMnm1 = document.querySelector('#heritageccbaMnm1').value // 문화재 이름
 					if (commentInputResult === '') {
 						alert('공백으로 등록 할 수 없습니다');
 						return;
@@ -469,7 +367,7 @@ export function detailContentLoad(data) {
 						return;
 					} else {
 						commentInputtype.value = '';
-						commentStaRateCreate(sessionStorage.getItem("userid"), heritageCcbaAsno, heritageCcbaMnm1, commentInputResult, starPointInputResult);
+						commentStaRateCreate(sessionStorage.getItem("userid"), heritageCcbaKdcd, heritageCcbaAsno, heritageCcbaCtcd, heritageCcbaMnm1, commentInputResult, starPointInputResult);
 						markerClose();
 						// 별점 등록창 종료 시 검색결과 창 다시 보여주기
 						commentCreateCloseButton.click();
@@ -497,3 +395,4 @@ export function detailContentLoad(data) {
 		}
 	}
 }
+

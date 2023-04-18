@@ -161,4 +161,18 @@ public class MemberController {
 		}
 		return result;
 	}
+	
+	// 회원 탈퇴
+	@DeleteMapping()
+	@ResponseBody
+	public String userWithdrawal(@RequestBody Map<String, Object> userData) {
+		String result = null;
+		try {
+			memberService.userWithdrawal(userData);
+			result = "true";
+		} catch (Exception e) {
+			result = "false";
+		}
+		return result;
+	}
 }

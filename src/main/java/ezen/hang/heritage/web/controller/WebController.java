@@ -29,4 +29,10 @@ public class WebController {
 	public String adminPage() {
 		return "admin";
 	}
+	
+	//소개 페이지
+	@GetMapping("/introduce")
+	public String introducePage() {
+		return "introducePage";
+	}
 }

@@ -3,39 +3,30 @@ package ezen.hang.heritage.domain.item.dto;
 import java.sql.Date;
 
 public class CommentStarRate {
-	private String ccbaAsno, ccbaMnm1, comment, userid;
+	private String ccbaKdcd, ccbaAsno, ccbaCtcd, ccbaMnm1, comment, userid;
 	private int starpoint, count;
 	private Date commentDate;
 
 	public CommentStarRate() {}
-	
-	public CommentStarRate(String ccbaAsno) {
-		this.ccbaAsno = ccbaAsno;
-	}
-	
-	public CommentStarRate(String ccbaAsno, String userid) {
-		this.ccbaAsno = ccbaAsno;
-		this.userid = userid;
-	}
 
-	public CommentStarRate(String ccbaAsno, String userid, String ccbaMnm1, String comment, int starpoint, int count) {
+	public CommentStarRate(String ccbaKdcd, String ccbaAsno, String ccbaCtcd, String userid, String ccbaMnm1, String comment, int starpoint, int count) {
+		this.ccbaKdcd = ccbaKdcd;
 		this.ccbaAsno = ccbaAsno;
+		this.ccbaCtcd = ccbaCtcd;
 		this.ccbaMnm1 = ccbaMnm1;
 		this.comment = comment;
 		this.userid = userid;
 		this.starpoint = starpoint;
 		this.count = count;
 	}
-	
-	public CommentStarRate(String ccbaAsno, String userid, String ccbaMnm1, String comment, int starpoint, Date commentDate) {
-		this.ccbaAsno = ccbaAsno;
-		this.ccbaMnm1 = ccbaMnm1;
-		this.comment = comment;
-		this.userid = userid;
-		this.starpoint = starpoint;
-		this.commentDate = commentDate;
+
+	public String getCcbaKdcd() {
+		return ccbaKdcd;
 	}
 
+	public void setCcbaKdcd(String ccbaKdcd) {
+		this.ccbaKdcd = ccbaKdcd;
+	}
 
 	public String getCcbaAsno() {
 		return ccbaAsno;
@@ -43,6 +34,14 @@ public class CommentStarRate {
 
 	public void setCcbaAsno(String ccbaAsno) {
 		this.ccbaAsno = ccbaAsno;
+	}
+
+	public String getCcbaCtcd() {
+		return ccbaCtcd;
+	}
+
+	public void setCcbaCtcd(String ccbaCtcd) {
+		this.ccbaCtcd = ccbaCtcd;
 	}
 
 	public String getCcbaMnm1() {
@@ -61,20 +60,20 @@ public class CommentStarRate {
 		this.comment = comment;
 	}
 
-	public int getStarpoint() {
-		return starpoint;
-	}
-
-	public void setStarpoint(int starpoint) {
-		this.starpoint = starpoint;
-	}
-
 	public String getUserid() {
 		return userid;
 	}
 
 	public void setUserid(String userid) {
 		this.userid = userid;
+	}
+
+	public int getStarpoint() {
+		return starpoint;
+	}
+
+	public void setStarpoint(int starpoint) {
+		this.starpoint = starpoint;
 	}
 
 	public int getCount() {
@@ -95,8 +94,9 @@ public class CommentStarRate {
 
 	@Override
 	public String toString() {
-		return "CommentStarRate [ccbaAsno=" + ccbaAsno + ", ccbaMnm1=" + ccbaMnm1 + ", comment=" + comment + ", userid="
-				+ userid + ", starpoint=" + starpoint + ", count=" + count + ", commentDate=" + commentDate + "]";
+		return "CommentStarRate [ccbaKdcd=" + ccbaKdcd + ", ccbaAsno=" + ccbaAsno + ", ccbaCtcd=" + ccbaCtcd
+				+ ", ccbaMnm1=" + ccbaMnm1 + ", comment=" + comment + ", userid=" + userid + ", starpoint=" + starpoint
+				+ ", count=" + count + ", commentDate=" + commentDate + "]";
 	}
 
 

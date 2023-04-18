@@ -61,8 +61,11 @@ public class ItemController {
 
 	// 문화재 개별 등록된 댓글 및 별점 가져오기
 	@GetMapping("/output")
-	public List<Map<String, Object>> loadCommentStarRate(@RequestParam("ccbaAsno") String ccbaAsno) {
-		return itemService.loadCommentStarRate(ccbaAsno);
+	public List<Map<String, Object>> commentStarRateLoad(
+			@RequestParam("ccbaKdcd") String ccbaKdcd,
+			@RequestParam("ccbaAsno") String ccbaAsno,
+			@RequestParam("ccbaCtcd") String ccbaCtcd) {
+		return itemService.commentStarRateLoad(ccbaKdcd, ccbaAsno, ccbaCtcd);
 	}
 
 }

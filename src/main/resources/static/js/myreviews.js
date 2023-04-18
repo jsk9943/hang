@@ -12,13 +12,7 @@ var editDeleteContent = `
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="editDeleteModalLabel" style="font-weight: bold;">${loginUserid}님의 댓글 및 별점 관리</h1>
       </div>
-      <div class="modal-body table-container scrollBarDesign" >
-        
-       <nav aria-label="Page navigation example">
-             <ul id="dyn_ul" class="pagination" style="justify-content:center;" >
-                
-             </ul>
-         </nav>
+      <div class="modal-body tables-container" >
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-warning btn-sm" id="checkBoxAllcheckButton">전체선택 / 해제</button>
@@ -70,7 +64,7 @@ if (myCommentButton !== null) {
 				 * */
 				// 테이블 요소와 테이블 컨테이너 요소 가져오기
 				var table = document.querySelector('.table');
-				var tableContainer = document.querySelector('.table-container');
+				var tableContainer = document.querySelector('.tables-container');
 				if (table) {
 					// 테이블 삭제
 					table.remove();
@@ -114,7 +108,7 @@ if (myCommentButton !== null) {
 								`;
 				// 테이블 컨테이너에 새로운 Pagination 추가
 				tableContainer.appendChild(newPagination);
-				tableInsert(data);
+				myreviewsTableInsert(data);
 			})
 			.catch(error => {
 				alert(`리뷰를 불러오는 도중 문제가 발생하였습니다\n관리자에게 문의해주세요\n${error}`);

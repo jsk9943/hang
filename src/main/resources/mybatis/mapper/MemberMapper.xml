@@ -114,6 +114,33 @@
       FROM BOOKMARK
       WHERE USERID = #{userid} AND CCBAASNO = #{ccbaAsno};
    </delete>
+   
+   <!-- 회원 탈퇴 -->
+	<update id="userWithdrawal1" parameterType="string">
+	UPDATE HERITAGEREVIEW
+	SET userid = '탈퇴회원'
+	WHERE userid = #{userid};
+	</update>
+	<update id="userWithdrawal2" parameterType="string">
+	UPDATE RATE
+	SET userid = '탈퇴회원'
+	WHERE userid = #{userid};
+	</update>
+   <delete id="userWithdrawal3" parameterType="string">
+		DELETE 
+		FROM BOOKMARK  
+		WHERE USERID = #{userid};
+   </delete>
+   <delete id="userWithdrawal4" parameterType="string">
+		DELETE 
+		FROM PROFILEIMAGE
+		WHERE USERID = #{userid};
+   </delete>
+   <delete id="userWithdrawal5" parameterType="string">
+		DELETE 
+		FROM MEMBER 
+		WHERE USERID = #{userid};
+   </delete>
 </mapper>
 
 	

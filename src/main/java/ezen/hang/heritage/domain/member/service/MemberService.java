@@ -51,4 +51,7 @@ public interface MemberService {
 
 	// 북마크 삭제 기능
 	public void deleteBookmark(List<Map<String, Object>> BookmarkList) throws Exception;
+	
+	// 회원탈퇴 기능
+	public void userWithdrawal(Map<String, Object> userData) throws Exception;
 }

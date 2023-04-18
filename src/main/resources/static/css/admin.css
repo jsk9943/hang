@@ -17,20 +17,17 @@
 }
 
 .commentTable4 {
-	width: 45%;
+	width: 50%;
 }
 
 .commentTable5 {
-	width: 10%;
+	width: 15%;
 }
 
 .commentTable6 {
 	width: 15%;
 }
 
-.commentTable7 {
-	width: 10%;
-}
 
 /*유저권한 테이블*/
 .userAuthorityTable{

@@ -8,12 +8,12 @@
 	<select id="adminIdConfirm" parameterType="string" resultType="java.lang.String">
 		SELECT ADMIN 
 		FROM MEMBER
-		WHERE userid = #{userid};
+		WHERE userid = #{adminid};
 	</select>
 	
 	<!-- 모든 댓글 가져오기 -->
 	<select id="allCommentList" resultType="map">
-		SELECT USERID , COMMENT ,CCBAASNO ,CCBAMNM1 ,COMMENTDATE 
+		SELECT USERID , COMMENT, CCBAKDCD, CCBAASNO, CCBACTCD ,CCBAMNM1 ,COMMENTDATE 
 		FROM HERITAGEREVIEW
 		ORDER BY COMMENTDATE DESC;
 	</select>
@@ -41,8 +41,8 @@
 	<delete id="checkCommentDelete" parameterType="map">
 		DELETE R, H
 		FROM RATE R
-		JOIN HERITAGEREVIEW H ON R.CCBAASNO = H.CCBAASNO AND  R.USERID = H.USERID 
-		WHERE R.CCBAASNO = #{ccbaAsno} AND R.USERID = #{userid} ;
+		JOIN HERITAGEREVIEW H ON H.USERID  = R.USERID AND H.CCBAASNO = R.CCBAASNO AND H.CCBAKDCD = R.CCBAKDCD  AND H.CCBACTCD = R.CCBACTCD
+		WHERE R.CCBAASNO = #{ccbaAsno} AND R.USERID = #{userid} AND R.CCBAKDCD = #{ccbaKdcd} AND R.CCBACTCD = #{ccbaCtcd};
 	</delete>
 	
 	<!-- 가입된 유저의 관리자권한과 댓글쓰기권한 가져오기 -->
@@ -50,6 +50,31 @@
 		SELECT USERID, ADMIN, ACCESS
 		FROM MEMBER;
 	</select>
+	
+	<!-- 검색단어로 유저 찾아오기 -->
+	<select id="keywordUserAuthorityFind" parameterType="map" resultType="map">
+		SELECT USERID, ADMIN , ACCESS
+		FROM MEMBER
+		WHERE 1=1
+		    <if test="userid != null">
+		      AND userid LIKE CONCAT('%', #{userid}, '%')
+		    </if>
+		    <if test="adminValue != null">
+		      AND ADMIN LIKE CONCAT('%', #{adminValue}, '%')
+		    </if>
+		    <if test="commentBlockValue != null">
+		      AND ACCESS LIKE CONCAT('%', #{commentBlockValue}, '%')
+		    </if>
+	</select>
+	
+	<!-- 유저의 권한 등록 제거 -->
+	<update id="userAuthorityChange" parameterType="map">
+	UPDATE MEMBER
+	SET ADMIN = #{admin}, ACCESS = #{access}
+	WHERE userid = #{userid};
+	</update>
+	
+	
 
 </mapper>
 

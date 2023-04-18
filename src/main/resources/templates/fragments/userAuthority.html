@@ -36,21 +36,20 @@
     <div class="input-group"
       style="width: 50%; float: left; margin-left: 25%;">
       <select style="font-size: 0.8em;" class="form-select"
-        id="inputGroup">
+        id="userAuthorityinputGroup">
+        <option selected>선택</option>
         <option value="userid">아이디</option>
-        <option value="adminValue">권한차단여부</option>
-        <option value="commentBlockValue">댓글쓰기차단여부</option>
-      </select> <input style="font-size: 0.8em;" type="text"
-        class="form-control w-50" id="searchInput" placeholder="검색">
-      <button class="btn btn-primary userAuthoritySearchButton"
-        type="button">검색</button>
+        <option value="adminValue">관리자권한</option>
+        <option value="commentBlockValue">댓글권한여부</option>
+      </select> <input style="font-size: 0.8em;" type="text" class="form-control w-50" id="userAuthoritySearchInput" placeholder="검색">
+      <button class="btn btn-primary userAuthoritySearchButton" type="button">검색</button>
     </div>
     <button type="button" class="btn btn-success userAuthoritychange"
       style="float: right; margin-right: 5%;">변경</button>
     <!-- 토스트 창 -->
     <div
       class="toast-container bottom-50 d-flex justify-content-center align-items-center w-100">
-      <div id="liveToast" class="toast" role="alert"
+      <div id="userAuthorityliveToast" class="toast" role="alert"
         aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
           <strong class="me-auto">최종확인</strong>
@@ -62,7 +61,7 @@
           <button type="button" class="btn btn-success btn-sm"
             id="finalAuthorityButton" data-bs-dismiss="modal">변경</button>
           <button type="button" class="btn btn-secondary btn-sm"
-            data-bs-dismiss="toast" id="toastCloseButton">닫기</button>
+            data-bs-dismiss="toast" id="AuthoritytoastCloseButton">닫기</button>
         </div>
       </div>
     </div>
@@ -74,9 +73,13 @@
 
 
   <script type="text/javascript" defer>
+  /**
+   * 관리권한은 막강하여 매순간 서버요청 시 로그인 된 관리자의 관리권한 속성을
+   * 서버에서 즉각 확인하기 위해 상시 세션에 저장된 아이디를 받아와
+   * MAPPER와 통신전에 관리권한 확인 후 업무처리 구현
+   */
     let userAuthorityAdminId = sessionStorage.getItem('userid'); //관리자 아이디
-    //권한게시판 접속 시 모든 유저 리스트로 가져오기
-    let userAuthorityButtons = document.querySelector('#userAuthorityButton');
+    let userAuthorityButtons = document.querySelector('#userAuthorityButton'); // 상단 댓글게시판 버튼
     if (userAuthorityButtons !== null) {
       userAuthorityButtons.addEventListener('click', () => {
         let fetchData = {
@@ -86,41 +89,52 @@
       })
     }
     
-    // 검색 창 클릭하면 검색단어로 가져오기
-    let userAuthoritySearchButton = document.querySelector('.userAuthoritySearchButton');
+    let userAuthoritySearchButton = document.querySelector('.userAuthoritySearchButton'); // 검색 버튼
     if(userAuthoritySearchButton !== null){
+        let userAuthorityinputGroup = document.getElementById("userAuthorityinputGroup");
+        let userAuthoritySearchInput = document.getElementById("userAuthoritySearchInput");
+        userAuthoritySearchInput.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                let userAuthorityinputGroupValue = userAuthorityinputGroup.value;
+                let userAuthoritySearchInputValue = userAuthoritySearchInput.value;
+                let keywordData = {
+                  "adminid": userAuthorityAdminId
+                }
+                keywordData[userAuthorityinputGroupValue] = userAuthoritySearchInputValue;
+                userAurhorityTableKeyword(keywordData);
+            }
+        });
     	userAuthoritySearchButton.addEventListener('click', () => {
-          let inputGroup = document.getElementById("inputGroup");
-          let searchInput = document.getElementById("searchInput");
-          let inputGroupValue = inputGroup.value;
-          let searchInputValue = searchInput.value;
+          let userAuthorityinputGroupValue = userAuthorityinputGroup.value;
+          let userAuthoritySearchInputValue = userAuthoritySearchInput.value;
           let keywordData = {
             "adminid": userAuthorityAdminId
           }
-          keywordData[inputGroupValue] = searchInputValue;
+          keywordData[userAuthorityinputGroupValue] = userAuthoritySearchInputValue;
           userAurhorityTableKeyword(keywordData);
         })      
     }
-    
-    // 받아온 유저권한 리스트 테이블로 보여주기
+
     function userAurhorityTableStart(fetchData) {
     	userAurhorityFetchstart(fetchData)
         .then(data => {
-        	document.querySelector('#userAuthorityCount').innerHTML = `총 ${data.length}건`;
+        	document.querySelector('#userAuthorityCount').innerHTML = `총 ${data.length}건`; // 조회건수
         	userAuthorityTableInsert(data);
         })
     }
     
-    // 받아온 유저권한 검색 리스트 테이블로 보여주기
     function userAurhorityTableKeyword(fetchData){
     	userAurhorityFetchKeyword(fetchData)
-      .then(data => {
-    	  document.querySelector('#userAuthorityCount').innerHTML = `총 ${data.length}건`;
-    	  userAuthorityTableInsert(data);
-      })
+        .then(data => {
+      	  document.querySelector('#userAuthorityCount').innerHTML = `총 ${data.length}건`; // 조회건수
+      	  userAuthorityTableInsert(data);
+        })
     }
     
-    // 유저권한 리스트 통신요청
+    /**
+     * 첫번째 함수는 초기 게시판 진입 시 불러오는 모든 유저권한을 가져오는 통신 fetch이며,
+     * 두번째 함수는 검색창을 통해서 입력된 값만 불러오는 fetch 입니다.
+     */
     function userAurhorityFetchstart(fetchData) {
       return fetch(`/admin/ulist`, {
         method: 'POST',
@@ -132,10 +146,8 @@
         })
     }
     
-    /*
-    // 유저권한 검색 리스트 통신요청
     function userAurhorityFetchKeyword(fetchData){
-      return fetch(`/admin/clist/search`, {
+      return fetch(`/admin/ulist/search`, {
         method: 'POST',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(fetchData)
@@ -144,28 +156,24 @@
           return response.json();
         })
     }
-    */
     
-    
-    /* [html 최초 로드 및 이벤트 상시 대기 실시] */
+    /**
+     * 윈도우가 로드되면 테이블은 기본적으로 한번 생성
+     * 이후 아래 콜백 순서대로 테이블이 생성되며 
+     * 페이징 처리 후 해당 페이지로 넘어갈 때 콜백으로 페이지 불러오는 기능구현
+     */
     window.onload = function () {
-      // 동적으로 테이블 tbody tr 행 생성 실시
       userAuthorityTableInsert(0);
     };
-
-    /* [테이블 리스트 전역 변수 선언 실시] */
-    var tableList = []; // userAuthorityTableInsert 함수에서 for문을 돌면서 삽입 실시
-    var pageList = 10; // 한개의 페이지에 보여질 목록 개수
-    var pageMax = 5; // 최대 생성될 페이지 개수 (페이지를 더보려면 이전, 다음 버튼 클릭해야함)     
-    var idx = 0; //idx 값 확인 후 동적 페이지 전환 및 데이터 표시
-    var page = 1; //생성 시작할 페이지 번호
-
-    /* [tbody tr 동적 삽입 이벤트 수행 함수] */
+    var tableList = [];
+    var pageList = 10; 
+    var pageMax = 5;   
+    var idx = 0;
+    var page = 1; 
+ 
     function userAuthorityTableInsert(data) {
-      tableList = []; // 새 결과값을 받기 위해 초기화
-      // [for 반복문을 돌려서 tr 데이터 임의로 생성 실시]
+      tableList = []; 
       for (var i = 0; i < data.length; i++) {
-        // JSON 형식으로 리스트에 추가 실시
         var jsonObject = {
           "idx": i + 1,
           "userid": data[i].USERID,
@@ -174,138 +182,111 @@
         };
         tableList.push(jsonObject);
       }
-      // [테이블 행 개수에따라 페이징 처리 실시]
       userAuthorityPageInsert(page);
     };
-
-    /* [페이징 처리 이벤트 수행 함수] */
+    
     function userAuthorityPageInsert(value) {
-      // [페이징 목록 초기화 실시]
-      $("#userAuthority_dyn_ul").empty();
-      // [생성된 테이블 tr 개수 확인 >> 페이징 처리 5개씩 목록 자름]       
-      var startIndex = value; // 생성 시작 페이지        
-      //var endIndex = $("#userAuthority_dyn_tbody tr").length; // tbody에 동적으로 추가된 tr 개수 확인
-      var endIndex = tableList.length; // 배열에 있는 길이 확인
-      // [tr 개수에 따라 페이징 해야할 개수 확인]
+      $("#userAuthority_dyn_ul").empty();     
+      var startIndex = value;    
+      var endIndex = tableList.length;
       var pageCount = 0;
       var pagePlus = 0;
-      if (endIndex > pageList) { // tr 행 개수가 5 이상인 경우 (임의로 설정)
-        pageCount = Math.floor(endIndex / pageList); //생성될 페이지 수 (소수점 버림)
-        pagePlus = endIndex % pageList; //추가 나머지 자식 수
-        if (pagePlus > 0) { //추가 자식수가 있는경우 >> 페이지 추가
+      if (endIndex > pageList) { 
+        pageCount = Math.floor(endIndex / pageList); 
+        pagePlus = endIndex % pageList;
+        if (pagePlus > 0) { 
           pageCount = pageCount + 1;
         }
       }
-
-      // [생성될 페이지 번호가 전체 생성되야하는 길이보다 크거나 작은지 확인]
-      if (startIndex > pageCount) { //길이 초과 시 기존꺼로 다시 저장
+      if (startIndex > pageCount) { 
         startIndex = page;
       }
-      else if (startIndex < 0) { //길이 미만 시 기존꺼로 다시 저장
+      else if (startIndex < 0) { 
         startIndex = page;
       }
       else {
         page = startIndex;
       }
-      // [동적 ul 페이징 처리 실시]
-      if (pageCount == 1) { //생성해야할 페이지가 1페이지인 경우
-        var insertUl = "<li class='page-item'>"; // 변수 선언
+      if (pageCount == 1) { 
+        var insertUl = "<li class='page-item'>"; 
         insertUl += insertUl + "<a class='page-link' href='javascript:void(0)' onclick = 'userAuthorityNewPage(1);'>";
         insertUl += insertUl + i;
         insertUl += insertUl + "</a></li>";
-        $("#userAuthority_dyn_ul").append(insertUl); //jquery append 사용해 동적으로 추가 실시           
+        $("#userAuthority_dyn_ul").append(insertUl);        
       }
-      else if (pageCount >= 2) { //생성해야할 페이지가 2페이지 이상인 경우
-        // 이전 페이지 추가 실시 
-        var insertSTR = "<li class='page-item'>"; // 변수 선언
+      else if (pageCount >= 2) {
+        var insertSTR = "<li class='page-item'>"; 
         insertSTR = insertSTR + "<a class='page-link' href='javascript:void(0)' onclick = 'userAuthorityNewPage(" + "-1" + ");'>";
         insertSTR = insertSTR + "이전";
         insertSTR = insertSTR + "</a></li>";
-        $("#userAuthority_dyn_ul").append(insertSTR); //jquery append 사용해 동적으로 추가 실시            
-        // 특정 1, 2, 3 .. 페이지 추가 실시
+        $("#userAuthority_dyn_ul").append(insertSTR);
         var count = 1;
         for (var i = startIndex; i <= pageCount; i++) {
-          if (count > pageMax) { //최대로 생성될 페이지 개수가 된 경우 
-            page = i - pageMax; //생성된 페이지 초기값 저장 (초기 i값 4 탈출 인경우 >> 1값 저장)
-            break; //for 반복문 탈출
+          if (count > pageMax) { 
+            page = i - pageMax; 
+            break; 
           }
-          var insertUl = "<li class='page-item'>"; // 변수 선언
+          var insertUl = "<li class='page-item'>"; 
           insertUl = insertUl + "<a class='page-link' href='javascript:void(0)' onclick = 'userAuthorityNewPage(" + i + ");'>";
           insertUl = insertUl + String(i);
           insertUl = insertUl + "</a></li>";
-          $("#userAuthority_dyn_ul").append(insertUl); //jquery append 사용해 동적으로 추가 실시  
+          $("#userAuthority_dyn_ul").append(insertUl);
           count++;
         }
-        // 다음 페이지 추가 실시
-        var insertEND = "<li class='page-item'>"; // 변수 선언
+        var insertEND = "<li class='page-item'>"; 
         insertEND = insertEND + "<a class='page-link' href='javascript:void(0)' onclick = 'userAuthorityNewPage(" + "0" + ");'>";
         insertEND = insertEND + "다음";
         insertEND = insertEND + "</a></li>";
-        $("#userAuthority_dyn_ul").append(insertEND); //jquery append 사용해 동적으로 추가 실시
+        $("#userAuthority_dyn_ul").append(insertEND); 
       }
-      // [페이징 완료 후 >> tr 개수 전체 삭제 >> 페이징 개수에 맞게 다시 표시 실시]
-      $("#userAuthority_dyn_tbody").empty(); //tbody tr 전체 삭제 실시
-      // [새롭게 페이지 목록 리스트 처리 실시]
+      $("#userAuthority_dyn_tbody").empty(); 
       userAuthorityNewPage(startIndex);
     };
 
-    /* [tbody tr 동적 삽입 이벤트 수행 함수] */
     function userAuthorityNewPage(pageCurrent) {
-      // [새롭게 테이블 tbody tr 데이터 생성 실시]
-      if (pageCurrent == -1) { // 이전 페이지
-        $("#userAuthority_dyn_tbody").empty(); //tbody tr 전체 삭제 실시
-        // [새롭게 페이징 처리 실시]
+      if (pageCurrent == -1) { 
+        $("#userAuthority_dyn_tbody").empty(); 
         var newIdx = page - pageMax;
-        // [테이블 데이터에 따라 페이징 처리 실시]
-        userAuthorityPageInsert(newIdx); //표시될 페이지 번호 전송
+        userAuthorityPageInsert(newIdx); 
       }
-      else if (pageCurrent == 0) { // 다음 페이지
-        $("#userAuthority_dyn_tbody").empty(); //tbody tr 전체 삭제 실시
-        // [새롭게 페이징 처리 실시]
+      else if (pageCurrent == 0) { 
+        $("#userAuthority_dyn_tbody").empty(); 
         var newIdx = page + pageMax;
-        // [테이블 데이터에 따라 페이징 처리 실시]
-        userAuthorityPageInsert(newIdx); //표시될 페이지 번호 전송
+        userAuthorityPageInsert(newIdx); 
       }
-      else { // 일반 테이블 목록 리스트 갱신
-        $("#userAuthority_dyn_tbody").empty(); //tbody tr 전체 삭제 실시
-        // 저장된 idx 에서 페이지 수를 곱해서 새로운 idx 지정
-        // [1페이지 클릭 >> (1*5) -5 = 0 시작]
-        // [2페이지 클릭 >> (2*5) -5 = 5 시작]
+      else { 
+        $("#userAuthority_dyn_tbody").empty(); 
         idx = (pageCurrent * pageList) - pageList;
         var checkCount = 1;
-        for (var i = idx; i < tableList.length; i++) { //반복문을 수행하면서 tbody에 tr데이터 삽입 실시
-          if (checkCount > pageList) { //한페이지에 표시될 목록을 초과한 경우
+        for (var i = idx; i < tableList.length; i++) { 
+          if (checkCount > pageList) { 
             return;
           }
-          // json 데이터 파싱 실시
-          var jsonObject = JSON.parse(JSON.stringify(tableList[i])); //각 배열에 있는 jsonObject 참조
+          var jsonObject = JSON.parse(JSON.stringify(tableList[i]));
           idx = jsonObject.idx;
           var userid = jsonObject.userid;
           var admin = jsonObject.admin;
           var access = jsonObject.access;
-          // 동적으로 리스트 추가
-          var insertTr = ""; // 변수 선언
-          insertTr += "<tr>"; // body 에 남겨둔 예시처럼 데이터 삽입
-          insertTr += `<td class="table-col-1 commentTable">
-              <input class="deleteCommentCheckbox" type="checkbox" value="${userid}"></td>`;
-          insertTr += `<td class="table-col-2 commentTable">${idx}</td>`;
-          insertTr += `<td class="table-col-3 commentTable">${userid}</td>`;
-          insertTr += `<td class="table-col-4 commentTable">${admin}</td>`;
-          insertTr += `<td class="table-col-5 commentTable">
+          var insertTr = ""; 
+          insertTr += "<tr>"; 
+          insertTr += `<td class="table-col-1 userAuthorityTable1">
+              <input class="userAuthorityCheckbox" id="userAuthorityCheckboxfor${i}" type="checkbox" value="${userid}"></td>`;
+          insertTr += `<td class="table-col-2 userAuthorityTable2"><label for="userAuthorityCheckboxfor${i}">${idx}</label></td>`;
+          insertTr += `<td class="table-col-3 userAuthorityTable3"><label for="userAuthorityCheckboxfor${i}">${userid}</label></td>`;
+          insertTr += `<td class="table-col-4 userAuthorityTable4"><label for="userAuthorityCheckboxfor${i}">${admin}</label></td>`;
+          insertTr += `<td class="table-col-5 userAuthorityTable5">
                       <select class="form-select form-select-sm">
-                      <option value="Y" style="text-align: center;">Y</option>
-                      <option value="N" style="text-align: center;">N</option>
+                      <option value="N" style="text-align: center;">관리자권한 없음</option>
+                      <option value="Y" style="text-align: center;">관리자권한 부여</option>
                       </select></td>`;
-          insertTr += `<td class="table-col-6 commentTable">${access}</td>`;
-          insertTr += `<td class="table-col-7 commentTable">
+          insertTr += `<td class="table-col-6 userAuthorityTable6"><label for="userAuthorityCheckboxfor${i}">${access}</label></td>`;
+          insertTr += `<td class="table-col-7 userAuthorityTable7">
                       <select class="form-select form-select-sm">
-                      <option value="Y" style="text-align: center;">Y</option>
-                      <option value="N" style="text-align: center;">N</option>
+                      <option value="Y" style="text-align: center;">댓글허용</option>
+                      <option value="N" style="text-align: center;">댓글금지</option>
                       </select></td>`;
           insertTr += "</tr>";
-          // jquery append 사용해 동적으로 추가 실시
           $("#userAuthority_dyn_tbody").append(insertTr);
-          // 카운트 횟수 증가    
           checkCount++;
         }
       }

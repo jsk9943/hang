@@ -1,7 +1,7 @@
 /**
  * 회원이 입력한 아이디와 비밀번호로 로그인 및 로그아웃 기능 제공
  */
-import { loginDo, logoutDo } from './fetch.js';
+import { loginDo, logoutDo, userWithdrawal } from './fetch.js';
 let logoutButtons = document.querySelectorAll('.logoutButton'); // 로그아웃 버튼
 let loginButton = document.querySelector('#loginBtn'); // 로그인버튼
 let userIdInput = document.querySelector('#floatingInput');// 아이디 입력 창
@@ -103,4 +103,95 @@ if (logbtnButton !== null) {
 	logbtnButton.addEventListener('click', () => {
 		document.querySelector('.offcanvasClose').click();
 	})
+}
+
+//회원탈퇴 클릭 시 삭제처리
+let withdrawalModal = `
+			<div class="modal fade" id="withdrawalModal" tabindex="-1" aria-labelledby="withdrawalModalLabel" aria-hidden="true" style="z-index:10000;">
+			  <div class="modal-dialog modal-dialog-centered modal-lg">
+			    <div class="modal-content ">
+			      <div class="modal-header">
+			        <h1 class="modal-title fs-5" id="withdrawalModalLabel" style="font-weight:bold;">회원탈퇴</h1>
+			        <button type="button" class="btn-close withdrawalCLOSEBUTTON" data-bs-dismiss="modal" aria-label="Close"></button>
+			      </div>
+			      <div class="modal-body" style="text-align:center;">
+			        <p style="margin-bottom:20px;">회원탈퇴 할 경우 저장된 즐겨찾기와 댓글의 삭제권한이 사라집니다</p><br>
+			        <p style="font-weight:bold; margin-bottom:5px;">그래도 <span style="color:red;">탈퇴</span> 하시겠습니까?</p><br>
+			        <p style="font-weight:bold; font-size:0.7em; margin-bottom:20px;">[탈회 시 작성된 댓글과 별점 정보는 그대로 남아있음]</p>
+			        <p>탈퇴를 원하시면 아이디를 입력 후 <span style="color:red;">[탈퇴]</span> 버튼을 눌러주세요</p>
+			        <input class="form-control withdrawalID" type="text" placeholder="아이디 입력">
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-danger withdrawalInBUTTON">탈퇴</button>
+			        <button type="button" class="btn btn-secondary withdrawalCLOSEBUTTON" data-bs-dismiss="modal">닫기</button>
+			        
+			        
+			        <div class="toast-container bottom-50 d-flex justify-content-center align-items-center w-100">
+			          <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+			            <div class="toast-header">
+			              <strong class="me-auto">최종확인</strong>
+			              <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+			            </div>
+			            <div class="toast-body">
+			              정말로 탈퇴하시겠습니까?<br>
+			              <button type="button" class="btn btn-danger btn-sm" id="finalWithdrawalInBUTTON" data-bs-dismiss="modal">탈퇴</button>
+			              <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="toast" id="toastCloseButton">닫기</button>
+			            </div>
+			          </div>
+			        </div>
+			        
+			        
+			      </div>
+			    </div>
+			  </div>
+			</div>
+		`;
+let withdrawalButton = document.querySelector('#withdrawal'); // 회원탈퇴 버튼
+let modalWithdrawal = document.querySelector('#modalWithdrawal'); // 모달이 붙을 main div
+if (modalWithdrawal.childElementCount > 0) {
+	modalWithdrawal.innerHTML = "";
+}
+modalWithdrawal.innerHTML += withdrawalModal;
+if (withdrawalButton !== null) {
+	let withdrawalModals = document.querySelector('#withdrawalModal'); // 회원탈퇴 모달
+	withdrawalButton.addEventListener('click', () => {
+		let modalWithdrawalModal = bootstrap.Modal.getOrCreateInstance(withdrawalModals);
+		modalWithdrawalModal.show();
+	})
+}
+
+// 탈퇴 버튼 누르면 토스트 보여주기
+let withdrawalInBUTTON = document.querySelector('.withdrawalInBUTTON'); // 모달 안에 탈퇴버튼
+if(withdrawalInBUTTON !== null){
+	var toastContent = document.getElementById('liveToast'); // 토스트창
+	withdrawalInBUTTON.addEventListener('click', () => {
+		let toast = bootstrap.Toast.getOrCreateInstance(toastContent);
+		toast.show();
+	})
+}
+
+// 토스트 탈퇴 버튼 누르면 fetch로 통신
+let finalWithdrawalInBUTTON = document.querySelector('#finalWithdrawalInBUTTON'); // 토스트 안에 최종 탈퇴 버튼
+if(finalWithdrawalInBUTTON !== null){
+	finalWithdrawalInBUTTON.addEventListener('click', () =>{
+		let withdrawalID = document.querySelector('.withdrawalID');
+		userWithdrawal(sessionStorage.getItem('userid'), withdrawalID.value);
+		document.querySelector('#toastCloseButton').click(); //  오류났을 경우 토스트창만 닫기
+	})
+}
+
+// 모달 닫을 때 입력창 초기화
+let withdrawalCLOSEBUTTON = document.querySelectorAll('.withdrawalCLOSEBUTTON'); //닫기 버튼
+if(withdrawalCLOSEBUTTON !== null){
+	withdrawalCLOSEBUTTON.forEach(button => {
+        button.addEventListener('click', () => {
+            // withdrawalID라는 input 창 초기화
+            let withdrawalID = document.querySelector('.withdrawalID');
+            if (withdrawalID !== null) {
+                withdrawalID.value = '';
+            }
+            // 토스트창 닫기
+            document.querySelector('#toastCloseButton').click();
+        });
+    });
 }

@@ -21,10 +21,12 @@ export function heritageKeywordSearchDetail(ccbaKdcd, ccbaAsno, ccbaCtcd) {
 }
 
 // 코멘트 및 별점 등록 fetch
-export function commentStaRateCreate(userid, ccbaAsno, ccbaMnm1, comment, starpoint) {
+export function commentStaRateCreate(userid, ccbaKdcd, ccbaAsno, ccbaCtcd, ccbaMnm1, comment, starpoint) {
 	let Data = {
 		"userid": userid,
+		"ccbaKdcd": ccbaKdcd,
 		"ccbaAsno": ccbaAsno,
+		"ccbaCtcd": ccbaCtcd,
 		"ccbaMnm1": ccbaMnm1,
 		"comment": comment,
 		"starpoint": starpoint
@@ -42,6 +44,8 @@ export function commentStaRateCreate(userid, ccbaAsno, ccbaMnm1, comment, starpo
 		.then(data => {
 			if (data === 'true') {
 				alert('정상적으로 등록되었습니다');
+			} else if (data === 'DENIED') {
+				alert(`댓글쓰기 기능 접근이 차단되어있습니다\n관리자에게 문의해주세요`);
 			}
 		})
 		.catch(error => {
@@ -51,8 +55,8 @@ export function commentStaRateCreate(userid, ccbaAsno, ccbaMnm1, comment, starpo
 
 
 // 코멘트 및 별점 리스트 가져오는 fetch
-export function heritageCommentList(ccbaAsno) {
-	return fetch(`/heritage/item/output?ccbaAsno=${ccbaAsno}`, {
+export function heritageCommentList(ccbaKdcd, ccbaAsno, ccbaCtcd) {
+	return fetch(`/heritage/item/output?ccbaKdcd=${ccbaKdcd}&ccbaAsno=${ccbaAsno}&ccbaCtcd=${ccbaCtcd}`, {
 		method: 'GET'
 	})
 		.then(response => {
@@ -369,5 +373,36 @@ export function userInfoDataLoad(userid) {
 		.then(data => {
 			document.querySelector('#usingEmail').innerHTML = data.email;
 			document.querySelector('#usingPh').innerHTML = data.userph;
+		})
+}
+
+
+// 회원탈퇴 요청
+export function userWithdrawal(sessionUserid, userid) {
+	let withdrawalData = {
+		sessionUserid: sessionUserid,
+		userid: userid
+	};
+	fetch('/member', {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(withdrawalData)
+	})
+		.then(response => {
+			return response.text();
+		})
+		.then(data => {
+			if (data === 'true') {
+				alert('정상적으로 탈퇴되었습니다');
+				location.reload();
+			} else if (data === 'false'){
+				document.querySelector('#toastCloseButton').click(); //  오류났을 경우 토스트창만 닫기
+				alert('탈퇴하실 아이디를 확인해주세요');
+			}
+		})
+		.catch(error => {
+			alert(`탈퇴 중 문제가 발생하였습니다\n관리자에게 문의해주세요\n${error}`);
 		})
 }
