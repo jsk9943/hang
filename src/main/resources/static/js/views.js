@@ -125,6 +125,7 @@ function searchHeritage(keyword) {
 					}
 				}
 			}
+			document.getElementById('searchResult').innerHTML = "";
 			document.getElementById('searchResult').innerHTML = html;
 			// 자세히 보기 버튼 클릭 시 
 			let detailbutton = document.querySelectorAll('.detail-link');

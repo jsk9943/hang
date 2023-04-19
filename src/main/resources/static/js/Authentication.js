@@ -115,11 +115,13 @@ let withdrawalModal = `
 			        <button type="button" class="btn-close withdrawalCLOSEBUTTON" data-bs-dismiss="modal" aria-label="Close"></button>
 			      </div>
 			      <div class="modal-body" style="text-align:center;">
-			        <p style="margin-bottom:20px;">회원탈퇴 할 경우 저장된 즐겨찾기와 댓글의 삭제권한이 사라집니다</p><br>
-			        <p style="font-weight:bold; margin-bottom:5px;">그래도 <span style="color:red;">탈퇴</span> 하시겠습니까?</p><br>
-			        <p style="font-weight:bold; font-size:0.7em; margin-bottom:20px;">[탈회 시 작성된 댓글과 별점 정보는 그대로 남아있음]</p>
-			        <p>탈퇴를 원하시면 아이디를 입력 후 <span style="color:red;">[탈퇴]</span> 버튼을 눌러주세요</p>
-			        <input class="form-control withdrawalID" type="text" placeholder="아이디 입력">
+			        <p style="margin-bottom:20px;">회원탈퇴 할 경우 저장된 즐겨찾기와 댓글의 권한이 사라집니다</p><br>
+			        <p style="font-weight:bold; margin-bottom:20px;">그래도 <span style="color:red;">탈퇴</span> 하시겠습니까?</p><br>
+			        <p style="font-weight:bold; font-size:0.7em; margin-bottom:20px;">[탈회 시 작성된 댓글과 별점 정보는 그대로 유지되며 아이디만 탈퇴회원으로 변경처리 됩니다]</p>
+			        <p>탈퇴를 원하시면 아이디를 입력 후 <span style="color:red; font-weight:bold;">[탈퇴]</span> 버튼을 눌러주세요</p>
+			        <div style="display: flex; justify-content: center; padding-top:20px;">
+				  <input class="form-control withdrawalID" type="text" placeholder="아이디 입력" style="width: 50%;">
+				</div>
 			      </div>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-danger withdrawalInBUTTON">탈퇴</button>

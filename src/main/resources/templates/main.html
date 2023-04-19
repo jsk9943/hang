@@ -50,25 +50,21 @@
 
 
     <!-- 문화재 검색결과 사이드바 -->
-    <div class="sidebar searchResult scrollBarDesign"
-      style="box-shadow: 1px 1px 5px rgb(98, 107, 233);">
-      <div style="text-align: center;">
+    <div class="sidebar" style="box-shadow: 1px 1px 5px rgb(98, 107, 233);">
+      <div class="searchTop">
       <button type="button" class="btn-close noSidebar" style="float:right; font-size: 1.2em; position: absolute;  top: 10px; right: 10px;" data-bs-dismiss="sidebar" aria-label="Close"></button>
-      
-        <p style="font-size: 2.5em; font-family: 'moonhwa'; margin: 10px 0px;">검색결과
-        </p>
-        <p id="searchCount"
-          style="font-family: 'moonhwa'; font-size: 1em;"></p>
+        <p style="font-size: 2.5em; font-family: 'moonhwa'; margin: 10px 0px;">검색결과</p>
+        <p id="searchCount" style="font-family: 'moonhwa'; font-size: 1em;"></p>
       </div>
-      <div id="searchResult">
-        <div style="text-align: center; border: none;">
-          <p
-            style="font-size: 1.8em; color: rgb(171, 17, 126); font-weight: bold; text-align: center; margin-top: 90%;">대기중</p>
-          <img class="nugiimg" alt="" src="./img/nugi.png"
-            style="width: 100px; height: 100px;">
+      
+      <div id="searchResult" class="scrollBarDesign">
+        <div style="text-align: center; border:none;">
+          <p style="font-size: 1.8em; color: rgb(171, 17, 126); font-weight: bold; text-align: center; margin-top: 50%;">대기중</p>
+          <img class="nugiimg" alt="" src="./img/nugi.png">
         </div>
       </div>
     </div>
+    
   </div>
 
   <div id="map"></div>
@@ -115,6 +111,7 @@
 			// 검색결과 창 띄우기
 			let menuicon = document.querySelector('#menuicon');
 			let sidebar = document.querySelector('.sidebar');
+			let searchTop = document.querySelector('.searchTop');
 			let noSidebarBtn = document.querySelector('.noSidebar');
 
 			if (menuicon && sidebar) {
@@ -122,17 +119,25 @@
 				    // menuicon이 클릭되었을 때 .sidebar에 스타일 변경
 				    if (menuicon.checked) {
 				      sidebar.style.left = '0';
+				      searchTop.style.left = '0';
 				    } else {
 				      sidebar.style.left = '-100%';
+				      searchTop.style.left = '-100%';
 				    }
 				  });
 			}
 			if(sidebar){
 		         noSidebarBtn.addEventListener('click', () => {
 		   	        sidebar.style.left = '-100%';
+		   	     	searchTop.style.left = '-100%';
 		            menuicon.checked = false;
 		         });
 		    }
+			var searchTopHeight = document.querySelector('.searchTop').offsetHeight;
+			var searchCountHeight = document.querySelector('#searchCount').offsetHeight;
+			var maxHeight = document.querySelector('.sidebar').offsetHeight - (searchTopHeight + searchCountHeight + 40);
+			document.getElementById('searchResult').style.maxHeight = maxHeight + 'px';
+			document.getElementById('searchResult').style.marginTop = (searchTopHeight + searchCountHeight + 40) + 'px';
 		</script>
     
     <!-- 게시판 및 페이징 처리 -->

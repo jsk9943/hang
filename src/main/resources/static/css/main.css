@@ -301,13 +301,28 @@ hr[role="tournament2"]::before {
 	left: -350px;
 	z-index: 1;
 	transition: all .35s;
+}
+
+.searchTop{
+	text-align: center;
+	background: rgb(223, 228, 239);
+	position:fixed;
+	top:0;
+	left:-350px;
+	width:350px;
+	z-index: 2;
+	transition: all .35s;
 	overflow: auto;
 }
 
+#searchCount{
+	background: rgb(223, 228, 239);
+}
 
-
-
-
+#searchResult {
+	overflow:auto;
+	height:100%;
+}
 
 
 /*검색결과 스크롤바 디자인*/
@@ -395,8 +410,10 @@ hr[role="tournament2"]::before {
 
 /* 대기중 문양 빙글빙글 도는 애니메이션*/
 .nugiimg {
-  animation: rotate_updown 4s linear infinite;
-  transform-origin: 50% 50%;
+	width: 100px;
+	height: 100px;
+ 	animation: rotate_updown 4s linear infinite;
+  	transform-origin: 50% 50%;
 }
 
 @keyframes rotate_updown {
