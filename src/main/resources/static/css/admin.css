@@ -1,6 +1,4 @@
-@charset "EUC-KR";
-
-/*ÄÚ¸àÆ® Å×ÀÌºí*/
+/*ì½”ë©˜íŠ¸ í…Œì´ë¸”*/
 .commentTable{
 	font-size:0.9em;	
 }
@@ -29,14 +27,14 @@
 }
 
 
-/*À¯Àú±ÇÇÑ Å×ÀÌºí*/
+/*ìœ ì €ê¶Œí•œ í…Œì´ë¸”*/
 .userAuthorityTable{
 	font-size:0.9em;
 }
 .userAuthorityTable1{
 	width: 5%;
 }
-.table-col-2.userAuthorityTable2{
+.userAuthorityTable2{
 	width: 5%;
 }
 .userAuthorityTable3{
@@ -53,4 +51,26 @@
 }
 .userAuthorityTable7{
 	width:20%;
+}
+
+
+/*ìœ ì € ê°•ì œíƒˆí‡´*/
+.userForcedWithdrawalTable1 {
+	width: 10%;
+}
+
+.userForcedWithdrawalTable2 {
+	width: 20%;
+}
+
+.userForcedWithdrawalTable3 {
+	width: 20%;
+}
+
+.userForcedWithdrawalTable4 {
+	width: 20%;
+}
+
+.userForcedWithdrawalTable5 {
+	width: 30%;
 }

@@ -4,32 +4,56 @@
 let adminid = sessionStorage.getItem('userid'); //접속한 아이디
 let commentPageButton = document.querySelector('#commentPageButton'); // 댓글 페이지 보기 버튼
 let userAuthorityButton = document.querySelector('#userAuthorityButton'); // 권한 페이지 보기 버튼
+let userForcedWithdrawalbuttonButton = document.querySelector('#userForcedWithdrawalbutton'); // 강제탈퇴 페이지 보기 버튼
+let commentPageDiv = document.querySelector('#commentPage'); // 댓글 페이지
+let adminAuthorityPageDiv = document.querySelector('#adminAuthorityPage'); // 권한 페이지
+let userForcedWithdrawalPageDiv = document.querySelector('#userForcedWithdrawalPage'); // 권한 페이지
+// commentPageButton 버튼 클릭 시 commentPage 보이게 처리
+if (commentPageButton !== null) {
+	commentPageButton.addEventListener('click', () => {
+		commentPageDiv.style.display = 'block';
+		adminAuthorityPageDiv.style.display = 'none';
+		userForcedWithdrawalPageDiv.style.display = 'none';
+		let fetchData = {
+			"adminid": commentAdminId
+		}
+		commentTableStart(fetchData);
+	});
+}
+// userAuthorityButton 버튼 클릭 시 adminAuthorityPage 보이게 처리
+if (userAuthorityButton !== null) {
+	userAuthorityButton.addEventListener('click', () => {
+		commentPageDiv.style.display = 'none';
+		adminAuthorityPageDiv.style.display = 'block';
+		userForcedWithdrawalPageDiv.style.display = 'none';
+		let fetchData = {
+			"adminid": userAuthorityAdminId
+		}
+		userAurhorityTableStart(fetchData);
+	});
+}
+// userForcedWithdrawalbutton 버튼 클릭 시 userForcedWithdrawalPage 보이게 처리
+if (userForcedWithdrawalbuttonButton !== null) {
+	userForcedWithdrawalbuttonButton.addEventListener('click', () => {
+		commentPageDiv.style.display = 'none';
+		adminAuthorityPageDiv.style.display = 'none';
+		userForcedWithdrawalPageDiv.style.display = 'block';
+		let fetchData = {
+			"adminid": userForcedWithdrawalAdminId
+		}
+		userForcedWithdrawalTableStart(fetchData);
+	});
+}
+
+
+
 
 
 
 /**
  * 댓글 관련 페이지
  */
-let commentPageDiv = document.querySelector('#commentPage'); // 댓글 페이지
-let adminAuthorityPageDiv = document.querySelector('#adminAuthorityPage'); // 댓글 페이지
-let commentToastContent = document.querySelector('#commentliveToast'); // 토스트창
-
-// commentPageButton 버튼 클릭 시 commentPage 보이게 처리
-if (commentPageButton !== null) {
-	commentPageButton.addEventListener('click', () => {
-		commentPageDiv.style.display = 'block';
-		adminAuthorityPageDiv.style.display = 'none';
-	});
-}
-
-// userAuthorityButton 버튼 클릭 시 adminAuthorityPage 보이게 처리
-if (userAuthorityButton !== null) {
-	userAuthorityButton.addEventListener('click', () => {
-		commentPageDiv.style.display = 'none';
-		adminAuthorityPageDiv.style.display = 'block';
-	});
-}
-
+let commentToastContent = document.querySelector('#commentliveToast');
 //코멘트 삭제 전 최종확인 토스트
 let commentDeleteButton = document.querySelector('.adminCommentDelete'); // 삭제버튼
 if (commentDeleteButton !== null) {
@@ -138,7 +162,7 @@ function checkBoxTrValue() {
 	}
 }
 
-// 최종 변경 버튼 클릭 시 통신
+// 유저권한 최종 변경 버튼 클릭 시 통신
 let finalAuthorityButton = document.querySelector('#finalAuthorityButton');
 if (finalAuthorityButton !== null) {
 	finalAuthorityButton.addEventListener('click', () => {

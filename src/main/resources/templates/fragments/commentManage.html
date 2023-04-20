@@ -68,15 +68,6 @@
        * MAPPER와 통신전에 관리권한 확인 후 업무처리 구현
        */
 		let commentAdminId = sessionStorage.getItem('userid'); //관리자 아이디
-		let adminCommentListButton = document.querySelector('#commentPageButton'); // 상단 댓글게시판 버튼
-		if (adminCommentListButton !== null) {
-			adminCommentListButton.addEventListener('click', () => {
-				let fetchData = {
-					"adminid" : commentAdminId
-				}
-				commentTableStart(fetchData);
-			})
-		}
 		
 		let commentSearchButton = document.querySelector('.commentSearchButton'); // 검색 버튼
 		if(commentSearchButton !== null){

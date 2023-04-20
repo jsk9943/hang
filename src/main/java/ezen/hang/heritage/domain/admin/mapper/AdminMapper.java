@@ -9,24 +9,34 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface AdminMapper {
 	
-	//관리자가 맞는지 확인
+	/**
+	 * 모든 mapper 실행 시 기본적으로 수행되어야 하는 관리자 권한 유무 확인
+	 */
 	public String adminIdConfirm(String userid);
 
-	// 모든 댓글 가져오기
+	/**
+	 * 코멘트가 등록된 전체 유저 정보를 가져와 게시판에 보여주고
+	 * 선택된 데이터가 request되면 DB에서 삭제
+	 */
 	public List<Map<String, Object>> allCommentList();
 	
-	// 검색단어로 등록된 댓글 가져오기
 	public List<Map<String, Object>> keywordCommentFind(Map<String, Object> keyword);
 	
-	// 선택한 리뷰 삭제하기
 	public void checkCommentDelete(Map<String, Object> deleteCommentList);
 	
-	// 가입된 유저의 관리자권한과 댓글쓰기권한 가져오기
+	/**
+	 * 유저의 권한부여 기능으로 관리자권한과 댓글쓰기,금지 권한을 변경 할 수 있음
+	 */
 	public List<Map<String, Object>> allUserAuthority();
 	
-	// 검색단어로 유저 찾아오기
 	public List<Map<String, Object>> keywordUserAuthorityFind(Map<String, Object> keyword);
 	
-	// 유저의 관리자 권한 및 댓글쓰기 권한 변경
 	public void userAuthorityChange(Map<String, Object> userData);
+	
+	/**
+	 * 유저를 강제 탈퇴시킬 수 있는 기능
+	 */
+	public List<Map<String, Object>> allUserForcedWithdrawal();
+
+	public List<Map<String, Object>> keywordUserForcedWithdrawalFind(Map<String, Object> keyword);
 }

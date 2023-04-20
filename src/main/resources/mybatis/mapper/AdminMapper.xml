@@ -75,6 +75,26 @@
 	</update>
 	
 	
+	<!-- 탈퇴시킬 모든 유저 정보 가져오기 -->
+	<select id="allUserForcedWithdrawal" resultType="map">
+		SELECT USERID , USERNAME ,REGDATE 
+		FROM MEMBER
+		ORDER BY USERID ASC;
+	</select>
+	
+	<!-- 검색단어로 탈퇴시킬 유저 찾아오기 -->
+	<select id="keywordUserForcedWithdrawalFind" parameterType="map" resultType="map">
+		SELECT USERID, USERNAME , REGDATE
+		FROM MEMBER
+		WHERE 1=1
+		    <if test="userid != null">
+		      AND userid LIKE CONCAT('%', #{userid}, '%')
+		    </if>
+		    <if test="username != null">
+		      AND username LIKE CONCAT('%', #{username}, '%')
+		    </if>
+	</select>
+	
 
 </mapper>
 

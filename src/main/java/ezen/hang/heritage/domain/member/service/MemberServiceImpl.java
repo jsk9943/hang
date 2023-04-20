@@ -154,7 +154,7 @@ public class MemberServiceImpl implements MemberService {
 		String userid = imgData.get("userid").toString();
 		String imagefile = imgData.get("imgBase64Data").toString();
 		String[] parts = imagefile.split(",", 2);
-		String base64Data = parts[1]; // "/9j/4AAQSkZJRgABAQ"
+		String base64Data = parts[1];
 		byte[] bytes = Base64.getDecoder().decode(base64Data);
 		map.put("imagefile", bytes);
 		map.put("userid", userid);
@@ -183,7 +183,7 @@ public class MemberServiceImpl implements MemberService {
 			try (InputStream inputStream = imageFile.getBinaryStream()) {
 				byte[] imageBytes = inputStream.readAllBytes();
 				HttpHeaders headers = new HttpHeaders();
-				headers.setContentType(MediaType.IMAGE_JPEG); // 이미지 파일의 MIME 타입에 맞게 설정
+				headers.setContentType(MediaType.IMAGE_JPEG);
 				return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
 			} catch (IOException | SQLException e) {
 				e.printStackTrace();

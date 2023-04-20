@@ -396,7 +396,7 @@ export function userWithdrawal(sessionUserid, userid) {
 		.then(data => {
 			if (data === 'true') {
 				alert('정상적으로 탈퇴되었습니다');
-				location.reload();
+				logoutDo();
 			} else if (data === 'false'){
 				document.querySelector('#toastCloseButton').click(); //  오류났을 경우 토스트창만 닫기
 				alert('탈퇴하실 아이디를 확인해주세요');

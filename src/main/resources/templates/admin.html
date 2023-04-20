@@ -44,7 +44,7 @@
               <a class="nav-link" type="button" id="userAuthorityButton">유저권한</a>
             </li>
             <li class="nav-item" style="width: 25%; text-align: center;">
-              <a class="nav-link" type="button">신고내역</a>
+              <a class="nav-link" type="button" id="userForcedWithdrawalbutton">강제탈퇴</a>
             </li>
             <li class="nav-item" style="width: 25%; text-align: center;">
               <a class="nav-link" type="button">차단유저</a>
@@ -60,6 +60,9 @@
     
   <div id="adminAuthorityPage"
     th:insert="~{fragments/userAuthority :: userAuthorityPage}" style="display:none;"></div>
+    
+  <div id="userForcedWithdrawalPage"
+    th:insert="~{fragments/userForcedWithdrawal :: userForcedWithdrawalPage}" style="display:none;"></div>
 
 
 

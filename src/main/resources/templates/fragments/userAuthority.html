@@ -79,15 +79,6 @@
    * MAPPER와 통신전에 관리권한 확인 후 업무처리 구현
    */
     let userAuthorityAdminId = sessionStorage.getItem('userid'); //관리자 아이디
-    let userAuthorityButtons = document.querySelector('#userAuthorityButton'); // 상단 댓글게시판 버튼
-    if (userAuthorityButtons !== null) {
-      userAuthorityButtons.addEventListener('click', () => {
-        let fetchData = {
-          "adminid" : userAuthorityAdminId
-        }
-        userAurhorityTableStart(fetchData);
-      })
-    }
     
     let userAuthoritySearchButton = document.querySelector('.userAuthoritySearchButton'); // 검색 버튼
     if(userAuthoritySearchButton !== null){

@@ -15,9 +15,11 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 
-	// 모든 댓글 가져오기
+	/**
+	 * 코멘트가 등록된 전체 유저 정보를 가져와 게시판에 보여주고
+	 * 선택된 데이터가 request되면 DB에서 삭제
+	 */
 	@PostMapping("/clist")
-	@ResponseBody
 	public List<Map<String, Object>> allCommentList(@RequestBody Map<String, Object> useridData) {
 		List<Map<String, Object>> map = null;
 		try {
@@ -26,9 +28,7 @@ public class AdminController {
 		return map;
 	}
 
-	// 검색단어로 등록된 댓글 가져오기
 	@PostMapping("/clist/search")
-	@ResponseBody
 	public List<Map<String, Object>> keywordCommentFind(@RequestBody Map<String, Object> keyword) {
 		List<Map<String, Object>> map = null;
 		try {
@@ -37,9 +37,7 @@ public class AdminController {
 		return map;
 	}
 
-	// 선택한 리뷰 삭제하기
 	@DeleteMapping("/clist")
-	@ResponseBody
 	public String checkCommentDelete(@RequestBody List<Map<String, Object>> deleteCommentList) {
 		String result = null;
 		try {
@@ -51,9 +49,10 @@ public class AdminController {
 		return result;
 	}
 
-	// 가입된 유저의 관리자권한과 댓글쓰기권한 가져오기
+	/**
+	 * 유저의 권한부여 기능으로 관리자권한과 댓글쓰기,금지 권한을 변경 할 수 있음
+	 */
 	@PostMapping("/ulist")
-	@ResponseBody
 	public List<Map<String, Object>> allUserAuthority(@RequestBody Map<String, Object> useridData) {
 		List<Map<String, Object>> map = null;
 		try {
@@ -62,9 +61,7 @@ public class AdminController {
 		return map;
 	}
 
-	// 검색단어로 필요한 유저정보 가져오기
 	@PostMapping("/ulist/search")
-	@ResponseBody
 	public List<Map<String, Object>> keywordUserAuthorityFind(@RequestBody Map<String, Object> keyword) {
 		List<Map<String, Object>> map = null;
 		try {
@@ -73,9 +70,7 @@ public class AdminController {
 		return map;
 	}
 
-	// 유저의 관리자 권한 및 댓글쓰기 권한 변경
 	@PatchMapping("/ulist")
-	@ResponseBody
 	public String userAuthorityChange(@RequestBody List<Map<String, Object>> userData) {
 		String result = null;
 		try {
@@ -85,5 +80,26 @@ public class AdminController {
 			result = "false";
 		}
 		return result;
+	}
+	
+	/**
+	 * 유저를 강제 탈퇴시킬 수 있는 기능
+	 */
+	@PostMapping("/wlist")
+	public List<Map<String, Object>> allUserForcedWithdrawal(@RequestBody Map<String, Object> useridData){
+		List<Map<String, Object>> map = null;
+		try {
+			map = adminService.allUserForcedWithdrawal(useridData);
+		} catch (Exception e) {}
+		return map;
+	}
+	
+	@PostMapping("/wlist/search")
+	public List<Map<String, Object>> keywordUserForcedWithdrawalFind(@RequestBody Map<String, Object> keyword) {
+		List<Map<String, Object>> map = null;
+		try {
+			map = adminService.keywordUserForcedWithdrawalFind(keyword);
+		} catch (Exception e) {}
+		return map;
 	}
 }

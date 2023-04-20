@@ -164,7 +164,7 @@ if (withdrawalButton !== null) {
 
 // 탈퇴 버튼 누르면 토스트 보여주기
 let withdrawalInBUTTON = document.querySelector('.withdrawalInBUTTON'); // 모달 안에 탈퇴버튼
-if(withdrawalInBUTTON !== null){
+if (withdrawalInBUTTON !== null) {
 	var toastContent = document.getElementById('liveToast'); // 토스트창
 	withdrawalInBUTTON.addEventListener('click', () => {
 		let toast = bootstrap.Toast.getOrCreateInstance(toastContent);
@@ -174,26 +174,26 @@ if(withdrawalInBUTTON !== null){
 
 // 토스트 탈퇴 버튼 누르면 fetch로 통신
 let finalWithdrawalInBUTTON = document.querySelector('#finalWithdrawalInBUTTON'); // 토스트 안에 최종 탈퇴 버튼
-if(finalWithdrawalInBUTTON !== null){
-	finalWithdrawalInBUTTON.addEventListener('click', () =>{
+if (finalWithdrawalInBUTTON !== null) {
+	finalWithdrawalInBUTTON.addEventListener('click', () => {
 		let withdrawalID = document.querySelector('.withdrawalID');
 		userWithdrawal(sessionStorage.getItem('userid'), withdrawalID.value);
-		document.querySelector('#toastCloseButton').click(); //  오류났을 경우 토스트창만 닫기
+		document.querySelector('#toastCloseButton').click();
 	})
 }
 
 // 모달 닫을 때 입력창 초기화
 let withdrawalCLOSEBUTTON = document.querySelectorAll('.withdrawalCLOSEBUTTON'); //닫기 버튼
-if(withdrawalCLOSEBUTTON !== null){
+if (withdrawalCLOSEBUTTON !== null) {
 	withdrawalCLOSEBUTTON.forEach(button => {
-        button.addEventListener('click', () => {
-            // withdrawalID라는 input 창 초기화
-            let withdrawalID = document.querySelector('.withdrawalID');
-            if (withdrawalID !== null) {
-                withdrawalID.value = '';
-            }
-            // 토스트창 닫기
-            document.querySelector('#toastCloseButton').click();
-        });
-    });
+		button.addEventListener('click', () => {
+			// withdrawalID라는 input 창 초기화
+			let withdrawalID = document.querySelector('.withdrawalID');
+			if (withdrawalID !== null) {
+				withdrawalID.value = '';
+			}
+			// 토스트창 닫기
+			document.querySelector('#toastCloseButton').click();
+		});
+	});
 }

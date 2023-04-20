@@ -1,0 +1,289 @@
+<div th:fragment="userForcedWithdrawalPage">
+  <div class="table-container"
+    style="margin: 0 auto; width: 90%; text-align: center;">
+    <table class="table table-hover" style="font-size: 0.9em;">
+      <thead>
+        <tr>
+          <th class="table-col-1 userForcedWithdrawalTable1">번호</th>
+          <th class="table-col-2 userForcedWithdrawalTable2">아이디</th>
+          <th class="table-col-3 userForcedWithdrawalTable3">이름</th>
+          <th class="table-col-4 userForcedWithdrawalTable4">가입일자</th>
+          <th class="table-col-5 userForcedWithdrawalTable5">강제탈퇴</th>
+        </tr>
+      </thead>
+      <tbody id="userForcedWithdrawal_dyn_tbody">
+      </tbody>
+    </table>
+  </div>
+
+
+
+  <!-- 페이징 속성 정의 -->
+  <nav aria-label="Page navigation example"
+    style="width: 100%; overflow: hidden;">
+    <!-- 총 건수 -->
+    <div id="userForcedWithdrawalCount"
+      style="width: 10%; font-size: 0.9em; font-weight: bold; float: left; margin-left: 5%;">
+    </div>
+    <ul id="userForcedWithdrawal_dyn_ul" class="pagination"
+      style="justify-content: center; margin-right: 10%;">
+    </ul>
+  </nav>
+
+
+  <!-- 검색창과 삭제버튼 -->
+
+  <div class="footer-container" style="width: 100%; overflow: hidden;">
+    <div class="input-group"
+      style="width: 50%; float: left; margin-left: 25%;">
+      <select style="font-size: 0.8em;" class="form-select"
+        id="userForcedWithdrawalinputGroup">
+        <option selected>선택</option>
+        <option value="userid">아이디</option>
+        <option value="username">이름</option>
+      </select> <input style="font-size: 0.8em;" type="text"
+        class="form-control w-50" id="userForcedWithdrawalSearchInput"
+        placeholder="검색">
+      <button class="btn btn-primary userForcedWithdrawalSearchButton"
+        type="button">검색</button>
+    </div>
+
+
+
+
+
+    <!--  삭제필요 -->
+
+    <!-- 토스트 창 -->
+    <div
+      class="toast-container bottom-50 d-flex justify-content-center align-items-center w-100">
+      <div id="userForcedWithdrawalliveToast" class="toast" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">최종확인</strong>
+          <button type="button" class="btn-close"
+            data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          정말로 강제탈퇴 진행 하시겠습니까?<br>
+          <button type="button" class="btn btn-danger btn-sm"
+            id="finaluserForcedWithdrawalButton" data-bs-dismiss="modal">강제탈퇴</button>
+          <button type="button" class="btn btn-secondary btn-sm"
+            data-bs-dismiss="toast"
+            id="userForcedWithdrawaltoastCloseButton">닫기</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+
+  <script type="text/javascript" defer>
+  /**
+   * 관리권한은 막강하여 매순간 서버요청 시 로그인 된 관리자의 관리권한 속성을
+   * 서버에서 즉각 확인하기 위해 상시 세션에 저장된 아이디를 받아와
+   * MAPPER와 통신전에 관리권한 확인 후 업무처리 구현
+   */
+     let userForcedWithdrawalAdminId = sessionStorage.getItem('userid'); //관리자 아이디
+     
+     let userForcedWithdrawalSearchButton = document.querySelector('.userForcedWithdrawalSearchButton'); // 검색 버튼
+     if(userForcedWithdrawalSearchButton !== null){
+         let userForcedWithdrawalinputGroup = document.getElementById("userForcedWithdrawalinputGroup");
+         let userForcedWithdrawalSearchInput = document.getElementById("userForcedWithdrawalSearchInput");
+         userForcedWithdrawalSearchInput.addEventListener("keydown", function(event) {
+             if (event.key === "Enter") {
+                 let userForcedWithdrawalinputGroupValue = userForcedWithdrawalinputGroup.value;
+                 let userForcedWithdrawalSearchInputValue = userForcedWithdrawalSearchInput.value;
+                 let keywordData = {
+                   "adminid": userForcedWithdrawalAdminId
+                 }
+                 keywordData[userForcedWithdrawalinputGroupValue] = userForcedWithdrawalSearchInputValue;
+                 userForcedWithdrawalTableKeyword(keywordData);
+             }
+         });
+         userForcedWithdrawalSearchButton.addEventListener('click', () => {
+           let userForcedWithdrawalinputGroupValue = userForcedWithdrawalinputGroup.value;
+           let userForcedWithdrawalSearchInputValue = userForcedWithdrawalSearchInput.value;
+           let keywordData = {
+             "adminid": userForcedWithdrawalAdminId
+           }
+           keywordData[userForcedWithdrawalinputGroupValue] = userForcedWithdrawalSearchInputValue;
+           userForcedWithdrawalTableKeyword(keywordData);
+         })      
+     }
+    
+     function userForcedWithdrawalTableStart(fetchData) {
+       userForcedWithdrawalFetchstart(fetchData)
+         .then(data => {
+           document.querySelector('#userForcedWithdrawalCount').innerHTML = `총 ${data.length}건`; // 조회건수
+           userForcedWithdrawalTableInsert(data);
+         })
+     }
+     
+     function userForcedWithdrawalTableKeyword(fetchData){
+       userForcedWithdrawalFetchKeyword(fetchData)
+         .then(data => {
+           document.querySelector('#userForcedWithdrawalCount').innerHTML = `총 ${data.length}건`; // 조회건수
+           userForcedWithdrawalTableInsert(data);
+         })
+     }
+     
+     /**
+      * 첫번째 함수는 초기 게시판 진입 시 불러오는 모든 유저권한을 가져오는 통신 fetch이며,
+      * 두번째 함수는 검색창을 통해서 입력된 값만 불러오는 fetch 입니다.
+      */
+     function userForcedWithdrawalFetchstart(fetchData) {
+       return fetch(`/admin/wlist`, {
+         method: 'POST',
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify(fetchData)
+       })
+         .then(response => {
+           return response.json();
+         })
+     }
+     
+     function userForcedWithdrawalFetchKeyword(fetchData){
+       return fetch(`/admin/wlist/search`, {
+         method: 'POST',
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify(fetchData)
+       })
+         .then(response => {
+           return response.json();
+         })
+     }
+     
+     /**
+      * 윈도우가 로드되면 테이블은 기본적으로 한번 생성
+      * 이후 아래 콜백 순서대로 테이블이 생성되며 
+      * 페이징 처리 후 해당 페이지로 넘어갈 때 콜백으로 페이지 불러오는 기능구현
+      */
+     window.onload = function () {
+    	userForcedWithdrawalTableInsert(0);
+     };
+     var tableList = [];
+     var pageList = 10; 
+     var pageMax = 5;   
+     var idx = 0;
+     var page = 1; 
+    
+     function userForcedWithdrawalTableInsert(data) {
+       tableList = []; 
+       for (var i = 0; i < data.length; i++) {
+         var jsonObject = {
+           "idx": i + 1,
+           "userid": data[i].USERID,
+           "username": data[i].USERNAME,
+           "regdate": data[i].REGDATE,
+         };
+         tableList.push(jsonObject);
+       }
+       userForcedWithdrawalPageInsert(page);
+     };
+     
+     function userForcedWithdrawalPageInsert(value) {
+       $("#userForcedWithdrawal_dyn_ul").empty();     
+       var startIndex = value;    
+       var endIndex = tableList.length;
+       var pageCount = 0;
+       var pagePlus = 0;
+       if (endIndex > pageList) { 
+         pageCount = Math.floor(endIndex / pageList); 
+         pagePlus = endIndex % pageList;
+         if (pagePlus > 0) { 
+           pageCount = pageCount + 1;
+         }
+       }
+       if (startIndex > pageCount) { 
+         startIndex = page;
+       }
+       else if (startIndex < 0) { 
+         startIndex = page;
+       }
+       else {
+         page = startIndex;
+       }
+       if (pageCount == 1) { 
+         var insertUl = "<li class='page-item'>"; 
+         insertUl += insertUl + "<a class='page-link' href='javascript:void(0)' onclick = 'userForcedWithdrawalNewPage(1);'>";
+         insertUl += insertUl + i;
+         insertUl += insertUl + "</a></li>";
+         $("#userForcedWithdrawal_dyn_ul").append(insertUl);        
+       }
+       else if (pageCount >= 2) {
+         var insertSTR = "<li class='page-item'>"; 
+         insertSTR = insertSTR + "<a class='page-link' href='javascript:void(0)' onclick = 'userForcedWithdrawalNewPage(" + "-1" + ");'>";
+         insertSTR = insertSTR + "이전";
+         insertSTR = insertSTR + "</a></li>";
+         $("#userForcedWithdrawal_dyn_ul").append(insertSTR);
+         var count = 1;
+         for (var i = startIndex; i <= pageCount; i++) {
+           if (count > pageMax) { 
+             page = i - pageMax; 
+             break; 
+           }
+           var insertUl = "<li class='page-item'>"; 
+           insertUl = insertUl + "<a class='page-link' href='javascript:void(0)' onclick = 'userForcedWithdrawalNewPage(" + i + ");'>";
+           insertUl = insertUl + String(i);
+           insertUl = insertUl + "</a></li>";
+           $("#userForcedWithdrawal_dyn_ul").append(insertUl);
+           count++;
+         }
+         var insertEND = "<li class='page-item'>"; 
+         insertEND = insertEND + "<a class='page-link' href='javascript:void(0)' onclick = 'userForcedWithdrawalNewPage(" + "0" + ");'>";
+         insertEND = insertEND + "다음";
+         insertEND = insertEND + "</a></li>";
+         $("#userForcedWithdrawal_dyn_ul").append(insertEND); 
+       }
+       $("#userForcedWithdrawal_dyn_tbody").empty(); 
+       userForcedWithdrawalNewPage(startIndex);
+     };
+    
+     function userForcedWithdrawalNewPage(pageCurrent) {
+       if (pageCurrent == -1) { 
+         $("#userForcedWithdrawal_dyn_tbody").empty(); 
+         var newIdx = page - pageMax;
+         userAuthorityPageInsert(newIdx); 
+       }
+       else if (pageCurrent == 0) { 
+         $("#userForcedWithdrawal_dyn_tbody").empty(); 
+         var newIdx = page + pageMax;
+         userAuthorityPageInsert(newIdx); 
+       }
+       else {
+         $("#userForcedWithdrawal_dyn_tbody").empty(); 
+         idx = (pageCurrent * pageList) - pageList;
+         var checkCount = 1;
+         for (var i = idx; i < tableList.length; i++) { 
+           if (checkCount > pageList) { 
+             return;
+           }
+           var jsonObject = JSON.parse(JSON.stringify(tableList[i]));
+           idx = jsonObject.idx;
+           var userid = jsonObject.userid;
+           var username = jsonObject.username;
+           var regdate = jsonObject.regdate;
+           var insertTr = ""; 
+           insertTr += "<tr>";
+           insertTr += `<td class="table-col-1 userForcedWithdrawalTable1">${idx}</td>`;
+           insertTr += `<td class="table-col-2 userForcedWithdrawalTable2">${userid}</td>`;
+           insertTr += `<td class="table-col-3 userForcedWithdrawalTable3">${username}</td>`;
+           insertTr += `<td class="table-col-4 userForcedWithdrawalTable4">${regdate}</td>`;
+           insertTr += `<td class="table-col-5 userForcedWithdrawalTable5">
+        	   			<button type="button" class="btn btn-danger userForcedWithdrawalchange" style="width:10vw;" value="${userid}">강제탈퇴</button>
+           				</td>`;
+           insertTr += "</tr>";
+           $("#userForcedWithdrawal_dyn_tbody").append(insertTr);
+           checkCount++;
+         }
+       }
+     };
+  </script>
+
+
+
+</div>
