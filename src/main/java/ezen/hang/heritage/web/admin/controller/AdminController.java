@@ -102,4 +102,16 @@ public class AdminController {
 		} catch (Exception e) {}
 		return map;
 	}
+	
+	@DeleteMapping("/wlist") 
+	public String deleteUserForcedWithdrawal(@RequestBody Map<String, Object> useridData){
+		String result = null;
+		try {
+			adminService.deleteUserForcedWithdrawal(useridData);
+			result = "true";
+		} catch (Exception e) {
+			result = "false";
+		}
+		return result;
+	}
 }

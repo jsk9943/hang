@@ -196,3 +196,5 @@ if (finalAuthorityButton !== null) {
 		document.querySelector('#AuthoritytoastCloseButton').click();
 	})
 }
+
+

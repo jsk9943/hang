@@ -39,4 +39,10 @@ public interface AdminMapper {
 	public List<Map<String, Object>> allUserForcedWithdrawal();
 
 	public List<Map<String, Object>> keywordUserForcedWithdrawalFind(Map<String, Object> keyword);
+	
+	public void userWithdrawal1(Map<String, Object> useridData);
+	public void userWithdrawal2(Map<String, Object> useridData);
+	public void userWithdrawal3(Map<String, Object> useridData);
+	public void userWithdrawal4(Map<String, Object> useridData);
+	public void userWithdrawal5(Map<String, Object> useridData);
 }

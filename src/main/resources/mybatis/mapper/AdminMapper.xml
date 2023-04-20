@@ -95,6 +95,33 @@
 		    </if>
 	</select>
 	
+	<!-- 회원 강제탈퇴 -->
+	<update id="userWithdrawal1" parameterType="map">
+	UPDATE HERITAGEREVIEW
+	SET userid = '탈퇴회원'
+	WHERE userid = #{userid};
+	</update>
+	<update id="userWithdrawal2" parameterType="map">
+	UPDATE RATE
+	SET userid = '탈퇴회원'
+	WHERE userid = #{userid};
+	</update>
+   <delete id="userWithdrawal3" parameterType="map">
+		DELETE 
+		FROM BOOKMARK  
+		WHERE USERID = #{userid};
+   </delete>
+   <delete id="userWithdrawal4" parameterType="map">
+		DELETE 
+		FROM PROFILEIMAGE
+		WHERE USERID = #{userid};
+   </delete>
+   <delete id="userWithdrawal5" parameterType="map">
+		DELETE 
+		FROM MEMBER 
+		WHERE USERID = #{userid};
+   </delete>
+	
 
 </mapper>
 

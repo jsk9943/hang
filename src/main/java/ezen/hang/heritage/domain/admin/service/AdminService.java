@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 
+
 /**
  * 회원 관련 비즈니스 메소드 선언
  */
@@ -34,4 +35,6 @@ public interface AdminService {
 	public List<Map<String, Object>> allUserForcedWithdrawal(Map<String, Object> useridData) throws Exception;
 	
 	public List<Map<String, Object>> keywordUserForcedWithdrawalFind(Map<String, Object> keyword) throws Exception;
+	
+	public void deleteUserForcedWithdrawal(Map<String, Object> useridData) throws Exception;
 }

@@ -72,7 +72,23 @@ function searchHeritage(keyword) {
 			} else {
 				for (let i = 0; i < data.length; i++) {
 					let item = data[i];
-					if (item.latitude === 0) { // 좌표값이 없을때
+					if (item.latitude === "0" && item.ccbaMnm2 === ""){ // 둘 다 없을 때
+						html += `
+					        <div class="card">
+					        <p class="card-header" style="font-family:'moonhwa';">${item.ccbaMnm1}</p>
+					        <p>종목 : ${item.ccmaName}</p>
+					        <p>위치 : ${item.ccbaCtcdNm} ${item.ccbaAdmin}</p>
+					        <a class="detail-link btn btn-primary" style="cursor: pointer;">
+									자세히보기
+									<input type="hidden" id="${item.ccbaKdcd}" name="ccbaKdcd" value="${item.ccbaKdcd}">
+									<input type="hidden" id="${item.ccbaAsno}" name="ccbaAsno" value="${item.ccbaAsno}">
+									<input type="hidden" id="${item.ccbaCtcd}" name="ccbaCtcd" value="${item.ccbaCtcd}">
+									<input type="hidden" id="${item.latitude}" name="latitude" value="${item.latitude}">
+									<input type="hidden" id="${item.longitude}" name="longitude" value="${item.longitude}">
+					        </a>
+					        </div>
+					        `;
+					} else if (item.latitude === '0') { // 좌표값이 없을때
 						html += `
 					        <div class="card">
 					        <p class="card-header" style="font-family:'moonhwa';">${item.ccbaMnm1}<br>(${item.ccbaMnm2})</p>
@@ -89,13 +105,12 @@ function searchHeritage(keyword) {
 					        </a>
 					        </div>
 					        `;
-					} else if (item.ccbaMnm2 === null || item.ccbaMnm2 === '') { // 한자명이 없을 때
+					} else if (item.ccbaMnm2 === "") { // 한자명이 없을 때
 						html += `
 					        <div class="card">
 					        <p class="card-header" style="font-family:'moonhwa';">${item.ccbaMnm1}</p>
 					        <p>종목 : ${item.ccmaName}</p>
 					        <p>위치 : ${item.ccbaCtcdNm} ${item.ccbaAdmin}</p>
-					        <p style="font-weight:bold; color:red; font-size:0.7em;">※ 해당 문화재는 위치정보가 확인되지 않아<br>ㅤ정상적으로 지도에 마커되지 않습니다</p>
 					        <a class="detail-link btn btn-primary" style="cursor: pointer;">
 									자세히보기
 									<input type="hidden" id="${item.ccbaKdcd}" name="ccbaKdcd" value="${item.ccbaKdcd}">
