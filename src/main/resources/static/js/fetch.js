@@ -1,4 +1,6 @@
-
+/**
+ * fetch 기능 module 화 진행
+ */
 
 // 검색단어로 문화재 검색 기능 fetch
 export function heritageKeywordSearch(keyword) {

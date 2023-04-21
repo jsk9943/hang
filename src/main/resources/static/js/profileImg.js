@@ -1,5 +1,5 @@
 /**
- * 
+ * 프로필 이미지 업로드
  */
 import { profileImgLoad } from './fetch.js';
 let profileUserid = sessionStorage.getItem("userid");

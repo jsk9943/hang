@@ -5,12 +5,14 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-
+/**
+ * admin 권한 관련 유저권한, 댓글관리, 강제탈퇴 기능을 가진 mapper 
+ */
 @Mapper
 public interface AdminMapper {
 	
 	/**
-	 * 모든 mapper 실행 시 기본적으로 수행되어야 하는 관리자 권한 유무 확인
+	 * 모든 Admin mapper 실행 시 기본적으로 수행되어야 하는 관리자 권한 유무 확인
 	 */
 	public String adminIdConfirm(String userid);
 
@@ -40,9 +42,13 @@ public interface AdminMapper {
 
 	public List<Map<String, Object>> keywordUserForcedWithdrawalFind(Map<String, Object> keyword);
 	
-	public void userWithdrawal1(Map<String, Object> useridData);
-	public void userWithdrawal2(Map<String, Object> useridData);
-	public void userWithdrawal3(Map<String, Object> useridData);
-	public void userWithdrawal4(Map<String, Object> useridData);
-	public void userWithdrawal5(Map<String, Object> useridData);
+	public void userWithdrawalHERITAGEREVIEW(Map<String, Object> useridData);
+	
+	public void userWithdrawalRATE(Map<String, Object> useridData);
+	
+	public void userWithdrawalBOOKMARK(Map<String, Object> useridData);
+	
+	public void userWithdrawalPROFILEIMAGE(Map<String, Object> useridData);
+	
+	public void userWithdrawalMEMBER(Map<String, Object> useridData);
 }

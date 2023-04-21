@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import ezen.hang.heritage.domain.admin.mapper.AdminMapper;
 
 /**
- * 회원 관련 비즈니스 메소드 구현
+ * 회원 관련 비즈니스 메소드 service implement 구현
  */
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -122,11 +122,11 @@ public class AdminServiceImpl implements AdminService {
 	public void deleteUserForcedWithdrawal(Map<String, Object> useridData) throws Exception {
 		String adminid = useridData.get("adminid").toString();
 		if (adminMapper.adminIdConfirm(adminid).equals("Y")) {
-			adminMapper.userWithdrawal1(useridData);
-			adminMapper.userWithdrawal2(useridData);
-			adminMapper.userWithdrawal3(useridData);
-			adminMapper.userWithdrawal4(useridData);
-			adminMapper.userWithdrawal5(useridData);
+			adminMapper.userWithdrawalHERITAGEREVIEW(useridData);
+			adminMapper.userWithdrawalRATE(useridData);
+			adminMapper.userWithdrawalBOOKMARK(useridData);
+			adminMapper.userWithdrawalPROFILEIMAGE(useridData);
+			adminMapper.userWithdrawalMEMBER(useridData);
 		}
 	}
 

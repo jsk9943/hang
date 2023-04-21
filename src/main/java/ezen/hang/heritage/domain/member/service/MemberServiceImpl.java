@@ -22,7 +22,7 @@ import ezen.hang.heritage.domain.member.dto.Member;
 import ezen.hang.heritage.domain.member.mapper.MemberMapper;
 
 /**
- * 회원 관련 비즈니스 메소드 구현
+ * 회원 관련 비즈니스 ServiceImplements
  */
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -30,7 +30,9 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	private MemberMapper memberMapper;
 
-	// 회원가입
+	/**
+	 * 회원가입을 통해 신규가입 시 사용되는 ServiceImplements 
+	 */
 	@Override
 	public void register(String username, String userid, String userpw, String userph, String email) throws Exception {
 		Member member = new Member();
@@ -42,39 +44,24 @@ public class MemberServiceImpl implements MemberService {
 		memberMapper.CreateMember(member);
 	}
 
-	// 로그인
-	@Override
-	public Member login(Map<String, Object> loginData) {
-		Member loginMember = new Member();
-		loginMember.setUserid(loginData.get("userid").toString());
-		loginMember.setUserpw(loginData.get("userpw").toString());
-		return memberMapper.login(loginMember);
-	}
-
-	// 아이디 체크
 	@Override
 	public int checkUserId(String userid) {
 		return memberMapper.checkUserId(userid);
 	}
-
-	// 아이디 찾기
+	
+	/**
+	 * 회원이 가입 후 잃어버린 아이디와 비밀번호 변경을 위한 ServiceImplements
+	 */
 	@Override
-	public String lostIdSearch(String userName, String userPh) {
-		String result = null;
+	public String lostIdSearch(String userName, String userPh) throws Exception {
 		Member lostIdMember = new Member();
 		lostIdMember.setUsername(userName);
 		lostIdMember.setUserph(userPh);
-		try {
-			result = memberMapper.lostIdSearch(lostIdMember).getUserid();
-		} catch (Exception e) {
-			result = "false";
-		}
-		return result;
+		return memberMapper.lostIdSearch(lostIdMember).getUserid();
 	}
 
-	// 비밀번호 분실 변경
 	@Override
-	public String lostPasswordChange(Map<String, Object> lostPasswordData) {
+	public String lostPasswordChange(Map<String, Object> lostPasswordData) throws Exception {
 		String result = null;
 		Member member = new Member();
 		String userid = lostPasswordData.get("userid").toString();
@@ -97,19 +84,28 @@ public class MemberServiceImpl implements MemberService {
 			member.setUserph(userph);
 			member.setEmail(email);
 			member.setUserpw(userpw);
-			try {
-				memberMapper.lostPasswordChange(member);
-				result = "true";
-			} catch (Exception e) {
-				result = "false";
-			}
+			memberMapper.lostPasswordChange(member);
+			result = "true";
 		}
 		return result;
 	}
-
-	// 회원정보 수정
+	
+	/**
+	 * 가입된 회원이 로그인 시 사용되는 ServiceImplements 
+	 */
 	@Override
-	public String updateMember(Map<String, Object> updateData) {
+	public Member login(Map<String, Object> loginData) {
+		Member loginMember = new Member();
+		loginMember.setUserid(loginData.get("userid").toString());
+		loginMember.setUserpw(loginData.get("userpw").toString());
+		return memberMapper.login(loginMember);
+	}
+
+	/**
+	 * 가입된 회원이 회원정보 수정을 하기 위해 사용되는 ServiceImplements
+	 */
+	@Override
+	public void updateMember(Map<String, Object> updateData) throws Exception{
 		Member member = new Member();
 		String userid = updateData.get("userid").toString();
 		String username = updateData.get("username").toString();
@@ -134,26 +130,19 @@ public class MemberServiceImpl implements MemberService {
 		member.setEmail(email);
 		member.setUserpw(userpw);
 		member.setUserph(userph);
-		String result = null;
-		try {
-			memberMapper.update(member);
-			result = "true";
-		} catch (Exception e) {
-			result = "false";
-		}
-		return result;
+		memberMapper.update(member);
 	}
 
-	// 아이디로 회원정보 가져오기
 	@Override
 	public Member usingProfile(String userid) {
 		return memberMapper.usingProfile(userid);
 	}
 
-	// 프로필 사진 등록하기(등록 전 기존 파일 확인 후 삭제처리)
+	/**
+	 * 프로필 사진을 수정하기 위해 사용되는 ServiceImplements
+	 */
 	@Override
-	public String profileImgUpload(Map<String, Object> imgData) {
-		String result = null;
+	public String profileImgUpload(Map<String, Object> imgData) throws Exception{
 		Map<String, Object> map = new HashMap<>();
 		String uuid = UUID.randomUUID().toString();
 		String userid = imgData.get("userid").toString();
@@ -165,21 +154,15 @@ public class MemberServiceImpl implements MemberService {
 		map.put("userid", userid);
 		map.put("imagefilename", uuid);
 		int count = memberMapper.profileUploadBefore(userid);
-		try {
-			if (count != 0) {
-				memberMapper.memberDeleteProfileImg(userid);
-				memberMapper.profileImageDelete(userid);
-			}
-			memberMapper.profileImgUpload(map);
-			memberMapper.profileImgMemberUpload(map);
-			result = uuid;
-		} catch (Exception e) {
-			result = "false";
+		if (count != 0) {
+			memberMapper.memberDeleteProfileImg(userid);
+			memberMapper.profileImageDelete(userid);
 		}
-		return result;
+		memberMapper.profileImgUpload(map);
+		memberMapper.profileImgMemberUpload(map);
+		return uuid;
 	}
 
-	// 프로필 사진 가져오기
 	@Override
 	public ResponseEntity<byte[]> profileImgLoading(Map<String, Object> imgData) {
 		Map<String, Object> map = memberMapper.profileImgLoading(imgData);
@@ -197,24 +180,24 @@ public class MemberServiceImpl implements MemberService {
 		return null;
 	}
 
-	// 북마크 생성
+	/**
+	 * 북마크를 등록, 삭제 하기 위해 사용되는 ServiceImplements
+	 */
+	@Override
 	public void createBookmark(Map<String, Object> BookmarkData) throws Exception {
 		memberMapper.createBookmark(BookmarkData);
 	}
 
-	// 북마크 가져오기
 	@Override
 	public List<Map<String, Object>> getBookmarkList(String userid) {
 		return memberMapper.getBookmarkList(userid);
 	}
 
-	// 인포창에서 버튼을 통한 단일 문화재 북마크 삭제
 	@Override
 	public void infoDeleteBookmark(@RequestBody Map<String, Object> BookmarkData) throws Exception {
 		memberMapper.deleteBookmark(BookmarkData);
 	}
 
-	// 북마크 삭제 기능
 	@Override
 	public void deleteBookmark(List<Map<String, Object>> BookmarkList) throws Exception {
 		for (Map<String, Object> map : BookmarkList) {
@@ -222,7 +205,9 @@ public class MemberServiceImpl implements MemberService {
 		}
 	}
 	
-	// 회원탈퇴 기능
+	/**
+	 * 회원 스스로 탈퇴하기 위한 ServiceImplements
+	 */
 	@Override
 	public void userWithdrawal(Map<String, Object> userData) throws Exception {
 		String sessionUserid = userData.get("sessionUserid").toString();

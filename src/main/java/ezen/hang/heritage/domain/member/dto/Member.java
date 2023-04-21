@@ -2,15 +2,15 @@ package ezen.hang.heritage.domain.member.dto;
 
 import java.sql.Date;
 
+/**
+ * 회원가입, 회원정보변경, 회원탈퇴, 댓글 및 별점 등록, 댓글 삭제, 프로필 사진 등록 등의
+ * 서비스 제공 시 필요한 회원정보 객체 
+ */
 public class Member {
 	private String userid, userpw, userph, username, email, imagefilename, admin, access;
 	private Date regdate;
-	
 
-	public Member() {
-		
-	}
-
+	public Member() {}
 
 	public Member(String userid, String userpw, String userph, String username, String email, Date regdate, String imagefilename, String admin, String access) {
 		this.userid = userid;

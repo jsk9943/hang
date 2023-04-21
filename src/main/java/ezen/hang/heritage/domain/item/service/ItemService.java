@@ -6,26 +6,27 @@ import java.util.Map;
 import ezen.hang.heritage.domain.item.dto.Heritage;
 import ezen.hang.heritage.domain.item.dto.CommentStarRate;
 
+/**
+ *  Dao에서 받아온 문화재청 정보를 객체에 담아 Web과 DB에 저장하고
+ *  문화재, 유저 별 등록된 별점과 댓글목록을 가져와 Web과 DB에 저장하는 Service 
+ */
 public interface ItemService {
 
-	// 문화재 이름으로 검색
-	public List<Heritage> searchHeritageParsing(String keyword);
+	/**
+	 * 검색요청하는 문화재 명에 따라 결과값을 List로 반환하고 추가로 상세검색을 위한 객체반환 Service 
+	 */
+	public List<Heritage> searchHeritageParsing(String keyword) throws Exception;
 
-	// 문화재 이름, 고유번호, 지역으로 상세 검색
-	public Heritage detailSearchHeritageParsing(String ccbaKdcd, String ccbaAsno, String ccbaCtcd);
+	public Heritage detailSearchHeritageParsing(String ccbaKdcd, String ccbaAsno, String ccbaCtcd) throws Exception;
+		
+	/**
+	 * 문화재에 등록된 유저들의 별점과 댓글을 등록하고 삭제, 가져오는 Service
+	 */
+	public void createCommentStarRate(Map<String, Object> inputData) throws Exception;
 	
-	// 문화재에 등록할 별점 및 코멘트
-	public String createCommentStarRate(Map<String, Object> inputData) ;
-	
-	// 문화재에 대한 평균 별점 가져오기
-	public CommentStarRate rateAvgPoint(String ccbaKdcd, String ccbaAsno, String ccbaCtcd);
-	
-	// 문화재에 대한 등록된 코멘트와 별점 리스트 가져오기
 	public List<Map<String, Object>> commentStarRateLoad(String ccbaKdcd, String ccbaAsno, String ccbaCtcd);
 	
-	// 유저가 작성한 문화재 리스트
 	public List<CommentStarRate> userHeritageList(String userid);
 	
-	// 등록된 코멘트, 별점 삭제
-	public String deleteCommentStarRate(List<Map<String, Object>> deleteData);
+	public void deleteCommentStarRate(List<Map<String, Object>> deleteData) throws Exception;
 }

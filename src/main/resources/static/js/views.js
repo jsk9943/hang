@@ -61,19 +61,20 @@ function searchHeritage(keyword) {
 	// 검색단어로 문화재 검색 기능
 	heritageKeywordSearch(keyword)
 		.then(data => {
-			document.querySelector('#searchCount').innerHTML = `${keyword} (${data.length}건)`;
-			let html = '';
-			if (data.length === 0) {
-				html += `
+			if (data !== null) {
+				document.querySelector('#searchCount').innerHTML = `${keyword} (${data.length}건)`;
+				let html = '';
+				if (data.length === 0) {
+					html += `
 				<div class="card">
 				<p class="card-header">검색결과가 없습니다</p>
 				</div>
 				`
-			} else {
-				for (let i = 0; i < data.length; i++) {
-					let item = data[i];
-					if (item.latitude === "0" && item.ccbaMnm2 === ""){ // 둘 다 없을 때
-						html += `
+				} else {
+					for (let i = 0; i < data.length; i++) {
+						let item = data[i];
+						if (item.latitude === "0" && item.ccbaMnm2 === "") { // 둘 다 없을 때
+							html += `
 					        <div class="card">
 					        <p class="card-header" style="font-family:'moonhwa';">${item.ccbaMnm1}</p>
 					        <p>종목 : ${item.ccmaName}</p>
@@ -88,8 +89,8 @@ function searchHeritage(keyword) {
 					        </a>
 					        </div>
 					        `;
-					} else if (item.latitude === '0') { // 좌표값이 없을때
-						html += `
+						} else if (item.latitude === '0') { // 좌표값이 없을때
+							html += `
 					        <div class="card">
 					        <p class="card-header" style="font-family:'moonhwa';">${item.ccbaMnm1}<br>(${item.ccbaMnm2})</p>
 					        <p>종목 : ${item.ccmaName}</p>
@@ -105,8 +106,8 @@ function searchHeritage(keyword) {
 					        </a>
 					        </div>
 					        `;
-					} else if (item.ccbaMnm2 === "") { // 한자명이 없을 때
-						html += `
+						} else if (item.ccbaMnm2 === "") { // 한자명이 없을 때
+							html += `
 					        <div class="card">
 					        <p class="card-header" style="font-family:'moonhwa';">${item.ccbaMnm1}</p>
 					        <p>종목 : ${item.ccmaName}</p>
@@ -121,8 +122,8 @@ function searchHeritage(keyword) {
 					        </a>
 					        </div>
 					        `;
-					} else { // 모두 정상일 때
-						html += `
+						} else { // 모두 정상일 때
+							html += `
 						        <div class="card">
 						        <p class="card-header" style="font-family:'moonhwa';">${item.ccbaMnm1}<br>(${item.ccbaMnm2})</p>
 						        <p>종목 : ${item.ccmaName}</p>
@@ -137,19 +138,22 @@ function searchHeritage(keyword) {
 						        </a>
 						        </div>
 						        `;
+						}
 					}
 				}
-			}
-			document.getElementById('searchResult').innerHTML = "";
-			document.getElementById('searchResult').innerHTML = html;
-			// 자세히 보기 버튼 클릭 시 
-			let detailbutton = document.querySelectorAll('.detail-link');
-			if (detailbutton !== null) {
-				detailbutton.forEach(button => {
-					button.addEventListener('click', (event) => {
-						detailContent(event);
+				document.getElementById('searchResult').innerHTML = "";
+				document.getElementById('searchResult').innerHTML = html;
+				// 자세히 보기 버튼 클릭 시 
+				let detailbutton = document.querySelectorAll('.detail-link');
+				if (detailbutton !== null) {
+					detailbutton.forEach(button => {
+						button.addEventListener('click', (event) => {
+							detailContent(event);
+						});
 					});
-				});
+				}
+			} else {
+				alert(`문화재청에서 데이터를 정상적으로 조회하지 못했습니다\n잠시 후 다시 시도해주세요`);
 			}
 		})
 		.catch(error => {
@@ -165,9 +169,13 @@ function detailContent(event) {
 	let ccbaCtcd = event.target.querySelector('input[name="ccbaCtcd"]').value;
 	heritageKeywordSearchDetail(ccbaKdcd, ccbaAsno, ccbaCtcd)
 		.then(data => {
-			marker.setMap(null);
-			infowindow.close();
-			detailContentLoad(data);
+			if(data !== null){
+				marker.setMap(null);
+				infowindow.close();
+				detailContentLoad(data);				
+			} else {
+				alert(`문화재청에서 데이터를 정상적으로 조회하지 못했습니다\n잠시 후 다시 시도해주세요`);
+			}
 		})
 		.catch(error => {
 			alert(`관리자에게 문의해주세요\n${error}`);

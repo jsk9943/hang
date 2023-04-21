@@ -1,107 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper
-	namespace="ezen.hang.heritage.domain.member.mapper.MemberMapper">
+<mapper namespace="ezen.hang.heritage.domain.member.mapper.MemberMapper">
 
-	<!-- 로그인 -->
+	<!--
+	회원의 로그인 기능
+	-->
 	<select id="login" parameterType="Member" resultType="Member">
 		SELECT *
 		FROM MEMBER
-		WHERE userid = #{userid} AND userpw = #{userpw}
+		WHERE userid = #{userid}
+		  AND userpw = #{userpw}
 	</select>
 
-	<!-- 회원가입 -->
+	<!--
+	회원가입 시 사용하는 기능
+	-->
 	<insert id="CreateMember" parameterType="Member">
 		INSERT INTO MEMBER
 		(userid, userpw, username, email, userph, regdate, imagefilename)
-		VALUES(#{userid},
-		#{userpw}, #{username}, #{email}, #{userph}, NOW(), '')
+		VALUES(#{userid}, #{userpw}, #{username}, #{email}, #{userph}, NOW(), '')
 	</insert>
 
-	<!-- 회원가입 아이디 체크 -->
 	<select id="checkUserId" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM MEMBER WHERE userId = #{userId}
 	</select>
 	
-	<!-- 아이디 찾기 -->
+	<!--
+	회원의 아이디를 찾거나 잃어버린 비밀번호는 변경해주는 기능
+	-->
 	<select id="lostIdSearch" parameterType="Member" resultType="Member">
 		SELECT USERID 
 		FROM MEMBER
-		WHERE USERNAME = #{username} AND USERPH = #{userph};
+		WHERE USERNAME = #{username}
+		  AND USERPH = #{userph};
 	</select>
-	<!-- 비밀번호 잃어린경우 확인 후 변경해주기 -->
+	
 	<update id="lostPasswordChange" parameterType="Member">
 		UPDATE MEMBER
 		SET USERPW = #{userpw}
-		WHERE USERID = #{userid} AND USERPH = #{userph} AND EMAIL = #{email} AND USERNAME = #{username};
+		WHERE USERID = #{userid}
+		  AND USERPH = #{userph}
+		  AND EMAIL = #{email}
+		  AND USERNAME = #{username};
 	</update>
 
-	<!-- 회원정보 수정 -->
+	<!--
+	회원정보를 수정하는 기능
+	-->
 	<update id="update" parameterType="Member">
 		UPDATE MEMBER SET
-		<if test="username != null">username = #{username},</if>
-		<if test="email != null">email = #{email},</if>
-		<if test="userpw != null">userpw = #{userpw},</if>
-		<if test="userph != null">userph = #{userph}</if>
+			<if test="username != null">username = #{username},</if>
+			<if test="email != null">email = #{email},</if>
+			<if test="userpw != null">userpw = #{userpw},</if>
+			<if test="userph != null">userph = #{userph}</if>
 		WHERE userid = #{userid}
-		AND (email IS NOT NULL OR userpw IS NOT NULL
-		OR userph IS NOT NULL)
+		  AND (email IS NOT NULL
+		   OR userpw IS NOT NULL
+		   OR userph IS NOT NULL)
 	</update>
 
-	<!-- 유저 아이디로 회원정보 가져오기(회원정보 변경시 사용) -->
-	<select id="usingProfile" parameterType="String"
-		resultType="Member">
-		SELECT *
-		FROM MEMBER
-		WHERE userid = #{userid}
+	<select id="usingProfile" parameterType="String" resultType="Member">
+		SELECT * FROM MEMBER WHERE userid = #{userid}
 	</select>
 
-	<!-- 프로필 사진 등록하기 전에 파일 등록 유무 체크 -->
+	<!--
+	프로필 사진 등록하는 기능
+	-->
 	<select id="profileUploadBefore" parameterType="string" resultType="int">
-		SELECT COUNT(*) 
-		FROM PROFILEIMAGE
-		WHERE USERID = #{userid};
+		SELECT COUNT(*) FROM PROFILEIMAGE WHERE USERID = #{userid};
 	</select>
-	<!-- 기존 등록된 프로필 사진이 있으면 삭제 처리(이미지와 맴버 테이블 -->
+	
 	<delete id="profileImageDelete" parameterType="string">
-		DELETE 
-		FROM PROFILEIMAGE 
-		WHERE USERID = #{userid};
+		DELETE FROM PROFILEIMAGE WHERE USERID = #{userid};
 	</delete>
+	
 	<update id="memberDeleteProfileImg" parameterType="string">
 		UPDATE MEMBER
 		SET IMAGEFILENAME = NULL
 		WHERE userid = #{userid};
 	</update>
 	
-	<!-- 프로필 사진 등록하기(이미지 테이블) -->
 	<insert id="profileImgUpload" parameterType="map">
 	    INSERT INTO PROFILEIMAGE (USERID, IMAGEFILENAME, IMAGEFILE)
 	    VALUES (#{userid}, #{imagefilename}, #{imagefile})
 	</insert>
 	
-	<!-- 프로필 사진 등록하기(맴버 테이블) -->
 	<update id="profileImgMemberUpload" parameterType="map">
 		UPDATE MEMBER
   		SET IMAGEFILENAME = #{imagefilename}
  		WHERE USERID = #{userid}
 	</update>
 	
-	<!-- 프로필 사진 가져오기 -->
 	<select id="profileImgLoading" parameterType="map" resultType="map">
 		SELECT USERID, IMAGEFILENAME, IMAGEFILE 
 		FROM PROFILEIMAGE
-		WHERE userid = #{userid} AND IMAGEFILENAME = #{imagefilename};
+		WHERE userid = #{userid}
+		  AND IMAGEFILENAME = #{imagefilename};
 	</select>
 	
-	<!--  북마크 생성 -->
+	<!--
+	회원이 북마크를 등록 삭제 변경하는 기능
+	-->
 	<insert id="createBookmark" parameterType="map">
 		INSERT INTO BOOKMARK (USERID, CCBAKDCD, CCBAASNO, CCBACTCD , CCBAMNM1)
 		VALUES (#{userid}, #{ccbaKdcd}, #{ccbaAsno}, #{ccbaCtcd}, #{ccbaMnm1});
 	</insert>
 	
-	<!-- 북마크 불러오기 -->
    <select id="getBookmarkList" parameterType="string" resultType="map">
        SELECT USERID, CCBAASNO, CCBAMNM1, CCBAKDCD, CCBACTCD
        FROM BOOKMARK
@@ -109,39 +114,46 @@
        ORDER BY CCBAMNM1
    </select>
 	
-	<!-- 북마크 삭제하기 -->
    <delete id="deleteBookmark" parameterType="map">
       DELETE
       FROM BOOKMARK
-      WHERE USERID = #{userid} AND CCBAASNO = #{ccbaAsno};
+      WHERE USERID = #{userid}
+        AND CCBAASNO = #{ccbaAsno};
    </delete>
    
-   <!-- 회원 탈퇴 -->
-	<update id="userWithdrawal1" parameterType="string">
+   <!--
+   회원이 스스로 탈퇴하는 기능
+   -->
+	<update id="userSelfWithdrawalHERITAGEREVIEW" parameterType="string">
 	UPDATE HERITAGEREVIEW
 	SET userid = '탈퇴회원'
 	WHERE userid = #{userid};
 	</update>
-	<update id="userWithdrawal2" parameterType="string">
+	
+	<update id="userSelfWithdrawalRATE" parameterType="string">
 	UPDATE RATE
 	SET userid = '탈퇴회원'
 	WHERE userid = #{userid};
 	</update>
-   <delete id="userWithdrawal3" parameterType="string">
+	
+   <delete id="userSelfWithdrawalBOOKMARK" parameterType="string">
 		DELETE 
 		FROM BOOKMARK  
 		WHERE USERID = #{userid};
    </delete>
-   <delete id="userWithdrawal4" parameterType="string">
+   
+   <delete id="userSelfWithdrawalPROFILEIMAGE" parameterType="string">
 		DELETE 
 		FROM PROFILEIMAGE
 		WHERE USERID = #{userid};
    </delete>
-   <delete id="userWithdrawal5" parameterType="string">
+   
+   <delete id="userSelfWithdrawalMEMBER" parameterType="string">
 		DELETE 
 		FROM MEMBER 
 		WHERE USERID = #{userid};
    </delete>
+   
 </mapper>
 
 	

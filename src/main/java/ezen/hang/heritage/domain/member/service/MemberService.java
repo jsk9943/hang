@@ -9,49 +9,56 @@ import org.springframework.web.bind.annotation.RequestBody;
 import ezen.hang.heritage.domain.member.dto.Member;
 
 /**
- * 회원 관련 비즈니스 메소드 선언
+ * 회원 관련 비즈니스 Service
  */
 public interface MemberService {
 
-	// 회원가입
+	/**
+	 * 회원가입을 통해 신규가입 시 사용되는 Service 
+	 */
 	public void register(String username, String userid, String userpw, String userph, String email) throws Exception;
 
-	// 로그인
-	public Member login(Map<String, Object> loginData);
-
-	// 아이디 체크
 	public int checkUserId(String userid);
 	
-	// 아이디 찾기
-	public String lostIdSearch(String userName, String userPh);
+	/**
+	 * 회원이 가입 후 잃어버린 아이디와 비밀번호 변경을 위한 Service
+	 */
+	public String lostIdSearch(String userName, String userPh) throws Exception;
 	
-	// 비밀번호 분실 변경
-	public String lostPasswordChange(Map<String, Object> lostPasswordData);
+	public String lostPasswordChange(Map<String, Object> lostPasswordData) throws Exception;
+	
+	/**
+	 * 가입된 회원이 로그인 시 사용되는 Service 
+	 */
+	public Member login(Map<String, Object> loginData);
+	
+	/**
+	 * 가입된 회원이 회원정보 수정을 하기 위해 사용되는 Service
+	 */
+	public void updateMember(Map<String, Object> updateData) throws Exception;
 
-	// 회원정보 수정
-	public String updateMember(Map<String, Object> updateData);
-
-	// 아이디로 회원정보 가져오기
 	public Member usingProfile(String userid);
 
-	// 프로필 사진 등록하기
-	public String profileImgUpload(Map<String, Object> imgData);
+	/**
+	 * 프로필 사진을 수정하기 위해 사용되는 Service
+	 */
+	public String profileImgUpload(Map<String, Object> imgData) throws Exception;
 
-	// 프로필 사진 가져오기
 	public ResponseEntity<byte[]> profileImgLoading(Map<String, Object> imgData);
 	
-	// 북마크 생성
+	/**
+	 * 북마크를 등록, 삭제 하기 위해 사용되는 Service
+	 */
 	public void createBookmark(Map<String, Object> BookmarkData) throws Exception;
 
-	// 북마크 기능
 	public List<Map<String, Object>> getBookmarkList(String userid);
 	
-	// 인포창에서 버튼을 통한 단일 문화재 북마크 삭제
 	public void infoDeleteBookmark(@RequestBody Map<String, Object> BookmarkData) throws Exception;
 
-	// 북마크 삭제 기능
 	public void deleteBookmark(List<Map<String, Object>> BookmarkList) throws Exception;
 	
-	// 회원탈퇴 기능
+	/**
+	 * 회원 스스로 탈퇴하기 위한 Service
+	 */
 	public void userWithdrawal(Map<String, Object> userData) throws Exception;
 }

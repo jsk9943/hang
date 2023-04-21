@@ -1,30 +1,28 @@
 package ezen.hang.heritage.domain.item.dto;
+
 /**
- * 문화재 객체 자체 생성
- * "ccbaKdcd", "ccbaAsno", "ccbaCtcd", "ccbaCpno", "longitude", "latitude", "ccmaName", "crltsnoNm", "ccbaMnm1", "ccbaMnm2", "gcodeName", "bcodeName", "mcodeName", "scodeName", "ccbaQuan", "ccbaAsdt", "ccbaCtcdNm", "ccsiName", "ccbaLcad", "ccceName", "ccbaPoss", "ccbaAdmin", "ccbaCncl", "ccbaCndt", "imageUrl", "content"
- * @author 김정석
- * @date   2023. 3. 27.
+ * 문화재 정보를 DB에 저장하고 Web에 보여줄 객체
  */
 
 public class Heritage {
-    private String sn, no, ccbaKdcd, ccbaAsno, ccbaCtcd, ccbaCpno, longitude, latitude, ccmaName, crltsnoNm, ccbaMnm1, ccbaMnm2, gcodeName, bcodeName, mcodeName, scodeName, ccbaQuan, ccbaAsdt, ccbaCtcdNm, ccsiName, ccbaLcad, ccceName, ccbaPoss, ccbaAdmin, ccbaCncl, ccbaCndt, imageUrl, content;
+    private String sn, no, ccbaKdcd, ccbaAsno, ccbaCtcd, ccbaCpno, longitude, latitude,
+    			   ccmaName, crltsnoNm, ccbaMnm1, ccbaMnm2, gcodeName, bcodeName, mcodeName,
+    			   scodeName, ccbaQuan, ccbaAsdt, ccbaCtcdNm, ccsiName, ccbaLcad, ccceName,
+    			   ccbaPoss, ccbaAdmin, ccbaCncl, ccbaCndt, imageUrl, content;
 	private CommentStarRate starRate;
-	
 	
 	public Heritage() {
 	}
 	
-	// 검색 단어
 	public Heritage(String ccbaMnm1) {
 		this.ccbaMnm1 = ccbaMnm1;
 	}
 
-	// 검색바를 통한 검색객체
-	public Heritage(String sn, String no, String ccbaKdcd, String ccbaAsno, String ccbaCtcd, String ccbaCpno, String longitude,
-			String latitude, String ccmaName, String crltsnoNm, String ccbaMnm1, String ccbaMnm2, String gcodeName,
-			String bcodeName, String mcodeName, String scodeName, String ccbaQuan, String ccbaAsdt, String ccbaCtcdNm,
-			String ccsiName, String ccbaLcad, String ccceName, String ccbaPoss, String ccbaAdmin, String ccbaCncl,
-			String ccbaCndt, String imageUrl, String content, CommentStarRate starRate) {
+	public Heritage(String sn, String no, String ccbaKdcd, String ccbaAsno, String ccbaCtcd, String ccbaCpno,
+			String longitude, String latitude, String ccmaName, String crltsnoNm, String ccbaMnm1, String ccbaMnm2,
+			String gcodeName, String bcodeName, String mcodeName, String scodeName, String ccbaQuan, String ccbaAsdt,
+			String ccbaCtcdNm, String ccsiName, String ccbaLcad, String ccceName, String ccbaPoss, String ccbaAdmin,
+			String ccbaCncl, String ccbaCndt, String imageUrl, String content, CommentStarRate starRate) {
 		this.sn = sn;
 		this.no = no;
 		this.ccbaKdcd = ccbaKdcd;

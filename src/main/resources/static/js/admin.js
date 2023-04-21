@@ -1,7 +1,10 @@
 /**
- * 
+ * admin 기능이 있는 사용자에게는
+ * 회원관리 페이지에서 별도의 아이콘을 생성해주고
+ * 해당 아이콘을 클릭했을 때 관리자 페이지가 표시되는 Javascript
  */
-// 관리자 계정일 경우 관리자 페이지 아이콘 보여지게 하기
+
+// 관리자 페이지 아이콘
 if (sessionStorage.getItem('userid') !== null) {
 	document.querySelector('.hangtoggler').addEventListener('click', () => {
 		var isAdmin = sessionStorage.getItem('admin');
@@ -14,7 +17,7 @@ if (sessionStorage.getItem('userid') !== null) {
 	})
 }
 
-// 관리자 아이콘 클릭 시 관리자 페이지 이동
+// 관리자 페이지
 if (document.getElementById('adminButton') !== null) {
 	document.getElementById('adminButton').addEventListener('click', () => {
 		fetch('/admin')

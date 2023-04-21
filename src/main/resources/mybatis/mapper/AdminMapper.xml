@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper
-	namespace="ezen.hang.heritage.domain.admin.mapper.AdminMapper">
+<mapper namespace="ezen.hang.heritage.domain.admin.mapper.AdminMapper">
 
-	<!-- 관리자가 맞는지 확인 -->
+	<!-- 관리자 권한 유무 확인 기능 -->
 	<select id="adminIdConfirm" parameterType="string" resultType="java.lang.String">
 		SELECT ADMIN 
 		FROM MEMBER
 		WHERE userid = #{adminid};
 	</select>
 	
-	<!-- 모든 댓글 가져오기 -->
+	<!--
+	관리자 권한 기능 중 유저댓글 관리에 대한 기능
+	-->
 	<select id="allCommentList" resultType="map">
 		SELECT USERID , COMMENT, CCBAKDCD, CCBAASNO, CCBACTCD ,CCBAMNM1 ,COMMENTDATE 
 		FROM HERITAGEREVIEW
 		ORDER BY COMMENTDATE DESC;
 	</select>
 	
-	<!-- 검색창을 통해 등록된 코멘트 조회하기 -->
 	<select id="keywordCommentFind" parameterType="map" resultType="map">
 		SELECT USERID, COMMENT ,CCBAASNO ,CCBAMNM1 ,COMMENTDATE 
 		FROM HERITAGEREVIEW
@@ -37,21 +37,26 @@
 		    </if>
 	</select>
 	
-	<!-- 선택한 리뷰 삭제하기 -->
 	<delete id="checkCommentDelete" parameterType="map">
 		DELETE R, H
 		FROM RATE R
-		JOIN HERITAGEREVIEW H ON H.USERID  = R.USERID AND H.CCBAASNO = R.CCBAASNO AND H.CCBAKDCD = R.CCBAKDCD  AND H.CCBACTCD = R.CCBACTCD
-		WHERE R.CCBAASNO = #{ccbaAsno} AND R.USERID = #{userid} AND R.CCBAKDCD = #{ccbaKdcd} AND R.CCBACTCD = #{ccbaCtcd};
+		JOIN HERITAGEREVIEW H ON H.USERID  = R.USERID
+							  AND H.CCBAASNO = R.CCBAASNO
+							  AND H.CCBAKDCD = R.CCBAKDCD
+							  AND H.CCBACTCD = R.CCBACTCD
+		WHERE R.CCBAASNO = #{ccbaAsno}
+		  AND R.USERID = #{userid}
+		  AND R.CCBAKDCD = #{ccbaKdcd}
+		  AND R.CCBACTCD = #{ccbaCtcd};
 	</delete>
 	
-	<!-- 가입된 유저의 관리자권한과 댓글쓰기권한 가져오기 -->
+	<!--
+	관리자 권한 기능 중 유저권한 부여에 대한 기능
+	-->
 	<select id="allUserAuthority" resultType="map">
-		SELECT USERID, ADMIN, ACCESS
-		FROM MEMBER;
+		SELECT USERID, ADMIN, ACCESS FROM MEMBER;
 	</select>
 	
-	<!-- 검색단어로 유저 찾아오기 -->
 	<select id="keywordUserAuthorityFind" parameterType="map" resultType="map">
 		SELECT USERID, ADMIN , ACCESS
 		FROM MEMBER
@@ -67,22 +72,22 @@
 		    </if>
 	</select>
 	
-	<!-- 유저의 권한 등록 제거 -->
 	<update id="userAuthorityChange" parameterType="map">
-	UPDATE MEMBER
-	SET ADMIN = #{admin}, ACCESS = #{access}
-	WHERE userid = #{userid};
+		UPDATE MEMBER
+		SET ADMIN = #{admin}, ACCESS = #{access}
+		WHERE userid = #{userid};
 	</update>
 	
 	
-	<!-- 탈퇴시킬 모든 유저 정보 가져오기 -->
+	<!--
+	관리자 권한 기능 중 회원강제탈퇴에 대한 기능
+	-->
 	<select id="allUserForcedWithdrawal" resultType="map">
 		SELECT USERID , USERNAME ,REGDATE 
 		FROM MEMBER
 		ORDER BY USERID ASC;
 	</select>
 	
-	<!-- 검색단어로 탈퇴시킬 유저 찾아오기 -->
 	<select id="keywordUserForcedWithdrawalFind" parameterType="map" resultType="map">
 		SELECT USERID, USERNAME , REGDATE
 		FROM MEMBER
@@ -95,28 +100,31 @@
 		    </if>
 	</select>
 	
-	<!-- 회원 강제탈퇴 -->
-	<update id="userWithdrawal1" parameterType="map">
-	UPDATE HERITAGEREVIEW
-	SET userid = '탈퇴회원'
-	WHERE userid = #{userid};
+	<update id="userWithdrawalHERITAGEREVIEW" parameterType="map">
+		UPDATE HERITAGEREVIEW
+		SET userid = '탈퇴회원'
+		WHERE userid = #{userid};
 	</update>
-	<update id="userWithdrawal2" parameterType="map">
-	UPDATE RATE
-	SET userid = '탈퇴회원'
-	WHERE userid = #{userid};
+	
+	<update id="userWithdrawalRATE" parameterType="map">
+		UPDATE RATE
+		SET userid = '탈퇴회원'
+		WHERE userid = #{userid};
 	</update>
-   <delete id="userWithdrawal3" parameterType="map">
+	
+   <delete id="userWithdrawalBOOKMARK" parameterType="map">
 		DELETE 
 		FROM BOOKMARK  
 		WHERE USERID = #{userid};
    </delete>
-   <delete id="userWithdrawal4" parameterType="map">
+   
+   <delete id="userWithdrawalPROFILEIMAGE" parameterType="map">
 		DELETE 
 		FROM PROFILEIMAGE
 		WHERE USERID = #{userid};
    </delete>
-   <delete id="userWithdrawal5" parameterType="map">
+   
+   <delete id="userWithdrawalMEMBER" parameterType="map">
 		DELETE 
 		FROM MEMBER 
 		WHERE USERID = #{userid};

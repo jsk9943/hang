@@ -1,5 +1,5 @@
 /**
- * 
+ * 나의리뷰 모아보는 게시판
  */
 import { userReviewStarrate, removeUserReviews } from './fetch.js';
 // 로그인 되어있는 유저이름

@@ -35,7 +35,6 @@ class imgtest {
 		Map<String, Object> data = new HashMap<>();
 		data.put("userName", "김정석");
 		data.put("userPh", "123456");
-		log.info("테스트 시작");
 	}
 
 }

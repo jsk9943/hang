@@ -10,56 +10,64 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import ezen.hang.heritage.domain.item.dto.CommentStarRate;
 import ezen.hang.heritage.domain.item.dto.Heritage;
 import ezen.hang.heritage.domain.item.service.ItemService;
 
+/**
+ * hang Web에서 URI 들어오는 요청에 따라 RESTful하게 처리하는 Controller
+ */
 @RestController
 @RequestMapping("/heritage/item")
 public class ItemController {
 
 	@Autowired
 	private ItemService itemService;
-	
-	// 문화재 이름으로 검색결과 가져오기
+
+	/**
+	 * 검색요청하는 문화재 명에 따라 결과값을 List로 반환하고 추가로 상세검색을 위한 객체반환 Controller
+	 */
 	@GetMapping("/search")
-	public List<Heritage> search(@RequestParam("keyword") String keyword) {
-		return itemService.searchHeritageParsing(keyword);
+	public List<Heritage> searchHeritageParsing(@RequestParam("keyword") String keyword) {
+		List<Heritage> list = null;
+		try {
+			list = itemService.searchHeritageParsing(keyword);
+		} catch (Exception e) {
+		}
+		return list;
 	}
-	
-	// 문화재 상세검색
+
 	@GetMapping("/search/detail")
-	public Heritage search(
+	public Heritage detailSearchHeritageParsing(
 			@RequestParam("ccbaKdcd") String ccbaKdcd,
 			@RequestParam("ccbaAsno") String ccbaAsno,
-			@RequestParam("ccbaCtcd") String ccbaCtcd ) {
-		return itemService.detailSearchHeritageParsing(ccbaKdcd, ccbaAsno, ccbaCtcd);
+			@RequestParam("ccbaCtcd") String ccbaCtcd) {
+		Heritage heritage = new Heritage();
+		try {
+			heritage = itemService.detailSearchHeritageParsing(ccbaKdcd, ccbaAsno, ccbaCtcd);
+		} catch (Exception e) {
+			heritage = null;
+		}
+		return heritage;
 	}
 
-	// 유저가 작성한 문화재 리스트
-	@GetMapping
-	public List<CommentStarRate> userHeritageList(@RequestParam("userid") String userid) {
-		return itemService.userHeritageList(userid);
-	}
-	
-	// 유저가 작성한 코멘트 및 별점 등록 컨트롤러
+	/**
+	 * 문화재에 등록된 유저들의 별점과 댓글을 등록하고 삭제, 가져오는 Controller
+	 */
 	@PostMapping("/input")
-	@ResponseBody
 	public String createCommentStarRate(@RequestBody Map<String, Object> inputData) {
-		return itemService.createCommentStarRate(inputData);
-	}
-	
-	// 유저의 코멘트 및 별점 삭제 컨트롤러
-	@DeleteMapping("/input")
-	@ResponseBody
-	public String deleteCommentStarRate(@RequestBody List<Map<String, Object>> deleteData) {
-		return itemService.deleteCommentStarRate(deleteData);
+		String result = "DENIED";
+		try {
+			itemService.createCommentStarRate(inputData);
+			result = "true";
+		} catch (Exception e) {
+			result = "false";
+		}
+		return result;
 	}
 
-	// 문화재 개별 등록된 댓글 및 별점 가져오기
 	@GetMapping("/output")
 	public List<Map<String, Object>> commentStarRateLoad(
 			@RequestParam("ccbaKdcd") String ccbaKdcd,
@@ -67,5 +75,23 @@ public class ItemController {
 			@RequestParam("ccbaCtcd") String ccbaCtcd) {
 		return itemService.commentStarRateLoad(ccbaKdcd, ccbaAsno, ccbaCtcd);
 	}
+	
+	@GetMapping
+	public List<CommentStarRate> userHeritageList(@RequestParam("userid") String userid) {
+		return itemService.userHeritageList(userid);
+	}
+
+	@DeleteMapping("/input")
+	public String deleteCommentStarRate(@RequestBody List<Map<String, Object>> deleteData) {
+		String result = null;
+		try {
+			itemService.deleteCommentStarRate(deleteData);
+			result = "true";
+		} catch (Exception e) {
+			result = "false";
+		}
+		return result;
+	}
+
 
 }

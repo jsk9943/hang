@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.*;
 
 import ezen.hang.heritage.domain.member.dto.Member;
 
+
+/**
+ * 회원가입과 회원탈퇴, 회원정보 변경, 프로필사진 등록 및 변경, 북마크리스트 관리
+ * Service를 제공받기 위한 Controller 
+ */
 @RestController
 @RequestMapping("/member")
 public class MemberController {
@@ -21,11 +26,15 @@ public class MemberController {
 	@Autowired
 	private MemberService memberService;
 
-	// 회원가입
+	/**
+	 * 회원가입을 통해 신규가입 시 사용되는 Controller 
+	 */
 	@PostMapping("/register")
-	@ResponseBody
-	public String registerMember(@RequestParam("username") String username, @RequestParam("userid") String userid,
-			@RequestParam("userpw") String userpw, @RequestParam("userph") String userph,
+	public String registerMember(
+			@RequestParam("username") String username,
+			@RequestParam("userid") String userid,
+			@RequestParam("userpw") String userpw,
+			@RequestParam("userph") String userph,
 			@RequestParam("email") String email) {
 		String result = null;
 		try {
@@ -37,29 +46,42 @@ public class MemberController {
 		return result;
 	}
 
-	// 회원가입 아이디 체크 컨트롤러
 	@PostMapping("/idCheck")
-	@ResponseBody
 	public int idCheck(@RequestParam("userid") String userid) {
 		return memberService.checkUserId(userid);
 	}
 	
-	// 아이디 찾기
+	/**
+	 * 회원이 가입 후 잃어버린 아이디와 비밀번호 변경을 위한 Controller
+	 */
 	@GetMapping("/idCheck")
-	public String lostIdSearch(@RequestParam("userName") String userName, @RequestParam("userPh") String userPh) {
-		return memberService.lostIdSearch(userName, userPh);
+	public String lostIdSearch(
+			@RequestParam("userName") String userName,
+			@RequestParam("userPh") String userPh) {
+		String result = null;
+		try {
+			result = memberService.lostIdSearch(userName, userPh);
+		} catch (Exception e) {
+			result = "false";
+		}
+		return result;
 	}
 	
-	// 비밀번호 잃어버려서 변경하기
 	@PatchMapping()
-	@ResponseBody
 	public String lostPasswordChange(@RequestBody Map<String, Object> passwordChangeData) {
-		return memberService.lostPasswordChange(passwordChangeData);
+		String result = null;
+		try {
+			result = memberService.lostPasswordChange(passwordChangeData);
+		} catch (Exception e) {
+			result = "false";
+		}
+		return result;
 	}
 
-	// 로그인
+	/**
+	 * 가입된 회원이 로그인, 로그아웃 시 사용되는 Controller 
+	 */
 	@PostMapping("/login")
-	@ResponseBody
 	public Map<String, Object> logindo(@RequestBody Map<String, Object> loginData, HttpSession session) {
 		Map<String, Object> userinfo = new HashMap<>();
 		Member member = memberService.login(loginData);
@@ -74,37 +96,48 @@ public class MemberController {
 		return userinfo;
 	}
 
-	// 로그아웃
 	@GetMapping("/logout")
 	public void logout(HttpSession session) {
 		session.removeAttribute("member");
 		session.invalidate();
 	}
 
-	// 회원정보 수정
+	
+	/**
+	 * 가입된 회원이 회원정보 수정을 하기 위해 사용되는 Controller
+	 */
 	@PatchMapping("/update")
-	@ResponseBody
 	public String updateMember(@RequestBody Map<String, Object> updateData) {
-		return memberService.updateMember(updateData);
+		String result = null;
+		try {
+			memberService.updateMember(updateData);
+			result = "true";
+		} catch (Exception e) {
+			result = "false";
+		}
+		return result;
 	}
 
-	// 회원정보 수정전 회원정보 가져오기
 	@PostMapping("/usingprofile")
-	@ResponseBody
 	public Member usingProfile(String userid) {
 		return memberService.usingProfile(userid);
 	}
 
-	// 프로필 사진 등록하기
+	/**
+	 * 프로필 사진을 수정하기 위해 사용되는 Controller
+	 */
 	@PostMapping("/profileimg/upload")
-	@ResponseBody
 	public String profileImgUpload(@RequestBody Map<String, Object> imgData) {
-		return memberService.profileImgUpload(imgData);
+		String result = null;
+		try {
+			result = memberService.profileImgUpload(imgData);
+		} catch (Exception e) {
+			result = "false";
+		}
+		return result;
 	}
 
-	// 프로필 사진 불러오기
 	@PostMapping("/profileimg")
-	@ResponseBody
 	public ResponseEntity<byte[]> profileImgLoading(@RequestBody Map<String, Object> imgData) {
 		try {
 			return memberService.profileImgLoading(imgData);
@@ -114,9 +147,10 @@ public class MemberController {
 		return null;
 	}
 
-	// 북마크 생성
+	/**
+	 * 북마크를 등록, 삭제 하기 위해 사용되는 Controller
+	 */
 	@PostMapping("/bookmark/add")
-	@ResponseBody
 	public String createBookmark(@RequestBody Map<String, Object> BookmarkData) {
 		String result = null;
 		try {
@@ -128,15 +162,7 @@ public class MemberController {
 		return result;
 	}
 
-	// 북마크 등록 리스트 가져오기
-	@GetMapping("/bookmark")
-	public List<Map<String, Object>> getBookmarkList(@RequestParam("userid") String userid) {
-		return memberService.getBookmarkList(userid);
-	}
-
-	// 인포창에서 버튼을 통한 단일 문화재 북마크 삭제
 	@DeleteMapping("/bookmark")
-	@ResponseBody
 	public String infoDeleteBookmark(@RequestBody Map<String, Object> BookmarkList) {
 		String result = null;
 		try {
@@ -147,10 +173,13 @@ public class MemberController {
 		}
 		return result;
 	}
+	
+	@GetMapping("/bookmark")
+	public List<Map<String, Object>> getBookmarkList(@RequestParam("userid") String userid) {
+		return memberService.getBookmarkList(userid);
+	}
 
-	// 회원 즐겨찾기를 통한 북마크 삭제
 	@DeleteMapping("/bookmark/delete")
-	@ResponseBody
 	public String deleteBookmark(@RequestBody List<Map<String, Object>> BookmarkList) {
 		String result = null;
 		try {
@@ -162,9 +191,10 @@ public class MemberController {
 		return result;
 	}
 	
-	// 회원 탈퇴
+	/**
+	 * 회원 스스로 탈퇴하기 위한 Controller
+	 */
 	@DeleteMapping()
-	@ResponseBody
 	public String userWithdrawal(@RequestBody Map<String, Object> userData) {
 		String result = null;
 		try {

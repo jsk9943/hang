@@ -1,5 +1,5 @@
 /**
- * 
+ * 회원정보 변경
  */
 import { userInfoUpdate, userInfoDataLoad } from './fetch.js';
 let userid = sessionStorage.getItem("userid");

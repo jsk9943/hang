@@ -1,5 +1,5 @@
 /**
- * 공통사항
+ * 관리자 페이지 내에 공통사용 변수 및 이벤트리스너
  */
 let adminid = sessionStorage.getItem('userid'); //접속한 아이디
 let commentPageButton = document.querySelector('#commentPageButton'); // 댓글 페이지 보기 버튼

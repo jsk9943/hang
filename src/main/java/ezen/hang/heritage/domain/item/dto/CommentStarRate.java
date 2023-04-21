@@ -2,6 +2,9 @@ package ezen.hang.heritage.domain.item.dto;
 
 import java.sql.Date;
 
+/**
+ * 개별 문화재에 등록될 댓글과 별점 객체 
+ */
 public class CommentStarRate {
 	private String ccbaKdcd, ccbaAsno, ccbaCtcd, ccbaMnm1, comment, userid;
 	private int starpoint, count;
@@ -9,7 +12,8 @@ public class CommentStarRate {
 
 	public CommentStarRate() {}
 
-	public CommentStarRate(String ccbaKdcd, String ccbaAsno, String ccbaCtcd, String userid, String ccbaMnm1, String comment, int starpoint, int count) {
+	public CommentStarRate(String ccbaKdcd, String ccbaAsno, String ccbaCtcd, String ccbaMnm1, String comment,
+						   String userid, int starpoint, int count, Date commentDate) {
 		this.ccbaKdcd = ccbaKdcd;
 		this.ccbaAsno = ccbaAsno;
 		this.ccbaCtcd = ccbaCtcd;
@@ -18,6 +22,7 @@ public class CommentStarRate {
 		this.userid = userid;
 		this.starpoint = starpoint;
 		this.count = count;
+		this.commentDate = commentDate;
 	}
 
 	public String getCcbaKdcd() {
