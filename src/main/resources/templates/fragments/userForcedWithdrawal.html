@@ -1,7 +1,7 @@
 <div th:fragment="userForcedWithdrawalPage">
-  <div class="table-container"
-    style="margin: 0 auto; width: 90%; text-align: center;">
-    <table class="table table-hover" style="font-size: 0.9em;">
+  <div class="table-container" style="margin: 0 auto; width: 90%; text-align: center;">
+    <table class="table table-hover"
+      style="font-size: 0.9em;">
       <thead>
         <tr>
           <th class="table-col-1 userForcedWithdrawalTable1">번호</th>
@@ -88,7 +88,6 @@
    * MAPPER와 통신전에 관리권한 확인 후 업무처리 구현
    */
      let userForcedWithdrawalAdminId = sessionStorage.getItem('userid'); //관리자 아이디
-     
      let userForcedWithdrawalSearchButton = document.querySelector('.userForcedWithdrawalSearchButton'); // 검색 버튼
      if(userForcedWithdrawalSearchButton !== null){
          let userForcedWithdrawalinputGroup = document.getElementById("userForcedWithdrawalinputGroup");
@@ -281,49 +280,53 @@
            checkCount++;
          }
          
-         /**
-          * 유저 강제탈퇴 시키기
-          */
-         let userForcedWithdrawalliveToastContent = $('#userForcedWithdrawalliveToast');
-         let ForcedWithdrawalUserid;
-         $(document).on("click", ".userForcedWithdrawalchange", function(){
-             console.log($(this).val());
-             ForcedWithdrawalUserid = $(this).val();
-             let toast = bootstrap.Toast.getOrCreateInstance(userForcedWithdrawalliveToastContent);
-             toast.show();
-         });
-         
-         let finaluserForcedWithdrawalButton = document.querySelector('#finaluserForcedWithdrawalButton');
-         finaluserForcedWithdrawalButton.addEventListener('click', () => {
-         	let data = {
-         		"adminid": userForcedWithdrawalAdminId,
-         		"userid": ForcedWithdrawalUserid
-         	}
-         	fetch('/admin/wlist', {
-         		method: 'DELETE',
-         		headers: {
-         			'Content-Type': 'application/json'
-         		},
-         		body: JSON.stringify(data)
-         	})
-         		.then(response => {
-         			return response.text();
-         		})
-         		.then(data => {
-         			if (data === 'true') {
-         				alert('정상적으로 강제탈퇴 처리 되었습니다');
-         				document.querySelector('#userForcedWithdrawaltoastCloseButton').click();
-         			} else if (data === 'false') {
-         				alert('강제탈퇴 처리에 실패하였습니다');
-         				document.querySelector('#userForcedWithdrawaltoastCloseButton').click();
-         			}
-         		})
-         		.catch(error => {
-         			alert(`강제탈퇴 중 오류가 발생하였습니다\n서버를 확인해주세요\n${error}`);
-         		})
-         })
+     
          
        }
+       
+       
+       
+       /**
+        * 유저 강제탈퇴 시키기
+        */
+       let userForcedWithdrawalliveToastContent = $('#userForcedWithdrawalliveToast');
+       let toast = bootstrap.Toast.getOrCreateInstance(userForcedWithdrawalliveToastContent);
+       let ForcedWithdrawalUserid;
+       $(document).off("click", ".userForcedWithdrawalchange").on("click", ".userForcedWithdrawalchange", function(event){
+    	    console.log($(event.currentTarget).val());
+    	    ForcedWithdrawalUserid = $(this).val();
+    	    toast.show();
+    	});
+       
+       let finaluserForcedWithdrawalButton = document.querySelector('#finaluserForcedWithdrawalButton');
+       finaluserForcedWithdrawalButton.addEventListener('click', () => {
+       	let data = {
+       		"adminid": userForcedWithdrawalAdminId,
+       		"userid": ForcedWithdrawalUserid
+       	}
+       	fetch('/admin/wlist', {
+       		method: 'DELETE',
+       		headers: {
+       			'Content-Type': 'application/json'
+       		},
+       		body: JSON.stringify(data)
+       	})
+       		.then(response => {
+       			return response.text();
+       		})
+       		.then(data => {
+       			if (data === 'true') {
+       				alert('정상적으로 강제탈퇴 처리 되었습니다');
+       				document.querySelector('#userForcedWithdrawaltoastCloseButton').click();
+       			} else if (data === 'false') {
+       				alert('강제탈퇴 처리에 실패하였습니다');
+       				document.querySelector('#userForcedWithdrawaltoastCloseButton').click();
+       			}
+       		})
+       		.catch(error => {
+       			alert(`강제탈퇴 중 오류가 발생하였습니다\n서버를 확인해주세요\n${error}`);
+       		})
+       })
      };
   </script>
 

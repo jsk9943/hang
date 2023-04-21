@@ -114,6 +114,16 @@
         <div class="modal-body edituserbody">
 
            <form>
+            <div style="font-size: 0.9em; padding: 5px; font-weight: bold;">이름 변경</div>
+            <div class="form-floating mb-2">
+              <input type="text" class="form-control" id="updateUsername"
+                name="username" placeholder="홍길동"
+                style="height: 40px;" required> <label
+                style="color: rgba(17, 17, 17, 0.39); font-size: 0.8em; line-height: 5px;"
+                for="updateUsername"> <span id="usingUsername"></span>
+              </label>
+            </div>
+           
             <div style="font-size: 0.9em; padding: 5px; font-weight: bold;">email 변경<span id="emailMessage"style="font-size: 0.7em; font-weight:200; float: right;"></span></div>
             <div class="form-floating mb-2">
               <input type="email" class="form-control" id="updateEmail"

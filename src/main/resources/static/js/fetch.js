@@ -330,12 +330,13 @@ export function removeUserReviews(Data) {
 
 
 // 유저 정보 업데이트 fetch
-export function userInfoUpdate(userid, userEmail, userPasswod, userPhoneNumber) {
+export function userInfoUpdate(userid, username, userEmail, userPasswod, userPhoneNumber) {
 	let updateData = {
-		userid: userid,
-		email: userEmail,
-		userpw: userPasswod,
-		userph: userPhoneNumber
+		"userid": userid,
+		"username": username,
+		"email": userEmail,
+		"userpw": userPasswod,
+		"userph": userPhoneNumber
 	};
 	fetch('/member/update', {
 		method: 'PATCH',
@@ -371,6 +372,7 @@ export function userInfoDataLoad(userid) {
 			return response.json();
 		})
 		.then(data => {
+			document.querySelector('#usingUsername').innerHTML = data.username;
 			document.querySelector('#usingEmail').innerHTML = data.email;
 			document.querySelector('#usingPh').innerHTML = data.userph;
 		})

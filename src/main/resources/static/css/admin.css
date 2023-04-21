@@ -4,26 +4,32 @@
 }
 .commentTable1 {
 	width: 5%;
+	font-size:0.9em;
 }
 
 .commentTable2 {
 	width: 5%;	
+	font-size:0.9em;
 }
 
 .commentTable3 {
 	width: 10%;
+	font-size:0.9em;
 }
 
 .commentTable4 {
 	width: 50%;
+	font-size:0.9em;
 }
 
 .commentTable5 {
 	width: 15%;
+	font-size:0.9em;
 }
 
 .commentTable6 {
 	width: 15%;
+	font-size:0.9em;
 }
 
 
@@ -33,44 +39,56 @@
 }
 .userAuthorityTable1{
 	width: 5%;
+	font-size:0.9em;
 }
 .userAuthorityTable2{
 	width: 5%;
+	font-size:0.9em;
 }
 .userAuthorityTable3{
 	width:10%;
+	font-size:0.9em;
 }
 .userAuthorityTable4{
 	width:20%;
+	font-size:0.9em;
 }
 .userAuthorityTable5{
 	width:20%;
+	font-size:0.9em;
 }
 .userAuthorityTable6{
 	width:20%;
+	font-size:0.9em;
 }
 .userAuthorityTable7{
 	width:20%;
+	font-size:0.9em;
 }
 
 
 /*유저 강제탈퇴*/
 .userForcedWithdrawalTable1 {
 	width: 10%;
+	font-size:0.9em;
 }
 
 .userForcedWithdrawalTable2 {
 	width: 20%;
+	font-size:0.9em;
 }
 
 .userForcedWithdrawalTable3 {
 	width: 20%;
+	font-size:0.9em;
 }
 
 .userForcedWithdrawalTable4 {
 	width: 20%;
+	font-size:0.9em;
 }
 
 .userForcedWithdrawalTable5 {
 	width: 30%;
+	font-size:0.9em;
 }

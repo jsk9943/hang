@@ -40,6 +40,7 @@
 	<!-- 회원정보 수정 -->
 	<update id="update" parameterType="Member">
 		UPDATE MEMBER SET
+		<if test="username != null">username = #{username},</if>
 		<if test="email != null">email = #{email},</if>
 		<if test="userpw != null">userpw = #{userpw},</if>
 		<if test="userph != null">userph = #{userph}</if>

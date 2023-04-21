@@ -112,10 +112,14 @@ public class MemberServiceImpl implements MemberService {
 	public String updateMember(Map<String, Object> updateData) {
 		Member member = new Member();
 		String userid = updateData.get("userid").toString();
+		String username = updateData.get("username").toString();
 		String email = updateData.get("email").toString();
 		String userpw = updateData.get("userpw").toString();
 		String userph = updateData.get("userph").toString();
 		member.setUserid(userid);
+		if (username.equals("")) {
+			username = null;
+		}
 		if (email.equals("")) {
 			email = null;
 		}
@@ -126,6 +130,7 @@ public class MemberServiceImpl implements MemberService {
 			Member userSavePh = usingProfile(userid);
 			userph = userSavePh.getUserph();
 		}
+		member.setUsername(username);
 		member.setEmail(email);
 		member.setUserpw(userpw);
 		member.setUserph(userph);
