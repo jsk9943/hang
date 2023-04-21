@@ -213,11 +213,11 @@ public class MemberServiceImpl implements MemberService {
 		String sessionUserid = userData.get("sessionUserid").toString();
 		String userid = userData.get("userid").toString();
 		if(sessionUserid.equals(userid)) {
-			memberMapper.userWithdrawal1(userid);
-			memberMapper.userWithdrawal2(userid);
-			memberMapper.userWithdrawal3(userid);
-			memberMapper.userWithdrawal4(userid);
-			memberMapper.userWithdrawal5(userid);			
+			memberMapper.userSelfWithdrawalHERITAGEREVIEW(userid);
+			memberMapper.userSelfWithdrawalRATE(userid);
+			memberMapper.userSelfWithdrawalBOOKMARK(userid);
+			memberMapper.userSelfWithdrawalPROFILEIMAGE(userid);
+			memberMapper.userSelfWithdrawalMEMBER(userid);			
 		} else {
 			throw new Exception();
 		}
