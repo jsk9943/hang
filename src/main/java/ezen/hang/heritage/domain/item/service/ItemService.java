@@ -15,7 +15,7 @@ public interface ItemService {
 	/**
 	 * 검색요청하는 문화재 명에 따라 결과값을 List로 반환하고 추가로 상세검색을 위한 객체반환 Service 
 	 */
-	public List<Heritage> searchHeritageParsing(String keyword) throws Exception;
+	public List<Heritage> searchHeritageParsing(String ccbaMnm1) throws Exception;
 
 	public Heritage detailSearchHeritageParsing(String ccbaKdcd, String ccbaAsno, String ccbaCtcd) throws Exception;
 		

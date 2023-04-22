@@ -31,19 +31,19 @@ public class ItemServiceImpl implements ItemService {
 	 * 검색요청하는 문화재 명에 따라 결과값을 List로 반환하고 추가로 상세검색을 위한 객체반환 ServiceImplements
 	 */
 	@Override
-	public List<Heritage> searchHeritageParsing(String keyword) throws Exception {
-		dsd.setCcbaMnm1Value(keyword);
-		return dsd.searchHeritage();
+	public List<Heritage> searchHeritageParsing(String ccbaMnm1) throws Exception {
+		//dsd.setCcbaMnm1(keyword);
+		return dsd.searchHeritage(ccbaMnm1);
 	}
 
 	@Override
 	public Heritage detailSearchHeritageParsing(String ccbaKdcd, String ccbaAsno, String ccbaCtcd) throws Exception {
 		Heritage heritage = new Heritage();
 		CommentStarRate commentStarRate = new CommentStarRate();
-		dsd.setCcbaKdcd(ccbaKdcd);
-		dsd.setCcbaAsno(ccbaAsno);
-		dsd.setCcbaCtcd(ccbaCtcd);
-		heritage = dsd.detailSearchHeritage();
+		//dsd.setCcbaKdcd(ccbaKdcd);
+		//dsd.setCcbaAsno(ccbaAsno);
+		//dsd.setCcbaCtcd(ccbaCtcd);
+		heritage = dsd.detailSearchHeritage(ccbaKdcd, ccbaAsno, ccbaCtcd);
 		commentStarRate.setCcbaKdcd(ccbaKdcd);
 		commentStarRate.setCcbaAsno(ccbaAsno);
 		commentStarRate.setCcbaCtcd(ccbaCtcd);

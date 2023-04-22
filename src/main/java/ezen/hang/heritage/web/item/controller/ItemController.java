@@ -30,10 +30,10 @@ public class ItemController {
 	 * 검색요청하는 문화재 명에 따라 결과값을 List로 반환하고 추가로 상세검색을 위한 객체반환 Controller
 	 */
 	@GetMapping("/search")
-	public List<Heritage> searchHeritageParsing(@RequestParam("keyword") String keyword) {
+	public List<Heritage> searchHeritageParsing(@RequestParam("keyword") String ccbaMnm1) {
 		List<Heritage> list = null;
 		try {
-			list = itemService.searchHeritageParsing(keyword);
+			list = itemService.searchHeritageParsing(ccbaMnm1);
 		} catch (Exception e) {
 		}
 		return list;

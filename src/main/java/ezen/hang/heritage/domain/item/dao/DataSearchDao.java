@@ -21,28 +21,11 @@ import ezen.hang.heritage.domain.item.dto.Heritage;
  */
 @Repository
 public class DataSearchDao {
-	private String ccbaMnm1, ccbaKdcd, ccbaAsno, ccbaCtcd;
-
-	public void setCcbaMnm1Value(String ccbaMnm1) {
-		this.ccbaMnm1 = ccbaMnm1;
-	}
-
-	public void setCcbaKdcd(String ccbaKdcd) {
-		this.ccbaKdcd = ccbaKdcd;
-	}
-
-	public void setCcbaAsno(String ccbaAsno) {
-		this.ccbaAsno = ccbaAsno;
-	}
-
-	public void setCcbaCtcd(String ccbaCtcd) {
-		this.ccbaCtcd = ccbaCtcd;
-	}
-
+	
 	/**
 	 * 문화재청 API로 문화재명 또는 지역명으로 검색 시 xml 반환 받는 URL pageUnit은 받아 올 수 있는 최대 결과값
 	 */
-	public List<Heritage> searchHeritage() throws Exception {
+	public List<Heritage> searchHeritage(String ccbaMnm1) throws Exception {
 		String url = "http://www.cha.go.kr/cha/SearchKindOpenapiList.do?ccbaMnm1=" + ccbaMnm1 + "&pageUnit=30";
 		List<Heritage> list = new ArrayList<>();
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -79,9 +62,8 @@ public class DataSearchDao {
 	/**
 	 * 문화재청 API로 받아온 문화재의 자세한 위치값 및 사진, 설명내용을 받아오기 위한 URL
 	 */
-	public Heritage detailSearchHeritage() throws Exception {
-		String url = "http://www.cha.go.kr/cha/SearchKindOpenapiDt.do?ccbaKdcd=" + ccbaKdcd + "&ccbaAsno=" + ccbaAsno
-				+ "&ccbaCtcd=" + ccbaCtcd;
+	public Heritage detailSearchHeritage(String ccbaKdcd, String ccbaAsno, String ccbaCtcd) throws Exception {
+		String url = "http://www.cha.go.kr/cha/SearchKindOpenapiDt.do?ccbaKdcd=" + ccbaKdcd + "&ccbaAsno=" + ccbaAsno + "&ccbaCtcd=" + ccbaCtcd;
 		Heritage heritage = new Heritage();
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
