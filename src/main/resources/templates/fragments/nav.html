@@ -1,145 +1,75 @@
 <nav th:fragment="nav" class="navbar fixed-top hangnav">
-  <!--nav바 전체 : hang_01 -->
-   <div class="form-check form-switch col-1" style="background-color:transparent; overflow:hidden; width:8%; padding:5px 5px; margin:0 auto; border:none;">
-  <input style="position:relative; padding:10px; margin:0; width:100%; height:100%;" class="form-check-input" type="checkbox" role="switch" id="menuicon">
-</div>
-  
-  
-  
-  <!-- 검색창 시작-->
+  <div class="form-check form-switch col-1" style="background-color:transparent; overflow:hidden; width:8%; padding:5px 5px; margin:0 auto; border:none;">
+    <input style="position:relative; padding:10px; margin:0; width:100%; height:100%;" class="form-check-input" type="checkbox" role="switch" id="menuicon">
+  </div>
   <div class="col-4 relative hangsearch">
-    <!--nav 검색창 : hang_02 -->
     <form id="heritagename" method="post">
-      <input id="searchInput" type="text" class="form-control"
-        name="heritagename" placeholder="검색 (지역, 문화재명)"
-        aria-label="Recipient's username"
-        aria-describedby="button-addon2" maxlength="50"> <a
-        id="searchButton" role="button"><img class="shabsolute"
-        src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+      <input id="searchInput" type="text" class="form-control" name="heritagename" placeholder="검색 (지역, 문화재명)" aria-label="Recipient's username" aria-describedby="button-addon2" maxlength="50">
+      <a id="searchButton" role="button"><img class="shabsolute" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
     </form>
   </div>
-
-
   
-<div style="width:5%;"></div>
-
-
-  <!-- 검색창 끝-->
-
+  <div style="width:5%;"></div>
 
   <ul class="col-4 nav nav-pills">
-    <!--로그인 구역 :hang_03-->
     <li class="nav-item hanglogin">
-
-
-
-
-
-
-      <button type="button"
-        class="btn btn-primary buttonbackimg logbtn navbutton"
-        data-bs-toggle="modal" data-bs-target="#login">로그인</button>
-
+      <button type="button" class="btn btn-primary buttonbackimg logbtn navbutton" data-bs-toggle="modal" data-bs-target="#login">로그인</button>
       <div class="container">
-
-        <div class="modal fade" id="login" tabindex="-1"
-          aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="login" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered sm">
             <div class="modal-content hangmodal">
-
               <div id="top1">
-
                 <main class="form-signin w-100 m-auto">
-
-
-                  <img class="mb-4" th:src="@{/img/loginIcon.png}" alt=""
-                    width="125" height="125">
+                  <img class="mb-4" th:src="@{/img/loginIcon.png}" alt="" width="125" height="125">
                   <h1 class="h3 mb-3 fw-normal" style="letter-spacing:5px;">로그인</h1>
-
                   <div class="form-floating">
-                    <input type="text" name="userid"
-                      class="form-control" id="floatingInput"
-                      placeholder="Id"> <label
-                      for="floatingInput">ID</label>
+                    <input type="text" name="userid" class="form-control" id="floatingInput" placeholder="Id">
+                    <label for="floatingInput">ID</label>
                   </div>
                   <div class="form-floating">
-                    <input type="password" name="userpw"
-                      class="form-control" id="floatingPassword"
-                      placeholder="Password"> <label
-                      for="floatingPassword">Password</label>
+                    <input type="password" name="userpw" class="form-control" id="floatingPassword" placeholder="Password">
+                    <label for="floatingPassword">Password</label>
                   </div>
-
                   <div class="checkbox mb-3">
-                    <label> <input type="checkbox" id="userIdSave"> 아이디 저장
-                    </label>
+                    <label><input type="checkbox" id="userIdSave"> 아이디 저장</label>
                   </div>
-                  <button id="loginBtn"
-                    class="w-100 btn btn-lg btn-primary buttonbackimg">로그인</button>
+                  <button id="loginBtn" class="w-100 btn btn-lg btn-primary buttonbackimg">로그인</button>
                   <a type="button" id="lostMyIdSearchButton" style="font-size:0.8em; color:gray; padding:5px; margin:5px;">아이디 찾기</a>
                   <a type="button" id="lostMyPasswordChangeButton"style="font-size:0.8em; color:gray; padding:5px; margin:5px;">비밀번호 찾기</a>
                   <p class="mt-5 mb-3 text-muted" style="font-size:0.7em;">&copy; Hang 2023</p>
                 </main>
-
               </div>
             </div>
-
           </div>
         </div>
-
-
-
-      </div> <!--로그인 끝-->
+      </div>
     </li>
-    <!--회원 가입 시작: hang_04 -->
-    <li class="nav-item newgestbtn">
-
-      <button type="button"
-        class="btn btn-primary buttonbackimg navbutton"
-        data-bs-toggle="modal" data-bs-target="#regist">회원가입</button>
-
-
-      <div th:insert="~{fragments/register :: register}"></div>
-
-    </li>
-
+  <li class="nav-item newgestbtn">
+    <button type="button" class="btn btn-primary buttonbackimg navbutton" data-bs-toggle="modal" data-bs-target="#regist">회원가입</button>
+    <div th:insert="~{fragments/register :: register}"></div>
+  </li>
   </ul>
 
   <div class="col-1" style="margin-right: 3%;">
-    <!-- 어사이드 와 오른쪽 버튼 : hang_05  -->
-    <button class="navbar-toggler hangtoggler" type="button"
-      data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling"
-      aria-controls="offcanvasDarkNavbar">
-      <span class="navbar-toggler-icon hangtoggler-icon"></span>
+    <button class="navbar-toggler hangtoggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasDarkNavbar">
+    <span class="navbar-toggler-icon hangtoggler-icon"></span>
     </button>
   </div>
-  <!-- 버튼끝 -->
-  
-  
-  
-  <div class="offcanvas offcanvas-end bug1" data-bs-scroll="true"
-    data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling"
-    aria-labelledby="offcanvasScrollingLabel" >
+
+  <div class="offcanvas offcanvas-end bug1" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel" >
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="offcanvasScrollingLabel"></h5>
-      <button type="button" class="btn-close offcanvasClose"
-        data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      <button type="button" class="btn-close offcanvasClose" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-
+  
     <div class="offcanvas-body" style="height:100vh;">
       <div style="font-size: 2.5wv; text-align: center; margin-bottom:8%;">Hang</div>
       <div style="font-size: 1.5wv; text-align: center; margin-bottom:8%;">여기는 무슨 사이트인가요?</div>
       <button type="button" class="btn btn-success introduce" style="width:50%; margin-bottom:15%; font-size:0.8vw;">알아보기</button>
       <div style="font-size: 1.5wv; text-align: center; margin-bottom:5%;">모든 기능을 사용하려면</div>
-      <button type="button"
-        class="btn btn-primary buttonbackimg logbtn navbutton offcanvasLogin"
-        data-bs-toggle="modal" data-bs-target="#login" style="width:50%; margin-bottom:10%;">로그인</button>
+      <button type="button" class="btn btn-primary buttonbackimg logbtn navbutton offcanvasLogin" data-bs-toggle="modal" data-bs-target="#login" style="width:50%; margin-bottom:10%;">로그인</button>
       <div style="font-size: 1.5wv; text-align: center; margin-bottom:5%;">아직 가입하지 않았다면</div>
-        <button type="button"
-        class="btn btn-primary buttonbackimg navbutton"
-        data-bs-toggle="modal" data-bs-target="#regist" style="width:50%;">회원가입</button>
+      <button type="button" class="btn btn-primary buttonbackimg navbutton" data-bs-toggle="modal" data-bs-target="#regist" style="width:50%;">회원가입</button>
     </div>
   </div>
-  <!-- 어사이드 끝-->
-
 </nav>
-
