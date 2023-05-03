@@ -88,6 +88,8 @@ public class ItemServiceImpl implements ItemService {
 			commentStarRate.setStarpoint(starpoint);
 			itemMapper.starRatingCreate(commentStarRate);
 			itemMapper.commentCreate(commentStarRate);
+		} else {
+			throw new Exception();
 		}
 	}
 

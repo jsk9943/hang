@@ -62,9 +62,7 @@ public class ItemController {
 		try {
 			itemService.createCommentStarRate(inputData);
 			result = "true";
-		} catch (Exception e) {
-			result = "false";
-		}
+		} catch (Exception e) {}
 		return result;
 	}
 
