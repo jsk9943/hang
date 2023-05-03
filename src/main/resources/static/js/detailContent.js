@@ -212,18 +212,18 @@ export function detailContentLoad(data) {
             aria-describedby="inputGroup-sizing-sm" id="commentInputText">
         </div>
         <label for="customRange2" class="form-label" style="font-weight:bold; font-size:1em; font-family:'moonhwa';">별점등록</label>
-        <div style="text-align:center; width:100%; text-align: center; font-size:0.8em; overflow: hidden;">
-          <p style="display:inline-block; width:6%; text-align: left; float: left;">1점</p>
-          <p style="display:inline-block; width:14%; text-align: center; float: left;">2점</p>
-          <p style="display:inline-block; width:6%; text-align: center; float: left;">3점</p>
-          <p style="display:inline-block; width:14%; text-align: center; float: left;">4점</p>
-          <p style="display:inline-block; width:10%; text-align: center; float: left;">5점</p>
-          <p style="display:inline-block; width:14%; text-align: center; float: left;">6점</p>
-          <p style="display:inline-block; width:6%; text-align: center; float: left;">7점</p>
-          <p style="display:inline-block; width:14%; text-align: center; float: left;">8점</p>
-          <p style="display:inline-block; width:6%; text-align: center; float: left;">9점</p>
-          <p style="display:inline-block; width:10%; text-align: right; float: right;">10점</p>
-        </div>
+        <div style="display:flex; justify-content:space-between; width:100%; font-size:0.8em;">
+		  <p style="width:5%; text-align:left;">1점</p>
+		  <p style="width:8%; text-align:center;">2점</p>
+		  <p style="width:8%; text-align:center;">3점</p>
+		  <p style="width:8%; text-align:center;">4점</p>
+		  <p style="width:10%; text-align:center;">5점</p>
+		  <p style="width:8%; text-align:center;">6점</p>
+		  <p style="width:8%; text-align:center;">7점</p>
+		  <p style="width:8%; text-align:center;">8점</p>
+		  <p style="width:8%; text-align:center;">9점</p>
+		  <p style="width:5%; text-align:right;">10점</p>
+		</div>
         <input type="range" class="form-range" min="1" max="10" id="customRange2" value="1">
       </div>
       <div class="modal-footer">
