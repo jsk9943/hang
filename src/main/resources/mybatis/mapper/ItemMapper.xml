@@ -7,7 +7,7 @@
 	별점 및 댓글 등록 전 유저의 이용가능 여부 체크
 	-->
 	<select id="userAccess" parameterType="string" resultType="string">
-	SELECT ACCESS FROM MEMBER WHERE USERID = #{userid};
+	SELECT ACCESS FROM AUTHORITY WHERE USERID = #{userid};
 	</select>
 	
 	<!--

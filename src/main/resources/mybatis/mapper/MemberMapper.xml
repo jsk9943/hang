@@ -21,6 +21,11 @@
 		(userid, userpw, username, email, userph, regdate, imagefilename)
 		VALUES(#{userid}, #{userpw}, #{username}, #{email}, #{userph}, NOW(), '')
 	</insert>
+	
+	<insert id="CreateAuthority" parameterType="Member">
+		INSERT INTO AUTHORITY (USERID)
+		VALUES(#{userid});
+	</insert>
 
 	<select id="checkUserId" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM MEMBER WHERE userId = #{userId}
@@ -125,15 +130,15 @@
    회원이 스스로 탈퇴하는 기능
    -->
 	<update id="userSelfWithdrawalHERITAGEREVIEW" parameterType="string">
-	UPDATE HERITAGEREVIEW
-	SET userid = '탈퇴회원'
-	WHERE userid = #{userid};
+		UPDATE HERITAGEREVIEW
+		SET userid = '탈퇴회원'
+		WHERE userid = #{userid};
 	</update>
 	
 	<update id="userSelfWithdrawalRATE" parameterType="string">
-	UPDATE RATE
-	SET userid = '탈퇴회원'
-	WHERE userid = #{userid};
+		UPDATE RATE
+		SET userid = '탈퇴회원'
+		WHERE userid = #{userid};
 	</update>
 	
    <delete id="userSelfWithdrawalBOOKMARK" parameterType="string">
@@ -146,6 +151,12 @@
 		DELETE 
 		FROM PROFILEIMAGE
 		WHERE USERID = #{userid};
+   </delete>
+   
+   <delete id="userSelfrWithdrawalAUTHORITY" parameterType="string">
+   		DELETE
+   		FROM AUTHORITY
+   		WHERE USERID = #{userid};
    </delete>
    
    <delete id="userSelfWithdrawalMEMBER" parameterType="string">

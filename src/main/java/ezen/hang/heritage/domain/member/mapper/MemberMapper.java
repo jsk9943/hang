@@ -18,6 +18,8 @@ public interface MemberMapper {
 	 */
 	public void CreateMember(Member member);
 
+	public void CreateAuthority(Member member);
+
 	public int checkUserId(String userid);
 
 	/**
@@ -67,6 +69,8 @@ public interface MemberMapper {
 	/**
 	 * 회원 스스로 탈퇴하기 위한 Mapper
 	 */
+	public void userSelfWithdrawalMEMBER(String userid);
+
 	public void userSelfWithdrawalHERITAGEREVIEW(String userid);
 	
 	public void userSelfWithdrawalRATE(String userid);
@@ -75,6 +79,6 @@ public interface MemberMapper {
 	
 	public void userSelfWithdrawalPROFILEIMAGE(String userid);
 	
-	public void userSelfWithdrawalMEMBER(String userid);
+	public void userSelfrWithdrawalAUTHORITY(String userid);
 
 }

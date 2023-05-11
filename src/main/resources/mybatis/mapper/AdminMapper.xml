@@ -6,7 +6,7 @@
 	<!-- 관리자 권한 유무 확인 기능 -->
 	<select id="adminIdConfirm" parameterType="string" resultType="java.lang.String">
 		SELECT ADMIN 
-		FROM MEMBER
+		FROM AUTHORITY
 		WHERE userid = #{adminid};
 	</select>
 	
@@ -54,28 +54,32 @@
 	관리자 권한 기능 중 유저권한 부여에 대한 기능
 	-->
 	<select id="allUserAuthority" resultType="map">
-		SELECT USERID, ADMIN, ACCESS FROM MEMBER;
+		SELECT m.USERID, a.ADMIN, a.ACCESS
+		FROM MEMBER m
+		JOIN AUTHORITY a ON m.USERID = a.USERID
+		WHERE m.USERID != '탈퇴회원';
 	</select>
 	
 	<select id="keywordUserAuthorityFind" parameterType="map" resultType="map">
-		SELECT USERID, ADMIN , ACCESS
-		FROM MEMBER
+		SELECT m.USERID, a.ADMIN, a.ACCESS
+		FROM MEMBER m
+		JOIN AUTHORITY a ON m.USERID = a.USERID
 		WHERE 1=1
 		    <if test="userid != null">
-		      AND userid LIKE CONCAT('%', #{userid}, '%')
+		      AND a.USERID LIKE CONCAT('%', #{userid}, '%')
 		    </if>
 		    <if test="adminValue != null">
-		      AND ADMIN LIKE CONCAT('%', #{adminValue}, '%')
+		      AND a.ADMIN LIKE CONCAT('%', #{adminValue}, '%')
 		    </if>
 		    <if test="commentBlockValue != null">
-		      AND ACCESS LIKE CONCAT('%', #{commentBlockValue}, '%')
+		      AND a.ACCESS LIKE CONCAT('%', #{commentBlockValue}, '%')
 		    </if>
 	</select>
 	
 	<update id="userAuthorityChange" parameterType="map">
-		UPDATE MEMBER
+		UPDATE AUTHORITY
 		SET ADMIN = #{admin}, ACCESS = #{access}
-		WHERE userid = #{userid};
+		WHERE USERID = #{userid};
 	</update>
 	
 	
@@ -85,6 +89,7 @@
 	<select id="allUserForcedWithdrawal" resultType="map">
 		SELECT USERID , USERNAME ,REGDATE 
 		FROM MEMBER
+		WHERE USERID != '탈퇴회원'
 		ORDER BY USERID ASC;
 	</select>
 	
@@ -121,6 +126,12 @@
    <delete id="userWithdrawalPROFILEIMAGE" parameterType="map">
 		DELETE 
 		FROM PROFILEIMAGE
+		WHERE USERID = #{userid};
+   </delete>
+   
+   <delete id="userWithdrawalAUTHORITY" parameterType="map">
+   		DELETE 
+		FROM AUTHORITY
 		WHERE USERID = #{userid};
    </delete>
    

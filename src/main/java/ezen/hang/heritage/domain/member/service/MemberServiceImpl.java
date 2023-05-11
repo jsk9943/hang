@@ -31,7 +31,7 @@ public class MemberServiceImpl implements MemberService {
 	private MemberMapper memberMapper;
 
 	/**
-	 * 회원가입을 통해 신규가입 시 사용되는 ServiceImplements 
+	 * 회원가입을 통해 신규가입 시 사용되는 ServiceImplements
 	 */
 	@Override
 	public void register(String username, String userid, String userpw, String userph, String email) throws Exception {
@@ -42,13 +42,14 @@ public class MemberServiceImpl implements MemberService {
 		member.setUserph(userph);
 		member.setEmail(email);
 		memberMapper.CreateMember(member);
+		memberMapper.CreateAuthority(member);
 	}
 
 	@Override
 	public int checkUserId(String userid) {
 		return memberMapper.checkUserId(userid);
 	}
-	
+
 	/**
 	 * 회원이 가입 후 잃어버린 아이디와 비밀번호 변경을 위한 ServiceImplements
 	 */
@@ -89,9 +90,9 @@ public class MemberServiceImpl implements MemberService {
 		}
 		return result;
 	}
-	
+
 	/**
-	 * 가입된 회원이 로그인 시 사용되는 ServiceImplements 
+	 * 가입된 회원이 로그인 시 사용되는 ServiceImplements
 	 */
 	@Override
 	public Member login(Map<String, Object> loginData) {
@@ -105,7 +106,7 @@ public class MemberServiceImpl implements MemberService {
 	 * 가입된 회원이 회원정보 수정을 하기 위해 사용되는 ServiceImplements
 	 */
 	@Override
-	public void updateMember(Map<String, Object> updateData) throws Exception{
+	public void updateMember(Map<String, Object> updateData) throws Exception {
 		Member member = new Member();
 		String userid = updateData.get("userid").toString();
 		String username = updateData.get("username").toString();
@@ -142,7 +143,7 @@ public class MemberServiceImpl implements MemberService {
 	 * 프로필 사진을 수정하기 위해 사용되는 ServiceImplements
 	 */
 	@Override
-	public String profileImgUpload(Map<String, Object> imgData) throws Exception{
+	public String profileImgUpload(Map<String, Object> imgData) throws Exception {
 		Map<String, Object> map = new HashMap<>();
 		String uuid = UUID.randomUUID().toString();
 		String userid = imgData.get("userid").toString();
@@ -204,7 +205,7 @@ public class MemberServiceImpl implements MemberService {
 			memberMapper.deleteBookmark(map);
 		}
 	}
-	
+
 	/**
 	 * 회원 스스로 탈퇴하기 위한 ServiceImplements
 	 */
@@ -212,14 +213,15 @@ public class MemberServiceImpl implements MemberService {
 	public void userWithdrawal(Map<String, Object> userData) throws Exception {
 		String sessionUserid = userData.get("sessionUserid").toString();
 		String userid = userData.get("userid").toString();
-		if(sessionUserid.equals(userid)) {
+		if (sessionUserid.equals(userid)) {
 			memberMapper.userSelfWithdrawalHERITAGEREVIEW(userid);
 			memberMapper.userSelfWithdrawalRATE(userid);
 			memberMapper.userSelfWithdrawalBOOKMARK(userid);
 			memberMapper.userSelfWithdrawalPROFILEIMAGE(userid);
+			memberMapper.userSelfrWithdrawalAUTHORITY(userid);
 			memberMapper.userSelfWithdrawalMEMBER(userid);			
 		} else {
 			throw new Exception();
-		}
+		} 
 	};
 }
