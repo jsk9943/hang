@@ -7,10 +7,11 @@
 	회원의 로그인 기능
 	-->
 	<select id="login" parameterType="Member" resultType="Member">
-		SELECT *
-		FROM MEMBER
-		WHERE userid = #{userid}
-		  AND userpw = #{userpw}
+		SELECT M.USERID, M.USERNAME, M.IMAGEFILENAME, A.admin
+		FROM MEMBER M
+		JOIN AUTHORITY A ON M.USERID = A.USERID 
+		WHERE M.USERID = #{userid}
+		  AND M.USERPW = #{userpw};
 	</select>
 
 	<!--

@@ -268,13 +268,13 @@
           insertTr += `<td class="table-col-5 userAuthorityTable5">
                       <select class="form-select form-select-sm">
                       <option value="N" style="text-align: center;">관리자권한 없음</option>
-                      <option value="Y" style="text-align: center;">관리자권한 부여</option>
+                      ${admin == "Y" ? `<option value="Y" style="text-align: center;" selected>관리자권한 부여</option>` : `<option value="Y" style="text-align: center;">관리자권한 부여</option>`}
                       </select></td>`;
           insertTr += `<td class="table-col-6 userAuthorityTable6"><label for="userAuthorityCheckboxfor${i}">${access}</label></td>`;
           insertTr += `<td class="table-col-7 userAuthorityTable7">
                       <select class="form-select form-select-sm">
                       <option value="Y" style="text-align: center;">댓글허용</option>
-                      <option value="N" style="text-align: center;">댓글금지</option>
+                      ${access == "N" ? `<option value="N" style="text-align: center;" selected>댓글금지</option>` : `<option value="N" style="text-align: center;">댓글금지</option>`}
                       </select></td>`;
           insertTr += "</tr>";
           $("#userAuthority_dyn_tbody").append(insertTr);
