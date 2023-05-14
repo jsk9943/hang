@@ -33,14 +33,21 @@
 		VALUES (#{starpoint}, #{userid}, #{ccbaKdcd}, #{ccbaAsno}, #{ccbaCtcd});
 	</insert>
 	
-	<insert id="commentCreate" parameterType="CommentStarRate" >
+	<insert id="commentCreate" parameterType="java.util.Map" >
 		INSERT INTO
-		HERITAGEREVIEW (userid, ccbaKdcd, ccbaAsno, ccbaCtcd, ccbaMnm1, COMMENT, COMMENTDATE)
-		VALUES (#{userid}, #{ccbaKdcd}, #{ccbaAsno}, #{ccbaCtcd}, #{ccbaMnm1}, #{comment}, NOW());
+		HERITAGEREVIEW (userid, ccbaKdcd, ccbaAsno, ccbaCtcd, ccbaMnm1, COMMENT, COMMENTDATE, REVIEWPHOTO)
+		VALUES (#{rate.userid}, #{rate.ccbaKdcd}, #{rate.ccbaAsno}, #{rate.ccbaCtcd}, #{rate.ccbaMnm1}, #{rate.comment}, NOW(), 
+			<if test="filePath != null">
+	        	#{filePath}
+		    </if>
+		    <if test="filePath == null">
+		        NULL
+		    </if>
+		);
 	</insert>
 	
 	<select id="commentStarRateLoad" parameterType="map" resultType="map">
-		SELECT DISTINCT H.USERID, H.COMMENT, H.COMMENTDATE, R.STARPOINT
+		SELECT DISTINCT H.USERID, H.COMMENT, H.COMMENTDATE, R.STARPOINT, H.REVIEWPHOTO
 		FROM HERITAGEREVIEW H
 		JOIN RATE R ON H.USERID  = R.USERID
 					AND H.CCBAASNO = R.CCBAASNO
@@ -52,15 +59,15 @@
 		ORDER BY H.COMMENTDATE DESC;
 	</select>
 	
-	<select id="userHeritageList" parameterType="String" resultType="CommentStarRate">
-		SELECT H.CCBAMNM1, H.CCBAASNO, H.COMMENT, H.COMMENTDATE, R.STARPOINT  
+	<select id="userHeritageList" parameterType="String" resultType="map">
+		SELECT H.CCBAMNM1, H.CCBAASNO, H.COMMENT, H.COMMENTDATE, R.STARPOINT, H.REVIEWPHOTO
 		FROM HERITAGEREVIEW H
 		JOIN RATE R ON H.USERID  = R.USERID
 					AND H.CCBAASNO = R.CCBAASNO
 					AND H.CCBAKDCD = R.CCBAKDCD
 					AND H.CCBACTCD = R.CCBACTCD
 		WHERE H.USERID = #{userid}
-		ORDER BY H.COMMENTDATE DESC;
+		ORDER BY H.CCBAMNM1;
 	</select>
 	
 	<delete id="deleteCommentStarRateMapper" parameterType="CommentStarRate">
@@ -71,4 +78,8 @@
 		WHERE R.CCBAASNO = #{ccbaAsno}
 		  AND R.USERID = #{userid} ;
 	</delete>
+	
+	<insert id="" parameterType="string">
+		
+	</insert>
 </mapper>

@@ -23,8 +23,13 @@ export function heritageKeywordSearchDetail(ccbaKdcd, ccbaAsno, ccbaCtcd) {
 }
 
 // 코멘트 및 별점 등록 fetch
-export function commentStaRateCreate(userid, ccbaKdcd, ccbaAsno, ccbaCtcd, ccbaMnm1, comment, starpoint) {
-	let Data = {
+export function commentStaRateCreate(userid, ccbaKdcd, ccbaAsno, ccbaCtcd, ccbaMnm1, comment, starpoint, file) {
+	let formData = new FormData();
+	formData.append('userid', userid);
+	if (file) {
+		formData.append('file', file);
+	}
+	let inputData = {
 		"userid": userid,
 		"ccbaKdcd": ccbaKdcd,
 		"ccbaAsno": ccbaAsno,
@@ -33,12 +38,10 @@ export function commentStaRateCreate(userid, ccbaKdcd, ccbaAsno, ccbaCtcd, ccbaM
 		"comment": comment,
 		"starpoint": starpoint
 	};
+	formData.append('inputData', JSON.stringify(inputData));
 	fetch('/heritage/item/input', {
 		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(Data)
+		body: formData
 	})
 		.then(response => {
 			return response.text();
@@ -46,6 +49,8 @@ export function commentStaRateCreate(userid, ccbaKdcd, ccbaAsno, ccbaCtcd, ccbaM
 		.then(data => {
 			if (data === 'true') {
 				alert('정상적으로 등록되었습니다');
+			} else if (data === 'false') {
+				alert(`사진이 등록되지 않았습니다.`);
 			} else if (data === 'DENIED') {
 				alert(`댓글쓰기 기능 접근이 차단되어있습니다\n관리자에게 문의해주세요`);
 			}
@@ -53,8 +58,8 @@ export function commentStaRateCreate(userid, ccbaKdcd, ccbaAsno, ccbaCtcd, ccbaM
 		.catch(error => {
 			alert(`코멘트 등록 중 문제가 발생하였습니다\n관리자에게 문의해주세요\n${error}`);
 		})
-}
 
+}
 
 // 코멘트 및 별점 리스트 가져오는 fetch
 export function heritageCommentList(ccbaKdcd, ccbaAsno, ccbaCtcd) {
@@ -64,6 +69,31 @@ export function heritageCommentList(ccbaKdcd, ccbaAsno, ccbaCtcd) {
 		.then(response => {
 			return response.json();
 		})
+}
+
+// 코멘트에 등록된 사진 가져오는 fetch
+export function heritageReviewPhotoLoading(reviewphoto) {
+	return fetch(`/heritage/item/image?filename=${reviewphoto}`, {
+		method: 'GET'
+	})
+		.then(response => response.arrayBuffer())
+		.then(buffer => {
+			const base64Flag = 'data:image/png;base64,';
+			const imageStr = arrayBufferToBase64(buffer);
+			const imgSrc = base64Flag + imageStr;
+			const img = document.createElement("img");
+			return img.src = imgSrc;
+		});
+}
+
+function arrayBufferToBase64(buffer) {
+	let binary = '';
+	const bytes = new Uint8Array(buffer);
+	const len = bytes.byteLength;
+	for (let i = 0; i < len; i++) {
+		binary += String.fromCharCode(bytes[i]);
+	}
+	return window.btoa(binary);
 }
 
 
@@ -401,7 +431,7 @@ export function userWithdrawal(sessionUserid, userid) {
 			if (data === 'true') {
 				alert('정상적으로 탈퇴되었습니다');
 				logoutDo();
-			} else if (data === 'false'){
+			} else if (data === 'false') {
 				document.querySelector('#toastCloseButton').click(); //  오류났을 경우 토스트창만 닫기
 				alert('탈퇴하실 아이디를 확인해주세요');
 			}

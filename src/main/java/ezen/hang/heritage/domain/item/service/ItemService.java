@@ -3,8 +3,12 @@ package ezen.hang.heritage.domain.item.service;
 import java.util.List;
 import java.util.Map;
 
+
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
+
 import ezen.hang.heritage.domain.item.dto.Heritage;
-import ezen.hang.heritage.domain.item.dto.CommentStarRate;
 
 /**
  *  Dao에서 받아온 문화재청 정보를 객체에 담아 Web과 DB에 저장하고
@@ -22,11 +26,16 @@ public interface ItemService {
 	/**
 	 * 문화재에 등록된 유저들의 별점과 댓글을 등록하고 삭제, 가져오는 Service
 	 */
-	public void createCommentStarRate(Map<String, Object> inputData) throws Exception;
+	public void createCommentStarRate(Map<String, Object> inputData, MultipartFile file) throws Exception;
 	
 	public List<Map<String, Object>> commentStarRateLoad(String ccbaKdcd, String ccbaAsno, String ccbaCtcd);
 	
-	public List<CommentStarRate> userHeritageList(String userid);
+	public List<Map<String, Object>> userHeritageList(String userid);
 	
 	public void deleteCommentStarRate(List<Map<String, Object>> deleteData) throws Exception;
+	
+	public ResponseEntity<UrlResource> getImage(String filename) throws Exception;
+	
+	public void deleteImage(String filename) throws Exception;
+	
 }

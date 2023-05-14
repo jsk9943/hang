@@ -19,6 +19,8 @@ public interface AdminService {
 	public List<Map<String, Object>> keywordCommentFind(Map<String, Object> keyword) throws Exception;
 
 	public void checkCommentDelete(List<Map<String, Object>> deleteCommentList) throws Exception;
+	
+	public void deleteImage(String filename) throws Exception;
 
 	/**
 	 * 유저의 권한부여 기능으로 관리자권한과 댓글쓰기,금지 권한을 변경 할 수 있음

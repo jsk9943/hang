@@ -4,7 +4,7 @@
 var container = document.getElementById('map');
 var options = {
 	center: new kakao.maps.LatLng(37.578559, 126.977007),
-	level: 5
+	level: 9
 };
 var map = new kakao.maps.Map(container, options);
 
@@ -60,11 +60,12 @@ function myreviewsTableInsert(data) {
 	for (var i = 0; i < data.length; i++) {
 		var jsonObject = {
 			"idx": i + 1,
-			"writerCCBAASNO": data[i].ccbaAsno,
-			"writerCCBAMNM1": data[i].ccbaMnm1,
-			"writerStarpoint": data[i].starpoint,
-			"writerComment": data[i].comment,
-			"writerCommentDate": data[i].commentDate
+			"writerCCBAASNO": data[i].CCBAASNO,
+			"writerCCBAMNM1": data[i].CCBAMNM1,
+			"writerStarpoint": data[i].STARPOINT,
+			"writerComment": data[i].COMMENT,
+			"writerCommentDate": data[i].COMMENTDATE,
+			"writerReviewphoto": data[i].REVIEWPHOTO
 		};
 		tableList.push(jsonObject);
 	}
@@ -155,6 +156,7 @@ function myreviewsNewPage(pageCurrent) {
 			var writerStarpoint = dataParsingComment.writerStarpoint;
 			var writerComment = dataParsingComment.writerComment;
 			var writerCommentDate = dataParsingComment.writerCommentDate;
+			var writerReviewphoto = dataParsingComment.writerReviewphoto;
 			var insertTr = "";
 			insertTr += "<tr>";
 			insertTr += `<td><input type="checkbox" id="myreviewCheckbox${writerCCBAASNO}" class="checkAll" value="${writerCCBAASNO}"></td>`;
@@ -162,6 +164,16 @@ function myreviewsNewPage(pageCurrent) {
 			insertTr += `<td><label for="myreviewCheckbox${writerCCBAASNO}">${writerStarpoint}</label></td>`;
 			insertTr += `<td><label for="myreviewCheckbox${writerCCBAASNO}">${writerComment}</label></td>`;
 			insertTr += `<td><label for="myreviewCheckbox${writerCCBAASNO}">${writerCommentDate}</label></td>`;
+			insertTr += `<td>
+							<div class="btn-group">
+							  <button type="button" class="btn btn-secondary btn-sm dropdown-toggle userphotoviewButton" data-bs-toggle="dropdown" aria-expanded="false" value="${writerReviewphoto}">
+							    사진
+							  </button>
+							  <ul class="dropdown-menu" style="z-index:10000;">
+							    <li class="userphotoview" style="text-align:center;"></li>
+							  </ul>
+							</div>
+						</td>`;
 			insertTr += "</tr>";
 			document.getElementById("dyn_tbody").innerHTML += insertTr;
 			checkCount++;
@@ -192,7 +204,8 @@ function tableInsert(data) {
 			"writer": data[i].USERID,
 			"writerStarpoint": data[i].STARPOINT,
 			"writerComment": data[i].COMMENT,
-			"writerCommentDate": data[i].COMMENTDATE
+			"writerCommentDate": data[i].COMMENTDATE,
+			"writerReviewphoto": data[i].REVIEWPHOTO
 		};
 		tableList.push(jsonObject);
 	}
@@ -281,12 +294,23 @@ function newPage(pageCurrent) {
 			var writerStarpoint = dataParsingComment.writerStarpoint;
 			var writerComment = dataParsingComment.writerComment;
 			var writerCommentDate = dataParsingComment.writerCommentDate;
+			var writerReviewphoto = dataParsingComment.writerReviewphoto;
 			var insertTr = "";
 			insertTr += "<tr>";
 			insertTr += "<td>" + writer + "</td>";
 			insertTr += "<td>" + writerStarpoint + "</td>";
 			insertTr += "<td>" + writerComment + "</td>";
 			insertTr += "<td>" + writerCommentDate + "</td>";
+			insertTr += `<td>
+							<div class="btn-group">
+							  <button type="button" class="btn btn-secondary btn-sm dropdown-toggle userphotoviewButton" data-bs-toggle="dropdown" aria-expanded="false" value="${writerReviewphoto}">
+							    사진
+							  </button>
+							  <ul class="dropdown-menu" style="z-index:10000;">
+							    <li class="userphotoview" style="text-align:center;"></li>
+							  </ul>
+							</div>
+						</td>`;
 			insertTr += "</tr>";
 			document.getElementById("dyn_tbody").innerHTML += insertTr;
 			checkCount++;

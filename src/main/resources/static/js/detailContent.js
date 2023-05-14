@@ -1,7 +1,7 @@
 /**
  * 디테일 설명 메뉴 확인
  */
-import { bookmarkConfirmRegistration, heritageCommentList, commentStaRateCreate, bookmarkAdd, bookmarkClear } from './fetch.js';
+import { bookmarkConfirmRegistration, heritageCommentList, commentStaRateCreate, bookmarkAdd, bookmarkClear, heritageReviewPhotoLoading } from './fetch.js';
 export function detailContentLoad(data) {
 	let markerLongitude = Number(data.longitude);
 	let markerLatitude = Number(data.latitude);
@@ -226,6 +226,11 @@ export function detailContentLoad(data) {
 		</div>
         <input type="range" class="form-range" min="1" max="10" id="customRange2" value="1">
       </div>
+      <label style="font-weight: bold; font-size:1em; padding-left:10px; font-family:'moonhwa';">문화재 리뷰 사진 올리기</label>
+      <div style="padding:20px 20px;">
+        <input type="file" id="fileupload" name="file">
+        <p style="color:red; font-size:0.7em;">파일은 최대 10MB을 초과할 수 없습니다 (jpg, png 파일만 가능)</p>
+      </div>
       <div class="modal-footer">
         <button id="commentStarpointConfirmButton" class="btn btn-primary" style="width:20%;">등록</button>
         <button id="commentStarpointCalcelButton" type="button" class="btn btn-secondary commentCreateClose" data-bs-dismiss="modal" style="width:20%;">닫기</button>
@@ -276,10 +281,11 @@ export function detailContentLoad(data) {
 					var thead = document.createElement('thead');
 					var tr = document.createElement('tr');
 					tr.innerHTML = `
-							  <th scope="col" style="width:20%;">아이디</th>
-				              <th scope="col" style="width:10%;">점수</th>
-				              <th scope="col" style="width:50%;">코멘트</th>
-				              <th scope="col" style="width:20%;">작성일자</th>
+							  <th scope="col" style="width:15%; font-size:0.8em;">아이디</th>
+				              <th scope="col" style="width:5%; font-size:0.8em;">점수</th>
+				              <th scope="col" style="width:50%; font-size:0.8em;">코멘트</th>
+				              <th scope="col" style="width:20%; font-size:0.8em;">작성일자</th>
+				              <th scope="col" style="width:10%; font-size:0.8em;">사진보기</th>
 							`;
 					thead.appendChild(tr);
 					newTable.appendChild(thead);
@@ -306,6 +312,81 @@ export function detailContentLoad(data) {
 					// 테이블 컨테이너에 새로운 Pagination 추가
 					tableContainer.appendChild(newPagination);
 					heritageCommentStart(data);
+					// 저장된 유저 사진 버튼 클릭 시 불러오기
+					document.querySelectorAll('.userphotoviewButton').forEach(button => {
+						button.addEventListener('click', (event) => {
+							let reviewPhoto = event.target.value.replace("/userfile/", "");
+							heritageReviewPhotoLoading(reviewPhoto)
+								.then(imageData => {
+									const userphotoviewElements = document.querySelectorAll('.userphotoview');
+									userphotoviewElements.forEach(userphotoviewElement => {
+										userphotoviewElement.innerHTML = '';
+										if (imageData === null || imageData === undefined) {
+											const text = document.createElement('p');
+											text.textContent = '사진이 없습니다';
+											text.style.fontWeight = 'bold';
+											userphotoviewElement.appendChild(text);
+										} else if (imageData.startsWith('data:image/png;base64,')) {
+											if (imageData.length === 22) { // Only 'data:image/png;base64,' without image data
+												const text = document.createElement('p');
+												text.textContent = '사진이 없습니다';
+												text.style.fontSize = '0.8em';
+												text.style.fontWeight = 'bold';
+												userphotoviewElement.appendChild(text);
+											} else {
+												const img = document.createElement('img');
+												img.style.width = '100%';
+												img.src = imageData;
+												const text = document.createElement('p');
+												text.textContent = '이미지 클릭 시 확대';
+												text.style.fontSize = '0.8em';
+												userphotoviewElement.appendChild(text);
+												userphotoviewElement.appendChild(img);
+												img.addEventListener('click', () => {
+													openPopup(imageData);
+												});
+											}
+										} else {
+											const text = document.createElement('p');
+											text.textContent = '올바른 형식의 이미지가 아닙니다';
+											text.style.fontSize = '0.8em';
+											text.style.fontWeight = 'bold';
+											userphotoviewElement.appendChild(text);
+										}
+									});
+								});
+
+							function openPopup(imageUrl) {
+								const windowWidth = 800;
+								const windowHeight = 600;
+								const image = new Image();
+								image.src = imageUrl;
+								image.onload = () => {
+									const imageWidth = image.width;
+									const imageHeight = image.height;
+									let scale = 1;
+									if (imageWidth > windowWidth) {
+										scale = windowWidth / imageWidth;
+									}
+									if (imageHeight * scale > windowHeight) {
+										scale = windowHeight / imageHeight;
+									}
+									const popupWidth = imageWidth * scale;
+									const popupHeight = imageHeight * scale;
+									const left = (screen.width / 2) - (popupWidth / 2);
+									const top = (screen.height / 2) - (popupHeight / 2);
+									const windowOptions = `width=${popupWidth},height=${popupHeight},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes`;
+									const imageWindow = window.open('', 'ImagePopup', windowOptions);
+									const container = imageWindow.document.createElement('div');
+									container.style.textAlign = 'center';
+									image.style.width = `${popupWidth}px`;
+									image.style.height = `${popupHeight}px`;
+									container.appendChild(image);
+									imageWindow.document.body.appendChild(container);
+								};
+							}
+						});
+					});
 				})
 				.catch(error => {
 					alert(`관리자에게 문의해주세요\n${error}`);
@@ -356,6 +437,7 @@ export function detailContentLoad(data) {
 					let heritageCcbaAsno = document.querySelector('#heritageccbaAsno').value // 문화재 번호
 					let heritageCcbaCtcd = document.querySelector('#heritageccbaCtcd').value // 문화재 번호
 					let heritageCcbaMnm1 = document.querySelector('#heritageccbaMnm1').value // 문화재 이름
+					let files = document.querySelector('#fileupload').files; // 업로드 할 사진 파일
 					if (commentInputResult === '') {
 						alert('공백으로 등록 할 수 없습니다');
 						return;
@@ -367,7 +449,17 @@ export function detailContentLoad(data) {
 						return;
 					} else {
 						commentInputtype.value = '';
-						commentStaRateCreate(sessionStorage.getItem("userid"), heritageCcbaKdcd, heritageCcbaAsno, heritageCcbaCtcd, heritageCcbaMnm1, commentInputResult, starPointInputResult);
+						if (files.length > 0) {
+							if (files[0].type !== 'image/jpeg' && files[0].type !== 'image/png') {
+								alert('파일 형식은 jpg나 png만 업로드 가능합니다.');
+								return;
+							}
+						}
+						if (files.length > 0) {
+							commentStaRateCreate(sessionStorage.getItem("userid"), heritageCcbaKdcd, heritageCcbaAsno, heritageCcbaCtcd, heritageCcbaMnm1, commentInputResult, starPointInputResult, files[0]);
+						} else {
+							commentStaRateCreate(sessionStorage.getItem("userid"), heritageCcbaKdcd, heritageCcbaAsno, heritageCcbaCtcd, heritageCcbaMnm1, commentInputResult, starPointInputResult, null);
+						}
 						markerClose();
 						// 별점 등록창 종료 시 검색결과 창 다시 보여주기
 						commentCreateCloseButton.click();

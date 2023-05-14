@@ -77,12 +77,14 @@ if (toastDeleteButton !== null) {
 				let ccbaKdcd = splitData[1];
 				let ccbaAsno = splitData[2];
 				let ccbaCtcd = splitData[3];
+				let reviewPhoto = splitData[4].replace("/userfile/", "");
 				let data = {
 					"adminid": adminid,
 					"userid": userid,
 					"ccbaKdcd": ccbaKdcd,
 					"ccbaAsno": ccbaAsno,
-					"ccbaCtcd": ccbaCtcd
+					"ccbaCtcd": ccbaCtcd,
+					"filename": reviewPhoto
 				}
 				list.push(data);
 			}

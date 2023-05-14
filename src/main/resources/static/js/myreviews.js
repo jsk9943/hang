@@ -1,7 +1,7 @@
 /**
  * 나의리뷰 모아보는 게시판
  */
-import { userReviewStarrate, removeUserReviews } from './fetch.js';
+import { userReviewStarrate, removeUserReviews, heritageReviewPhotoLoading } from './fetch.js';
 // 로그인 되어있는 유저이름
 let loginUserid = sessionStorage.getItem("userid");
 var editDeleteContent = `
@@ -78,11 +78,12 @@ if (myCommentButton !== null) {
 				var thead = document.createElement('thead');
 				var tr = document.createElement('tr');
 				tr.innerHTML = `
-						  <th scope="col" style="width:10%;">선택</th>
-						  <th scope="col" style="width:20%;">문화재명</th>
-						  <th scope="col" style="width:10%;">점수</th>
-						  <th scope="col" style="width:40%;">코멘트</th>
-						  <th scope="col" style="width:20%;">작성일자</th>
+						  <th scope="col" style="width:5%; font-size:0.8em;">선택</th>
+						  <th scope="col" style="width:20%; font-size:0.8em;">문화재명</th>
+						  <th scope="col" style="width:5%; font-size:0.8em;">점수</th>
+						  <th scope="col" style="width:40%; font-size:0.8em;">코멘트</th>
+						  <th scope="col" style="width:20%; font-size:0.8em;">작성일자</th>
+						  <th scope="col" style="width:10%; font-size:0.8em;">사진보기</th>
 						`;
 				thead.appendChild(tr);
 				newTable.appendChild(thead);
@@ -109,6 +110,81 @@ if (myCommentButton !== null) {
 				// 테이블 컨테이너에 새로운 Pagination 추가
 				tableContainer.appendChild(newPagination);
 				myreviewsTableInsert(data);
+				document.querySelectorAll('.userphotoviewButton').forEach(button => {
+					button.addEventListener('click', (event) => {
+						let reviewPhoto = event.target.value.replace("/userfile/", "");
+						heritageReviewPhotoLoading(reviewPhoto)
+							.then(imageData => {
+								const userphotoviewElements = document.querySelectorAll('.userphotoview');
+								userphotoviewElements.forEach(userphotoviewElement => {
+									userphotoviewElement.innerHTML = '';
+									if (imageData === null || imageData === undefined) {
+										const text = document.createElement('p');
+										text.textContent = '사진이 없습니다';
+										text.style.fontWeight = 'bold';
+										userphotoviewElement.appendChild(text);
+									} else if (imageData.startsWith('data:image/png;base64,')) {
+										if (imageData.length === 22) { // Only 'data:image/png;base64,' without image data
+											const text = document.createElement('p');
+											text.textContent = '사진이 없습니다';
+											text.style.fontSize = '0.8em';
+											text.style.fontWeight = 'bold';
+											userphotoviewElement.appendChild(text);
+										} else {
+											const img = document.createElement('img');
+											img.style.width = '100%';
+											img.src = imageData;
+											const text = document.createElement('p');
+											text.textContent = '이미지 클릭 시 확대';
+											text.style.fontSize = '0.8em';
+											userphotoviewElement.appendChild(text);
+											userphotoviewElement.appendChild(img);
+											img.addEventListener('click', () => {
+												openPopup(imageData);
+											});
+										}
+									} else {
+										const text = document.createElement('p');
+										text.textContent = '올바른 형식의 이미지가 아닙니다';
+										text.style.fontSize = '0.8em';
+										text.style.fontWeight = 'bold';
+										userphotoviewElement.appendChild(text);
+									}
+								});
+							});
+
+
+						function openPopup(imageUrl) {
+							const windowWidth = 800;
+							const windowHeight = 600;
+							const image = new Image();
+							image.src = imageUrl;
+							image.onload = () => {
+								const imageWidth = image.width;
+								const imageHeight = image.height;
+								let scale = 1;
+								if (imageWidth > windowWidth) {
+									scale = windowWidth / imageWidth;
+								}
+								if (imageHeight * scale > windowHeight) {
+									scale = windowHeight / imageHeight;
+								}
+								const popupWidth = imageWidth * scale;
+								const popupHeight = imageHeight * scale;
+								const left = (screen.width / 2) - (popupWidth / 2);
+								const top = (screen.height / 2) - (popupHeight / 2);
+								const windowOptions = `width=${popupWidth},height=${popupHeight},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes`;
+								const imageWindow = window.open('', 'ImagePopup', windowOptions);
+								const container = imageWindow.document.createElement('div');
+								container.style.textAlign = 'center';
+								image.style.width = `${popupWidth}px`;
+								image.style.height = `${popupHeight}px`;
+								container.appendChild(image);
+								imageWindow.document.body.appendChild(container);
+							};
+						}
+					});
+				});
 			})
 			.catch(error => {
 				alert(`리뷰를 불러오는 도중 문제가 발생하였습니다\n관리자에게 문의해주세요\n${error}`);
@@ -162,9 +238,11 @@ if (myCommentButton !== null) {
 			for (var j = 0; j < pageCheckboxs.length; j++) {
 				if (pageCheckboxs[j].checked === true) {
 					let ccbaAsno = pageCheckboxs[j].value;
+					let writerReviewphoto = pageCheckboxs[j].closest('tr').querySelector('.userphotoviewButton').value.replace("/userfile/", "");
 					let userCommentDeleteData = {
 						"userid": loginUserid,
-						"ccbaAsno": ccbaAsno
+						"ccbaAsno": ccbaAsno,
+						"filename": writerReviewphoto
 					}
 					userCommentDeleteDataArray.push(userCommentDeleteData);
 				}

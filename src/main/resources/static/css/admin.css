@@ -1,35 +1,40 @@
 /*코멘트 테이블*/
 .commentTable{
-	font-size:0.9em;	
+	font-size:0.8em;	
 }
 .commentTable1 {
 	width: 5%;
-	font-size:0.9em;
+	font-size:0.8em;
 }
 
 .commentTable2 {
 	width: 5%;	
-	font-size:0.9em;
+	font-size:0.8em;
 }
 
 .commentTable3 {
 	width: 10%;
-	font-size:0.9em;
+	font-size:0.8em;
 }
 
 .commentTable4 {
-	width: 50%;
-	font-size:0.9em;
+	width: 40%;
+	font-size:0.8em;
 }
 
 .commentTable5 {
 	width: 15%;
-	font-size:0.9em;
+	font-size:0.8em;
 }
 
 .commentTable6 {
 	width: 15%;
-	font-size:0.9em;
+	font-size:0.8em;
+}
+
+.commentTable7 {
+	width: 10%;
+	font-size:0.8em;
 }
 
 

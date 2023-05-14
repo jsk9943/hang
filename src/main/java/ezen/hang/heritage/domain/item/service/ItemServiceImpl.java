@@ -1,12 +1,21 @@
 package ezen.hang.heritage.domain.item.service;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import ezen.hang.heritage.domain.item.dao.DataSearchDao;
 import ezen.hang.heritage.domain.item.dto.Heritage;
@@ -32,7 +41,6 @@ public class ItemServiceImpl implements ItemService {
 	 */
 	@Override
 	public List<Heritage> searchHeritageParsing(String ccbaMnm1) throws Exception {
-		//dsd.setCcbaMnm1(keyword);
 		return dsd.searchHeritage(ccbaMnm1);
 	}
 
@@ -40,9 +48,6 @@ public class ItemServiceImpl implements ItemService {
 	public Heritage detailSearchHeritageParsing(String ccbaKdcd, String ccbaAsno, String ccbaCtcd) throws Exception {
 		Heritage heritage = new Heritage();
 		CommentStarRate commentStarRate = new CommentStarRate();
-		//dsd.setCcbaKdcd(ccbaKdcd);
-		//dsd.setCcbaAsno(ccbaAsno);
-		//dsd.setCcbaCtcd(ccbaCtcd);
 		heritage = dsd.detailSearchHeritage(ccbaKdcd, ccbaAsno, ccbaCtcd);
 		commentStarRate.setCcbaKdcd(ccbaKdcd);
 		commentStarRate.setCcbaAsno(ccbaAsno);
@@ -69,7 +74,7 @@ public class ItemServiceImpl implements ItemService {
 	 * 문화재에 등록된 유저들의 별점과 댓글을 등록하고 삭제, 가져오는 ServiceImplements
 	 */
 	@Override
-	public void createCommentStarRate(Map<String, Object> inputData) throws Exception {
+	public void createCommentStarRate(Map<String, Object> inputData, MultipartFile file) throws Exception {
 		String userid = inputData.get("userid").toString();
 		String ccbaKdcd = inputData.get("ccbaKdcd").toString();
 		String ccbaAsno = inputData.get("ccbaAsno").toString();
@@ -86,8 +91,26 @@ public class ItemServiceImpl implements ItemService {
 			commentStarRate.setCcbaMnm1(ccbaMnm1);
 			commentStarRate.setComment(comment);
 			commentStarRate.setStarpoint(starpoint);
-			itemMapper.starRatingCreate(commentStarRate);
-			itemMapper.commentCreate(commentStarRate);
+			if (file != null && !file.isEmpty()) {
+				String uploadDirPath = "/userfile/";
+				File uploadDir = new File(uploadDirPath);
+				if (!uploadDir.exists()) {
+					uploadDir.mkdirs();
+				}
+				UUID uuid = UUID.randomUUID();
+				String originalFilename = file.getOriginalFilename();
+				@SuppressWarnings("null")
+				String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+				String newFileName = userid + uuid.toString() + "." + fileExtension;
+				File dest = new File(uploadDirPath + newFileName);
+				String filePath = dest.getAbsolutePath();
+				file.transferTo(dest);
+				itemMapper.commentCreate(commentStarRate, filePath);
+				itemMapper.starRatingCreate(commentStarRate);
+			} else if (file == null || file.isEmpty()) {
+				itemMapper.commentCreate(commentStarRate, null);
+				itemMapper.starRatingCreate(commentStarRate);
+			}
 		} else {
 			throw new Exception();
 		}
@@ -103,21 +126,48 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	@Override
-	public List<CommentStarRate> userHeritageList(String userid) {
+	public List<Map<String, Object>> userHeritageList(String userid) {
 		return itemMapper.userHeritageList(userid);
 	}
 
 	@Override
 	public void deleteCommentStarRate(List<Map<String, Object>> deleteData) throws Exception {
+		List<String> filenamesToDelete = new ArrayList<>();
 		for (Map<String, Object> map : deleteData) {
-			for (int i = 0; i <  map.size(); i++) {
-				String userid = map.get("userid").toString();
-				String ccbaAsno = map.get("ccbaAsno").toString();
-				CommentStarRate commentStarRate = new CommentStarRate();
-				commentStarRate.setUserid(userid);
-				commentStarRate.setCcbaAsno(ccbaAsno);
-				itemMapper.deleteCommentStarRateMapper(commentStarRate);
-			}
+		    String userid = map.get("userid").toString();
+		    String ccbaAsno = map.get("ccbaAsno").toString();
+		    String filename = map.get("filename").toString();
+		    CommentStarRate commentStarRate = new CommentStarRate();
+		    commentStarRate.setUserid(userid);
+		    commentStarRate.setCcbaAsno(ccbaAsno);
+		    itemMapper.deleteCommentStarRateMapper(commentStarRate);
+		    filenamesToDelete.add(filename);
+		}
+		for (String filename : filenamesToDelete) {
+			deleteImage(filename);
+		}
+	}
+
+	@Override
+	public ResponseEntity<UrlResource> getImage(String filename) throws Exception {
+		UrlResource resource = new UrlResource("file:/userfile/" + filename);
+		if (resource.exists() && resource.isReadable()) {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.IMAGE_PNG);
+			return ResponseEntity.ok().headers(headers).body(resource);
+		} else {
+			throw new RuntimeException("Could not read image file: " + filename);
+		}
+	}
+
+	@Override
+	public void deleteImage(String filename) throws Exception {
+		String filePath = "/userfile/" + filename;
+		File fileToDelete = new File(filePath);
+		if (fileToDelete.exists()) {
+			fileToDelete.delete();
+		} else {
+			throw new FileNotFoundException("삭제할 파일이 존재하지 않습니다.");
 		}
 	}
 

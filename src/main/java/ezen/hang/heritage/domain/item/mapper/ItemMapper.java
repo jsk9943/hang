@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import ezen.hang.heritage.domain.item.dto.CommentStarRate;
 
@@ -20,11 +21,11 @@ public interface ItemMapper {
 	
 	public void starRatingCreate(CommentStarRate rate);
 	
-	public void commentCreate(CommentStarRate rate);
+	public void commentCreate(@Param("rate") CommentStarRate rate, @Param("filePath") String filePath);
 	
 	public List<Map<String, Object>> commentStarRateLoad(Map<String, Object> commentStarRateData);
 	
-	public List<CommentStarRate> userHeritageList(String userid);
+	public List<Map<String, Object>> userHeritageList(String userid);
 	
 	public void deleteCommentStarRateMapper(CommentStarRate rate);
 	

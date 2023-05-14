@@ -8,8 +8,9 @@
           <th class="table-col-2 commentTable2">번호</th>
           <th class="table-col-3 commentTable3">아이디</th>
           <th class="table-col-4 commentTable4">댓글내용</th>
-          <th class="table-col-5 commentTable6">문화재이름</th>
-          <th class="table-col-6 commentTable7">작성일자</th>
+          <th class="table-col-5 commentTable5">문화재이름</th>
+          <th class="table-col-6 commentTable6">작성일자</th>
+          <th class="table-col-7 commentTable7">등록사진</th>
         </tr>
       </thead>
       <tbody id="comment_dyn_tbody">
@@ -100,6 +101,103 @@
 				.then(data => {
 					document.querySelector('#commentCount').innerHTML = `총 ${data.length}건`;  // 조회건수
 					commentTableInsert(data);
+					document.querySelectorAll('.userphotoviewButton').forEach(button => {
+						button.addEventListener('click', (event) => {
+							let reviewPhoto = event.target.value.replace("/userfile/", "");
+							function heritageReviewPhotoLoading(reviewphoto) {
+								return fetch(`/heritage/item/image?filename=${reviewphoto}`, {
+									method: 'GET'
+								})
+									.then(response => response.arrayBuffer())
+									.then(buffer => {
+										const base64Flag = 'data:image/png;base64,';
+										const imageStr = arrayBufferToBase64(buffer);
+										const imgSrc = base64Flag + imageStr;
+										const img = document.createElement("img");
+										return img.src = imgSrc;
+									});
+							}
+							function arrayBufferToBase64(buffer) {
+								let binary = '';
+								const bytes = new Uint8Array(buffer);
+								const len = bytes.byteLength;
+								for (let i = 0; i < len; i++) {
+									binary += String.fromCharCode(bytes[i]);
+								}
+								return window.btoa(binary);
+							}
+							heritageReviewPhotoLoading(reviewPhoto)
+								.then(imageData => {
+									const userphotoviewElements = document.querySelectorAll('.userphotoview');
+									userphotoviewElements.forEach(userphotoviewElement => {
+										userphotoviewElement.innerHTML = '';
+										if (imageData === null || imageData === undefined) {
+											const text = document.createElement('p');
+											text.textContent = '사진이 없습니다';
+											text.style.fontWeight = 'bold';
+											userphotoviewElement.appendChild(text);
+										} else if (imageData.startsWith('data:image/png;base64,')) {
+											if (imageData.length === 22) { // Only 'data:image/png;base64,' without image data
+												const text = document.createElement('p');
+												text.textContent = '사진이 없습니다';
+												text.style.fontSize = '0.8em';
+												text.style.fontWeight = 'bold';
+												userphotoviewElement.appendChild(text);
+											} else {
+												const img = document.createElement('img');
+												img.style.width = '100%';
+												img.src = imageData;
+												const text = document.createElement('p');
+												text.textContent = '이미지 클릭 시 확대';
+												text.style.fontSize = '0.8em';
+												userphotoviewElement.appendChild(text);
+												userphotoviewElement.appendChild(img);
+												img.addEventListener('click', () => {
+													openPopup(imageData);
+												});
+											}
+										} else {
+											const text = document.createElement('p');
+											text.textContent = '올바른 형식의 이미지가 아닙니다';
+											text.style.fontSize = '0.8em';
+											text.style.fontWeight = 'bold';
+											userphotoviewElement.appendChild(text);
+										}
+									});
+								});
+
+
+							function openPopup(imageUrl) {
+								const windowWidth = 800;
+								const windowHeight = 600;
+								const image = new Image();
+								image.src = imageUrl;
+								image.onload = () => {
+									const imageWidth = image.width;
+									const imageHeight = image.height;
+									let scale = 1;
+									if (imageWidth > windowWidth) {
+										scale = windowWidth / imageWidth;
+									}
+									if (imageHeight * scale > windowHeight) {
+										scale = windowHeight / imageHeight;
+									}
+									const popupWidth = imageWidth * scale;
+									const popupHeight = imageHeight * scale;
+									const left = (screen.width / 2) - (popupWidth / 2);
+									const top = (screen.height / 2) - (popupHeight / 2);
+									const windowOptions = `width=${popupWidth},height=${popupHeight},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes`;
+									const imageWindow = window.open('', 'ImagePopup', windowOptions);
+									const container = imageWindow.document.createElement('div');
+									container.style.textAlign = 'center';
+									image.style.width = `${popupWidth}px`;
+									image.style.height = `${popupHeight}px`;
+									container.appendChild(image);
+									imageWindow.document.body.appendChild(container);
+								};
+							}
+						});
+					});
 				})
 		}
 		
@@ -108,6 +206,103 @@
 			.then(data => {
 				document.querySelector('#commentCount').innerHTML = `총 ${data.length}건`; // 조회건수
 				commentTableInsert(data);
+				document.querySelectorAll('.userphotoviewButton').forEach(button => {
+					button.addEventListener('click', (event) => {
+						let reviewPhoto = event.target.value.replace("/userfile/", "");
+						function heritageReviewPhotoLoading(reviewphoto) {
+							return fetch(`/heritage/item/image?filename=${reviewphoto}`, {
+								method: 'GET'
+							})
+								.then(response => response.arrayBuffer())
+								.then(buffer => {
+									const base64Flag = 'data:image/png;base64,';
+									const imageStr = arrayBufferToBase64(buffer);
+									const imgSrc = base64Flag + imageStr;
+									const img = document.createElement("img");
+									return img.src = imgSrc;
+								});
+						}
+						function arrayBufferToBase64(buffer) {
+							let binary = '';
+							const bytes = new Uint8Array(buffer);
+							const len = bytes.byteLength;
+							for (let i = 0; i < len; i++) {
+								binary += String.fromCharCode(bytes[i]);
+							}
+							return window.btoa(binary);
+						}
+						heritageReviewPhotoLoading(reviewPhoto)
+							.then(imageData => {
+								const userphotoviewElements = document.querySelectorAll('.userphotoview');
+								userphotoviewElements.forEach(userphotoviewElement => {
+									userphotoviewElement.innerHTML = '';
+									if (imageData === null || imageData === undefined) {
+										const text = document.createElement('p');
+										text.textContent = '사진이 없습니다';
+										text.style.fontWeight = 'bold';
+										userphotoviewElement.appendChild(text);
+									} else if (imageData.startsWith('data:image/png;base64,')) {
+										if (imageData.length === 22) { // Only 'data:image/png;base64,' without image data
+											const text = document.createElement('p');
+											text.textContent = '사진이 없습니다';
+											text.style.fontSize = '0.8em';
+											text.style.fontWeight = 'bold';
+											userphotoviewElement.appendChild(text);
+										} else {
+											const img = document.createElement('img');
+											img.style.width = '100%';
+											img.src = imageData;
+											const text = document.createElement('p');
+											text.textContent = '이미지 클릭 시 확대';
+											text.style.fontSize = '0.8em';
+											userphotoviewElement.appendChild(text);
+											userphotoviewElement.appendChild(img);
+											img.addEventListener('click', () => {
+												openPopup(imageData);
+											});
+										}
+									} else {
+										const text = document.createElement('p');
+										text.textContent = '올바른 형식의 이미지가 아닙니다';
+										text.style.fontSize = '0.8em';
+										text.style.fontWeight = 'bold';
+										userphotoviewElement.appendChild(text);
+									}
+								});
+							});
+
+
+						function openPopup(imageUrl) {
+							const windowWidth = 800;
+							const windowHeight = 600;
+							const image = new Image();
+							image.src = imageUrl;
+							image.onload = () => {
+								const imageWidth = image.width;
+								const imageHeight = image.height;
+								let scale = 1;
+								if (imageWidth > windowWidth) {
+									scale = windowWidth / imageWidth;
+								}
+								if (imageHeight * scale > windowHeight) {
+									scale = windowHeight / imageHeight;
+								}
+								const popupWidth = imageWidth * scale;
+								const popupHeight = imageHeight * scale;
+								const left = (screen.width / 2) - (popupWidth / 2);
+								const top = (screen.height / 2) - (popupHeight / 2);
+								const windowOptions = `width=${popupWidth},height=${popupHeight},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes`;
+								const imageWindow = window.open('', 'ImagePopup', windowOptions);
+								const container = imageWindow.document.createElement('div');
+								container.style.textAlign = 'center';
+								image.style.width = `${popupWidth}px`;
+								image.style.height = `${popupHeight}px`;
+								container.appendChild(image);
+								imageWindow.document.body.appendChild(container);
+							};
+						}
+					});
+				});
 			})
 		}
 		 /**
@@ -161,7 +356,8 @@
 					"ccbaMnm1": data[i].CCBAMNM1,
 					"comment": data[i].COMMENT,
 					"commentDate": data[i].COMMENTDATE,
-					"userid": data[i].USERID
+					"userid": data[i].USERID,
+					"reviewPhoto": data[i].REVIEWPHOTO
 				};
 				tableList.push(jsonObject);
 			}
@@ -254,15 +450,26 @@
 					var ccbaCtcd = jsonObject.ccbaCtcd;
 					var ccbaMnm1 = jsonObject.ccbaMnm1;
 					var commentDate = jsonObject.commentDate;
+					var reviewPhoto = jsonObject.reviewPhoto;
 					var insertTr = ""; 
 					insertTr += "<tr>"; 
 					insertTr += `<td class="table-col-1 commentTable">
-							<input class="deleteCommentCheckbox" id="CommentCheckboxfor${i}" type="checkbox" value="${userid} ${ccbaKdcd} ${ccbaAsno} ${ccbaCtcd}"></td>`;
+							<input class="deleteCommentCheckbox" id="CommentCheckboxfor${i}" type="checkbox" value="${userid} ${ccbaKdcd} ${ccbaAsno} ${ccbaCtcd} ${reviewPhoto}"></td>`;
 					insertTr += `<td class="table-col-2 commentTable"><label for="CommentCheckboxfor${i}">${idx}</label></td>`;
 					insertTr += `<td class="table-col-3 commentTable"><label for="CommentCheckboxfor${i}">${userid}</label></td>`;
 					insertTr += `<td class="table-col-4 commentTable"><label for="CommentCheckboxfor${i}">${comment}</label></td>`;
 					insertTr += `<td class="table-col-5 commentTable"><label for="CommentCheckboxfor${i}">${ccbaMnm1}</label></td>`;
 					insertTr += `<td class="table-col-6 commentTable"><label for="CommentCheckboxfor${i}">${commentDate}</label></td>`;
+					insertTr += `<td class="table-col-7 commentTable">
+									<div class="btn-group">
+									  <button type="button" class="btn btn-secondary btn-sm dropdown-toggle userphotoviewButton" data-bs-toggle="dropdown" aria-expanded="false" value="${reviewPhoto}">
+									    사진
+									  </button>
+									  <ul class="dropdown-menu" style="z-index:10000;">
+									    <li class="userphotoview" style="text-align:center;"></li>
+									  </ul>
+									</div>
+								</td>`;
 					insertTr += "</tr>";
 					$("#comment_dyn_tbody").append(insertTr);
 					checkCount++;
