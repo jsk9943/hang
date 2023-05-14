@@ -312,9 +312,9 @@ export function detailContentLoad(data) {
 					tableContainer.appendChild(newPagination);
 					heritageCommentStart(data);
 					// 저장된 유저 사진 버튼 클릭 시 불러오기
-					document.querySelectorAll('.userphotoviewButton').forEach(button => {
-						button.addEventListener('click', (event) => {
-							let reviewPhoto = event.target.value.replace("/userfile/", "");
+					document.querySelector('#dyn_tbody').addEventListener('click', (event) => {
+						if (event.target.classList.contains('userphotoviewButton')) {
+							let reviewPhoto = event.target.value.replace('/userfile/', '');
 							heritageReviewPhotoLoading(reviewPhoto)
 								.then(imageData => {
 									const userphotoviewElements = document.querySelectorAll('.userphotoview');
@@ -384,7 +384,7 @@ export function detailContentLoad(data) {
 									imageWindow.document.body.appendChild(container);
 								};
 							}
-						});
+						};
 					});
 				})
 				.catch(error => {

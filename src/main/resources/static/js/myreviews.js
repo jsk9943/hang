@@ -110,9 +110,9 @@ if (myCommentButton !== null) {
 				// 테이블 컨테이너에 새로운 Pagination 추가
 				tableContainer.appendChild(newPagination);
 				myreviewsTableInsert(data);
-				document.querySelectorAll('.userphotoviewButton').forEach(button => {
-					button.addEventListener('click', (event) => {
-						let reviewPhoto = event.target.value.replace("/userfile/", "");
+				document.querySelector('#dyn_tbody').addEventListener('click', (event) => {
+					if (event.target.classList.contains('userphotoviewButton')) {
+						let reviewPhoto = event.target.value.replace('/userfile/', '');
 						heritageReviewPhotoLoading(reviewPhoto)
 							.then(imageData => {
 								const userphotoviewElements = document.querySelectorAll('.userphotoview');
@@ -183,71 +183,71 @@ if (myCommentButton !== null) {
 								imageWindow.document.body.appendChild(container);
 							};
 						}
-					});
-				});
-			})
-			.catch(error => {
-				alert(`리뷰를 불러오는 도중 문제가 발생하였습니다\n관리자에게 문의해주세요\n${error}`);
-			})
-
+					};
+			});
 	})
-	// 삭제버튼 클릭 시 토스트 창 보여주기
-	if (commentDeleteButton !== null) {
-		commentDeleteButton.addEventListener('click', function() {
-			let toast = bootstrap.Toast.getOrCreateInstance(toastContent);
-			toast.show();
-		});
-	}
-	// 모든 체크박스 일괄선택 버튼기능
-	if (allCheckboxButton !== null) {
-		allCheckboxButton.addEventListener('click', function() {
-			let pageCheckboxs = document.getElementsByClassName('checkAll');
-			let checkboxsCount = 0;
-			for (var i = 0; i < pageCheckboxs.length; i++) {
-				if (pageCheckboxs[i].checked === true) {
-					checkboxsCount++;
+		.catch(error => {
+			alert(`리뷰를 불러오는 도중 문제가 발생하였습니다\n관리자에게 문의해주세요\n${error}`);
+		})
+
+})
+// 삭제버튼 클릭 시 토스트 창 보여주기
+if (commentDeleteButton !== null) {
+	commentDeleteButton.addEventListener('click', function() {
+		let toast = bootstrap.Toast.getOrCreateInstance(toastContent);
+		toast.show();
+	});
+}
+// 모든 체크박스 일괄선택 버튼기능
+if (allCheckboxButton !== null) {
+	allCheckboxButton.addEventListener('click', function() {
+		let pageCheckboxs = document.getElementsByClassName('checkAll');
+		let checkboxsCount = 0;
+		for (var i = 0; i < pageCheckboxs.length; i++) {
+			if (pageCheckboxs[i].checked === true) {
+				checkboxsCount++;
+			}
+		}
+		for (var i = 0; i < pageCheckboxs.length; i++) {
+			if (checkboxsCount < pageCheckboxs.length) {
+				if (pageCheckboxs[i].checked === false) {
+					pageCheckboxs[i].checked = !pageCheckboxs[i].checked;
 				}
+			} else {
+				pageCheckboxs[i].checked = false;
 			}
-			for (var i = 0; i < pageCheckboxs.length; i++) {
-				if (checkboxsCount < pageCheckboxs.length) {
-					if (pageCheckboxs[i].checked === false) {
-						pageCheckboxs[i].checked = !pageCheckboxs[i].checked;
-					}
-				} else {
-					pageCheckboxs[i].checked = false;
+		}
+	});
+}
+// 최종삭제처리
+if (toastDeleteButton !== null) {
+	toastDeleteButton.addEventListener('click', function() {
+		let pageCheckboxs = document.getElementsByClassName('checkAll');
+		var checkedCount = 0; // 체크된 체크박스 갯수
+		for (var i = 0; i < pageCheckboxs.length; i++) {
+			if (pageCheckboxs[i].checked) { // 체크된 체크박스인 경우
+				checkedCount++; // 체크된 체크박스의 개수를 1 증가
+			}
+		}
+		if (checkedCount === 0) {
+			alert('선택된 체크박스가 없습니다');
+			document.querySelector('#toastCloseButton').click();
+			return;
+		}
+		var userCommentDeleteDataArray = [];
+		for (var j = 0; j < pageCheckboxs.length; j++) {
+			if (pageCheckboxs[j].checked === true) {
+				let ccbaAsno = pageCheckboxs[j].value;
+				let writerReviewphoto = pageCheckboxs[j].closest('tr').querySelector('.userphotoviewButton').value.replace("/userfile/", "");
+				let userCommentDeleteData = {
+					"userid": loginUserid,
+					"ccbaAsno": ccbaAsno,
+					"filename": writerReviewphoto
 				}
+				userCommentDeleteDataArray.push(userCommentDeleteData);
 			}
-		});
-	}
-	// 최종삭제처리
-	if (toastDeleteButton !== null) {
-		toastDeleteButton.addEventListener('click', function() {
-			let pageCheckboxs = document.getElementsByClassName('checkAll');
-			var checkedCount = 0; // 체크된 체크박스 갯수
-			for (var i = 0; i < pageCheckboxs.length; i++) {
-				if (pageCheckboxs[i].checked) { // 체크된 체크박스인 경우
-					checkedCount++; // 체크된 체크박스의 개수를 1 증가
-				}
-			}
-			if (checkedCount === 0) {
-				alert('선택된 체크박스가 없습니다');
-				document.querySelector('#toastCloseButton').click();
-				return;
-			}
-			var userCommentDeleteDataArray = [];
-			for (var j = 0; j < pageCheckboxs.length; j++) {
-				if (pageCheckboxs[j].checked === true) {
-					let ccbaAsno = pageCheckboxs[j].value;
-					let writerReviewphoto = pageCheckboxs[j].closest('tr').querySelector('.userphotoviewButton').value.replace("/userfile/", "");
-					let userCommentDeleteData = {
-						"userid": loginUserid,
-						"ccbaAsno": ccbaAsno,
-						"filename": writerReviewphoto
-					}
-					userCommentDeleteDataArray.push(userCommentDeleteData);
-				}
-			}
-			removeUserReviews(userCommentDeleteDataArray); // 등록된 리뷰 및 별점 삭제
-		});
-	}
+		}
+		removeUserReviews(userCommentDeleteDataArray); // 등록된 리뷰 및 별점 삭제
+	});
+}
 }

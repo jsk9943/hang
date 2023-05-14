@@ -1,68 +1,79 @@
 <div th:fragment="commentManagePage">
-  <div class="table-container"
-    style="margin: 0 auto; width: 90%; text-align: center;">
-    <table class="table table-hover" style="font-size: 0.9em;">
-      <thead>
-        <tr>
-          <th class="table-col-1 commentTable1">선택</th>
-          <th class="table-col-2 commentTable2">번호</th>
-          <th class="table-col-3 commentTable3">아이디</th>
-          <th class="table-col-4 commentTable4">댓글내용</th>
-          <th class="table-col-5 commentTable5">문화재이름</th>
-          <th class="table-col-6 commentTable6">작성일자</th>
-          <th class="table-col-7 commentTable7">등록사진</th>
-        </tr>
-      </thead>
-      <tbody id="comment_dyn_tbody">
-      </tbody>
-    </table>
-  </div>
+	<div class="table-container"
+		style="margin: 0 auto; width: 90%; text-align: center;">
+		<table class="table table-hover" style="font-size: 0.9em;">
+			<thead>
+				<tr>
+					<th class="table-col-1 commentTable1">선택</th>
+					<th class="table-col-2 commentTable2">번호</th>
+					<th class="table-col-3 commentTable3">아이디</th>
+					<th class="table-col-4 commentTable4">댓글내용</th>
+					<th class="table-col-5 commentTable5">문화재이름</th>
+					<th class="table-col-6 commentTable6">작성일자</th>
+					<th class="table-col-7 commentTable7">등록사진</th>
+				</tr>
+			</thead>
+			<tbody id="comment_dyn_tbody">
+			</tbody>
+		</table>
+	</div>
 
 
-  <!-- 페이징 속성 정의 -->
-  <nav aria-label="Page navigation example" style="width:100%; overflow:hidden;">
-  <!-- 총 건수 -->
-  <div id="commentCount" style="width:10%;font-size:0.9em; font-weight:bold; float:left; margin-left:5%;">
-  </div>
-    <ul id="comment_dyn_ul" class="pagination" style="justify-content: center;margin-right:10%;">
-    </ul>
-  </nav>
-  
-  
-  <!-- 검색창과 삭제버튼 -->
-  
-<div class="footer-container" style="width:100%; overflow:hidden;">
-    <div class="input-group" style="width:50%; float:left; margin-left:25%;">
-      <select style="font-size:0.8em;" class="form-select" id="commentinputGroup">
-        <option selected>선택</option>
-        <option value="userid">아이디</option>
-        <option value="commentKeyword">댓글단어</option>
-        <option value="ccbaAsno">문화재번호</option>
-        <option value="ccbaMnm1">문화재이름</option>
-      </select>
-      <input style="font-size:0.8em;" type="text" class="form-control w-50" id="commentsearchInput" placeholder="검색">
-      <button class="btn btn-primary commentSearchButton" type="button">검색</button>
-    </div>
-    <button type="button" class="btn btn-danger adminCommentDelete" style="float:right; margin-right:5%;">삭제</button>
-    <!-- 토스트 창 -->
-    <div class="toast-container bottom-50 d-flex justify-content-center align-items-center w-100">
-          <div id="commentliveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-              <strong class="me-auto">최종확인</strong>
-              <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-              정말로 삭제하시겠습니까?<br>
-              <button type="button" class="btn btn-danger btn-sm" id="finalDeleteButton" data-bs-dismiss="modal">삭제</button>
-              <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="toast" id="toastCloseButton">닫기</button>
-            </div>
-          </div>
-        </div>
-        
-  </div>
+	<!-- 페이징 속성 정의 -->
+	<nav aria-label="Page navigation example"
+		style="width: 100%; overflow: hidden;">
+		<!-- 총 건수 -->
+		<div id="commentCount"
+			style="width: 10%; font-size: 0.9em; font-weight: bold; float: left; margin-left: 5%;">
+		</div>
+		<ul id="comment_dyn_ul" class="pagination"
+			style="justify-content: center; margin-right: 10%;">
+		</ul>
+	</nav>
 
 
-  <script type="text/javascript" defer>
+	<!-- 검색창과 삭제버튼 -->
+
+	<div class="footer-container" style="width: 100%; overflow: hidden;">
+		<div class="input-group"
+			style="width: 50%; float: left; margin-left: 25%;">
+			<select style="font-size: 0.8em;" class="form-select"
+				id="commentinputGroup">
+				<option selected>선택</option>
+				<option value="userid">아이디</option>
+				<option value="commentKeyword">댓글단어</option>
+				<option value="ccbaAsno">문화재번호</option>
+				<option value="ccbaMnm1">문화재이름</option>
+			</select> <input style="font-size: 0.8em;" type="text"
+				class="form-control w-50" id="commentsearchInput" placeholder="검색">
+			<button class="btn btn-primary commentSearchButton" type="button">검색</button>
+		</div>
+		<button type="button" class="btn btn-danger adminCommentDelete"
+			style="float: right; margin-right: 5%;">삭제</button>
+		<!-- 토스트 창 -->
+		<div
+			class="toast-container bottom-50 d-flex justify-content-center align-items-center w-100">
+			<div id="commentliveToast" class="toast" role="alert"
+				aria-live="assertive" aria-atomic="true">
+				<div class="toast-header">
+					<strong class="me-auto">최종확인</strong>
+					<button type="button" class="btn-close" data-bs-dismiss="toast"
+						aria-label="Close"></button>
+				</div>
+				<div class="toast-body">
+					정말로 삭제하시겠습니까?<br>
+					<button type="button" class="btn btn-danger btn-sm"
+						id="finalDeleteButton" data-bs-dismiss="modal">삭제</button>
+					<button type="button" class="btn btn-secondary btn-sm"
+						data-bs-dismiss="toast" id="toastCloseButton">닫기</button>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+
+	<script type="text/javascript" defer>
       /**
        * 관리권한은 막강하여 매순간 서버요청 시 로그인 된 관리자의 관리권한 속성을
        * 서버에서 즉각 확인하기 위해 상시 세션에 저장된 아이디를 받아와
@@ -101,9 +112,9 @@
 				.then(data => {
 					document.querySelector('#commentCount').innerHTML = `총 ${data.length}건`;  // 조회건수
 					commentTableInsert(data);
-					document.querySelectorAll('.userphotoviewButton').forEach(button => {
-						button.addEventListener('click', (event) => {
-							let reviewPhoto = event.target.value.replace("/userfile/", "");
+					document.querySelector('#comment_dyn_tbody').addEventListener('click', (event) => {
+						if (event.target.classList.contains('userphotoviewButton')) {
+							let reviewPhoto = event.target.value.replace('/userfile/', '');
 							function heritageReviewPhotoLoading(reviewphoto) {
 								return fetch(`/heritage/item/image?filename=${reviewphoto}`, {
 									method: 'GET'
@@ -196,7 +207,7 @@
 									imageWindow.document.body.appendChild(container);
 								};
 							}
-						});
+						}
 					});
 				})
 		}
@@ -206,9 +217,9 @@
 			.then(data => {
 				document.querySelector('#commentCount').innerHTML = `총 ${data.length}건`; // 조회건수
 				commentTableInsert(data);
-				document.querySelectorAll('.userphotoviewButton').forEach(button => {
-					button.addEventListener('click', (event) => {
-						let reviewPhoto = event.target.value.replace("/userfile/", "");
+				document.querySelector('#comment_dyn_tbody').addEventListener('click', (event) => {
+					  if (event.target.classList.contains('userphotoviewButton')) {
+					    let reviewPhoto = event.target.value.replace('/userfile/', '');
 						function heritageReviewPhotoLoading(reviewphoto) {
 							return fetch(`/heritage/item/image?filename=${reviewphoto}`, {
 								method: 'GET'
@@ -301,7 +312,7 @@
 								imageWindow.document.body.appendChild(container);
 							};
 						}
-					});
+					}
 				});
 			})
 		}
