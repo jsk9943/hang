@@ -293,40 +293,39 @@
        let toast = bootstrap.Toast.getOrCreateInstance(userForcedWithdrawalliveToastContent);
        let ForcedWithdrawalUserid;
        $(document).off("click", ".userForcedWithdrawalchange").on("click", ".userForcedWithdrawalchange", function(event){
-    	    console.log($(event.currentTarget).val());
     	    ForcedWithdrawalUserid = $(this).val();
     	    toast.show();
+    	    let finaluserForcedWithdrawalButton = document.querySelector('#finaluserForcedWithdrawalButton');
+    	       finaluserForcedWithdrawalButton.addEventListener('click', () => {
+    		       	let forcedWithdrawalData = {
+    		       		"adminid": userForcedWithdrawalAdminId,
+    		       		"userid": ForcedWithdrawalUserid
+    		       	}
+    		       	console.log(forcedWithdrawalData)
+    		       	fetch('/admin/wlist', {
+    		       		method: 'DELETE',
+    		       		headers: {
+    		       			'Content-Type': 'application/json'
+    		       		},
+    		       		body: JSON.stringify(forcedWithdrawalData)
+    		       	})
+    		       		.then(response => {
+    		       			return response.text();
+    		       		})
+    		       		.then(data => {
+    		       			if (data === 'true') {
+    		       				alert('정상적으로 강제탈퇴 처리 되었습니다');
+    		       				document.querySelector('#userForcedWithdrawaltoastCloseButton').click();
+    		       			} else if (data === 'false') {
+    		       				alert('강제탈퇴 처리에 실패하였습니다');
+    		       				document.querySelector('#userForcedWithdrawaltoastCloseButton').click();
+    		       			}
+    		       		})
+    		       		.catch(error => {
+    		       			alert(`강제탈퇴 중 오류가 발생하였습니다\n서버를 확인해주세요\n${error}`);
+    		       		})
+    	       })
     	});
-       
-       let finaluserForcedWithdrawalButton = document.querySelector('#finaluserForcedWithdrawalButton');
-       finaluserForcedWithdrawalButton.addEventListener('click', () => {
-       	let data = {
-       		"adminid": userForcedWithdrawalAdminId,
-       		"userid": ForcedWithdrawalUserid
-       	}
-       	fetch('/admin/wlist', {
-       		method: 'DELETE',
-       		headers: {
-       			'Content-Type': 'application/json'
-       		},
-       		body: JSON.stringify(data)
-       	})
-       		.then(response => {
-       			return response.text();
-       		})
-       		.then(data => {
-       			if (data === 'true') {
-       				alert('정상적으로 강제탈퇴 처리 되었습니다');
-       				document.querySelector('#userForcedWithdrawaltoastCloseButton').click();
-       			} else if (data === 'false') {
-       				alert('강제탈퇴 처리에 실패하였습니다');
-       				document.querySelector('#userForcedWithdrawaltoastCloseButton').click();
-       			}
-       		})
-       		.catch(error => {
-       			alert(`강제탈퇴 중 오류가 발생하였습니다\n서버를 확인해주세요\n${error}`);
-       		})
-       })
      };
   </script>
 

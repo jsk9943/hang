@@ -112,6 +112,7 @@ public class AdminController {
 	public String deleteUserForcedWithdrawal(@RequestBody Map<String, Object> useridData){
 		String result = null;
 		try {
+			System.out.println(useridData);
 			adminService.deleteUserForcedWithdrawal(useridData);
 			result = "true";
 		} catch (Exception e) {
