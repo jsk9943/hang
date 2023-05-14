@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -142,10 +143,14 @@ public class AdminServiceImpl implements AdminService {
 	public void deleteUserForcedWithdrawal(Map<String, Object> useridData) throws Exception {
 		String adminid = useridData.get("adminid").toString();
 		if (adminMapper.adminIdConfirm(adminid).equals("Y")) {
+			String userid = useridData.get("userid").toString();
+			String uuid = userid + UUID.randomUUID().toString();
+			useridData.put("randomUUID", uuid);
 			adminMapper.userWithdrawalHERITAGEREVIEW(useridData);
 			adminMapper.userWithdrawalRATE(useridData);
 			adminMapper.userWithdrawalBOOKMARK(useridData);
 			adminMapper.userWithdrawalPROFILEIMAGE(useridData);
+			adminMapper.userWithdrawalAUTHORITY(useridData);
 			adminMapper.userWithdrawalMEMBER(useridData);
 		}
 	}

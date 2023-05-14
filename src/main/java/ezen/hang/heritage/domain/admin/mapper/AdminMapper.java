@@ -49,6 +49,8 @@ public interface AdminMapper {
 	public void userWithdrawalBOOKMARK(Map<String, Object> useridData);
 	
 	public void userWithdrawalPROFILEIMAGE(Map<String, Object> useridData);
+
+	public void userWithdrawalAUTHORITY(Map<String, Object> useridData);
 	
 	public void userWithdrawalMEMBER(Map<String, Object> useridData);
 }

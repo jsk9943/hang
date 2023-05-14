@@ -107,13 +107,13 @@
 	
 	<update id="userWithdrawalHERITAGEREVIEW" parameterType="map">
 		UPDATE HERITAGEREVIEW
-		SET userid = '탈퇴회원'
+		SET userid = '탈퇴회원', userEx = #{randomUUID}
 		WHERE userid = #{userid};
 	</update>
 	
 	<update id="userWithdrawalRATE" parameterType="map">
 		UPDATE RATE
-		SET userid = '탈퇴회원'
+		SET userid = '탈퇴회원', userEx = #{randomUUID}
 		WHERE userid = #{userid};
 	</update>
 	

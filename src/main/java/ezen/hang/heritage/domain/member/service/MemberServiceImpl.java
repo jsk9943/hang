@@ -214,8 +214,12 @@ public class MemberServiceImpl implements MemberService {
 		String sessionUserid = userData.get("sessionUserid").toString();
 		String userid = userData.get("userid").toString();
 		if (sessionUserid.equals(userid)) {
-			memberMapper.userSelfWithdrawalHERITAGEREVIEW(userid);
-			memberMapper.userSelfWithdrawalRATE(userid);
+			Map<String, Object> map = new HashMap<>();
+			String uuid = userid + UUID.randomUUID().toString();
+			map.put("userid", userid);
+			map.put("randomUUID", uuid);
+			memberMapper.userSelfWithdrawalHERITAGEREVIEW(map);
+			memberMapper.userSelfWithdrawalRATE(map);
 			memberMapper.userSelfWithdrawalBOOKMARK(userid);
 			memberMapper.userSelfWithdrawalPROFILEIMAGE(userid);
 			memberMapper.userSelfrWithdrawalAUTHORITY(userid);

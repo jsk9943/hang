@@ -49,13 +49,14 @@
 	<select id="commentStarRateLoad" parameterType="map" resultType="map">
 		SELECT DISTINCT H.USERID, H.COMMENT, H.COMMENTDATE, R.STARPOINT, H.REVIEWPHOTO
 		FROM HERITAGEREVIEW H
-		JOIN RATE R ON H.USERID  = R.USERID
-					AND H.CCBAASNO = R.CCBAASNO
-					AND H.CCBAKDCD = R.CCBAKDCD
-					AND H.CCBACTCD = R.CCBACTCD 
+		LEFT JOIN RATE R ON H.USERID  = R.USERID
+		             AND H.CCBAASNO = R.CCBAASNO
+		             AND H.CCBAKDCD = R.CCBAKDCD
+		             AND H.CCBACTCD = R.CCBACTCD 
 		WHERE H.CCBAKDCD = #{ccbaKdcd}
 		  AND H.CCBAASNO = #{ccbaAsno}
 		  AND H.CCBACTCD = #{ccbaCtcd}
+		  AND (H.USERID &lt;&gt; '탈퇴회원' OR (H.USERID = '탈퇴회원' AND H.USEREX = R.USEREX))
 		ORDER BY H.COMMENTDATE DESC;
 	</select>
 	

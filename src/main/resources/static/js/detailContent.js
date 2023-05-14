@@ -264,7 +264,6 @@ export function detailContentLoad(data) {
 					 * 모달 내 게시판 페이징 시 새로운 데이터 생길 때 리프래쉬 되지 않아
 					 * table 자체를 삭제 후 새로 생성하게 끔 DOM 형태로 재구성
 					 * */
-
 					// 테이블 요소와 테이블 컨테이너 요소 가져오기
 					var table = document.querySelector('.table');
 					var tableContainer = document.querySelector('.table-container');

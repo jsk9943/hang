@@ -130,15 +130,15 @@
    <!--
    회원이 스스로 탈퇴하는 기능
    -->
-	<update id="userSelfWithdrawalHERITAGEREVIEW" parameterType="string">
+	<update id="userSelfWithdrawalHERITAGEREVIEW" parameterType="map">
 		UPDATE HERITAGEREVIEW
-		SET userid = '탈퇴회원'
+		SET userid = '탈퇴회원', userEx = #{randomUUID}
 		WHERE userid = #{userid};
 	</update>
 	
-	<update id="userSelfWithdrawalRATE" parameterType="string">
+	<update id="userSelfWithdrawalRATE" parameterType="map">
 		UPDATE RATE
-		SET userid = '탈퇴회원'
+		SET userid = '탈퇴회원', userEx = #{randomUUID}
 		WHERE userid = #{userid};
 	</update>
 	

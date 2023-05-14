@@ -71,9 +71,9 @@ public interface MemberMapper {
 	 */
 	public void userSelfWithdrawalMEMBER(String userid);
 
-	public void userSelfWithdrawalHERITAGEREVIEW(String userid);
+	public void userSelfWithdrawalHERITAGEREVIEW(Map<String, Object> userData);
 	
-	public void userSelfWithdrawalRATE(String userid);
+	public void userSelfWithdrawalRATE(Map<String, Object> userData);
 	
 	public void userSelfWithdrawalBOOKMARK(String userid);
 	
