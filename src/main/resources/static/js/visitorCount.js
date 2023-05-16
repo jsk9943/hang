@@ -69,9 +69,10 @@ function checkVisitorCount() {
 							document.querySelector('#total_visitor').innerHTML = visitor_totalcount;
 							document.querySelector('#today_visitor').innerHTML = visitor_count;
 						})
-				} else if (data === 'false') {
-					alert('방문자 통계 데이터를 불러오는데 실패하였습니다');
 				}
+			})
+			.catch(error => {
+				alert(`방문자 통계 데이터를 불러오는데 실패하였습니다\n${error}`);
 			})
 	} else {
 		visitorCountFetch(todayData)
@@ -80,6 +81,9 @@ function checkVisitorCount() {
 				let visitor_totalcount = data.visitor_totalcount;
 				document.querySelector('#total_visitor').innerHTML = visitor_totalcount;
 				document.querySelector('#today_visitor').innerHTML = visitor_count;
+			})
+			.catch(error => {
+				alert(`방문자 통계 데이터를 불러오는데 실패하였습니다\n${error}`);
 			})
 	}
 }
