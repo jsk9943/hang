@@ -189,7 +189,7 @@ html, body {
 /*오른쪽 aside 내부*/
 .bug1_1{
    text-align: center; padding: 5px;
-   height: 550px;
+   height: 650px;
     box-shadow: -1px 1px 5px rgb(98, 107, 233);
     background-color: #f5f5f5;
 }

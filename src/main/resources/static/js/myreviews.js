@@ -124,7 +124,7 @@ if (myCommentButton !== null) {
 										text.style.fontWeight = 'bold';
 										userphotoviewElement.appendChild(text);
 									} else if (imageData.startsWith('data:image/png;base64,')) {
-										if (imageData.length === 22) { // Only 'data:image/png;base64,' without image data
+										if (imageData.length === 22) {
 											const text = document.createElement('p');
 											text.textContent = '사진이 없습니다';
 											text.style.fontSize = '0.8em';
