@@ -10,7 +10,7 @@
 	
 	<insert id="insertTodayVisitorCount" parameterType="string">
 	    INSERT INTO VISITORCOUNT (visit_date, visitor_count, visitor_totalcount)
-	    VALUES (NOW(), 0, #{visitor_totalcount})
+	    VALUES (NOW(), 1, #{visitor_totalcount})
 	</insert>
 	
 	<update id="updateTodayVisitorCount" parameterType="map">

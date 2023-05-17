@@ -36,10 +36,10 @@ class VisitorTest {
 	@Disabled
 	void test2() {
 		Map<String, Object> map = new HashMap<>();
-		map.put("day", "2023-05-16");
+		map.put("day", "2023-05-19");
 		System.out.println("전달한 데이터 : " + map);
 		try {
-			visitorService.updateTodayVisitorCount(map);
+			visitorService.dayVisitorExiste(map);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
