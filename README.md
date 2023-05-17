@@ -1,4 +1,4 @@
-[ Hang 구현 사이트 ](http://kjnas7486.synology.me:8090/)
+[ Hang 구현 사이트 ](http://kjnas7486.synology.me)
   
   
 문화재(Heritage)를 지도를 통해 위치 탐색 및 리뷰를 달고 
