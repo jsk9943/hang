@@ -27,7 +27,8 @@ public class VisitorServiceImpl implements VisitorService{
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			String yesterday = dateFormat.format(calendar.getTime());
 			map.put("day", yesterday);
-			visitorMapper.insertTodayVisitorCount(visitorMapper.dayVisitorExiste(map).get("visitor_totalcount").toString());
+			int newTotalCount = Integer.parseInt(visitorMapper.dayVisitorExiste(map).get("visitor_totalcount").toString());
+			visitorMapper.insertTodayVisitorCount(String.valueOf(newTotalCount));
 		}
 		return visitorMapper.dayVisitorExiste(todayVisitorData);
 	}
