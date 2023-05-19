@@ -18,7 +18,6 @@ var infowindow = new kakao.maps.InfoWindow({ disableAutoPan: true });
 let menuicon = document.querySelector('#menuicon');
 let sidebar = document.querySelector('.sidebar');
 let searchTop = document.querySelector('.searchTop');
-let noSidebarBtn = document.querySelector('.noSidebar');
 
 if (menuicon && sidebar) {
 	menuicon.addEventListener('click', () => {
@@ -29,13 +28,6 @@ if (menuicon && sidebar) {
 			sidebar.style.left = '-100%';
 			searchTop.style.left = '-100%';
 		}
-	});
-}
-if (sidebar) {
-	noSidebarBtn.addEventListener('click', () => {
-		sidebar.style.left = '-100%';
-		searchTop.style.left = '-100%';
-		menuicon.checked = false;
 	});
 }
 var searchTopHeight = document.querySelector('.searchTop').offsetHeight;

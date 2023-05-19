@@ -1,6 +1,8 @@
 <nav th:fragment="nav" class="navbar fixed-top hangnav">
-  <div class="form-check form-switch col-1" style="background-color:transparent; overflow:hidden; width:8%; padding:5px 5px; margin:0 auto; border:none;">
-    <input style="position:relative; padding:10px; margin:0; width:100%; height:100%;" class="form-check-input" type="checkbox" role="switch" id="menuicon">
+	<div class="col-2">
+	  <div class="form-check form-switch col-1" style="background-color:transparent; overflow:hidden; width:50%; padding:5px 5px; margin:0 auto; margin-left:35%; border:none; display: flex; align-items: center;">
+	    <input style="position:relative; padding:15px; margin:0; width:50%; height:100%;" class="form-check-input" type="checkbox" role="switch" id="menuicon">
+	  </div>
   </div>
   <div class="col-4 relative hangsearch">
     <form id="heritagename" method="post">
@@ -50,7 +52,7 @@
   </li>
   </ul>
 
-  <div class="col-1" style="margin-right: 3%;">
+  <div class="col-1 hangtogglerdiv">
     <button class="navbar-toggler hangtoggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasDarkNavbar">
     <span class="navbar-toggler-icon hangtoggler-icon"></span>
     </button>
@@ -62,20 +64,15 @@
       <button type="button" class="btn-close offcanvasClose" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
   
-    <div class="offcanvas-body" style="height:100vh;">
-      <div style="font-size: 2.5wv; text-align: center; margin-bottom:8%;">Hang</div>
-      <div style="font-size: 1.5wv; text-align: center; margin-bottom:8%;">여기는 무슨 사이트인가요?</div>
-      <button type="button" class="btn btn-success introduce" style="width:50%; margin-bottom:15%; font-size:0.8vw;">알아보기</button>
-      <div style="font-size: 1.5wv; text-align: center; margin-bottom:5%;">모든 기능을 사용하려면</div>
-      <button type="button" class="btn btn-primary buttonbackimg logbtn navbutton offcanvasLogin" data-bs-toggle="modal" data-bs-target="#login" style="width:50%; margin-bottom:10%;">로그인</button>
-      <div style="font-size: 1.5wv; text-align: center; margin-bottom:5%;">아직 가입하지 않았다면</div>
-      <button type="button" class="btn btn-primary buttonbackimg navbutton" data-bs-toggle="modal" data-bs-target="#regist" style="width:50%;">회원가입</button>
-      <div style="display: flex; justify-content: center; align-items: center;">
-	      <div style="width:70%; text-align: center; background-color: rgb(220,220,220); padding:10px; border-radius:20px; margin-top: 15%;">
-		      <div style="font-size: 1em; text-align: center; padding:5px;">총 방문자 수 : <span id="total_visitor"></span>명</div>
-		      <div style="font-size: 0.8em; text-align: center; padding:5px;">오늘의 방문자 수 : <span id="today_visitor"></span>명</div>
-	      </div>
-      </div>
+    <div class="offcanvas-body">
+      <div style="font-size: 2.5em; text-align: center; margin-bottom:1%;">Hang</div>
+      <div style="font-size: 0.9em; text-align: center; margin-bottom:15%;">문화재, 그 길을 따라</div>
+      <div style="font-size: 1.5em; text-align: center; margin-bottom:8%;">여기는 무슨 사이트인가요?</div>
+      <button type="button" class="btn btn-info introduce" style="width:50%; margin-bottom:20%;">알아보기</button>
+      <div style="font-size: 1.5em; text-align: center; margin-bottom:5%;">모든 기능을 사용하려면</div>
+      <button type="button" class="btn btn-primary buttonbackimg logbtn offcanvasLogin" data-bs-toggle="modal" data-bs-target="#login" style="width:50%; margin-bottom:20%;">로그인</button>
+      <div style="font-size: 1.5em; text-align: center; margin-bottom:5%;">아직 가입하지 않았다면</div>
+      <button type="button" class="btn btn-primary buttonbackimg " data-bs-toggle="modal" data-bs-target="#regist" style="width:50%;">회원가입</button>
     </div>
   </div>
 </nav>

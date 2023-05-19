@@ -51,7 +51,7 @@ export function detailContentLoad(data) {
         <br>
         ${star}
       </div>
-      <div class="scrollBarDesign" style="width:100%; max-height:140px; font-size:0.7em; overflow: auto; border:2px solid rgba(140, 145, 236, 0.5); padding: 1%; text-align: justify;">
+      <div class="scrollBarDesign" style="width:100%; max-height:80px; font-size:0.7em; overflow: auto; border:2px solid rgba(140, 145, 236, 0.5); padding: 1%; text-align: justify;">
         ${itemContent.replace(/\. /g, ".<br><br>")}
       </div>
       <div style="font-size: 1em; color:gray; text-align:center;">

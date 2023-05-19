@@ -6,13 +6,13 @@
 
 html, body {
 	width: 100%;
-	height: 100vh;
 }
 
 #map {
-	position: relative;
+	position: fixed;
+	top:-7vh;
 	width: 100%;
-	height: 100%;
+	height: 93vh;
 }
 
 .buttonbackimg {
@@ -22,6 +22,10 @@ html, body {
 }
 
 .buttonbackimg:hover {
+	background-image: url("../img/backimg.png");
+}
+
+.buttonbackimg2:hover {
 	background-image: url("../img/backimg.png");
 }
 
@@ -44,11 +48,13 @@ html, body {
 	/*nav바 전체 : hang_01 */
 	z-index: 9999;
 	background-color: rgb(223, 228, 239);
-	border-bottom: 4px solid rgb(140, 145, 236);
-	width: 40%;
-	margin: 0 auto;
-	border-radius: 0px 0px 30px 30px;
+	width: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 7vh;
 	font-family: 'moonhwa';
+	box-shadow: 0px 3px 3px rgb(98, 107, 233);
 }
 
 .hangsearch {
@@ -65,44 +71,46 @@ html, body {
 }
 
 /*로그인/회원가입 버튼 사이즈 (li안에 싸여있음)*/
-.navbutton{
-	width:100%;
-	font-size:0.8vw;
+.navbutton {
+	width: 100%;
+	font-size: 0.8vw;
+	letter-spacing:20px;
+	padding-left:40px;
 }
 
 /* 로그인 구역 :hang_03 */
 /*로그인 li 간격*/
 .hanglogin {
-	width:50%;
+	width: 50%;
 	padding-right: 10px;
 }
 
 /* 회원 가입 시작: hang_04 */
 /*회원가입 li 버튼 간격  */
 .newgestbtn {
-	width:50%;
+	width: 50%;
 	padding-right: 10px;
 }
 
 #top1 {
-   /* 로그인 모달 창 바탕 */
-   width: 100%;
-   margin: 0 auto;
-   padding: 40px;
-   text-align: center;
+	/* 로그인 모달 창 바탕 */
+	width: 100%;
+	margin: 0 auto;
+	padding: 40px;
+	text-align: center;
 }
 
 .hanglogcont {
-   /* 로그인 모달 창 바탕 2*/
-   background-color: #f5f5f5;
-   box-shadow: 1px 1px 5px rgb(98, 107, 233);
-   border-radius: 10px;
+	/* 로그인 모달 창 바탕 2*/
+	background-color: #f5f5f5;
+	box-shadow: 1px 1px 5px rgb(98, 107, 233);
+	border-radius: 10px;
 }
 
 .hangmodal {
-   /*로그인 모달창 3*/
-   background-color: #f5f5f5;
-   box-shadow: 1px 1px 5px rgb(98, 107, 233);
+	/*로그인 모달창 3*/
+	background-color: #f5f5f5;
+	box-shadow: 1px 1px 5px rgb(98, 107, 233);
 }
 
 /* !!부트스트랩 권장값 자세히는 모름*/
@@ -148,14 +156,12 @@ html, body {
 	color: rgb(98, 107, 233);
 }
 
-
-
 /*회원 가입 끝*/
 
 /* 어사이드 오른쪽 버튼 : hang_05 */
 .hangtoggler { /* 햄버거 버튼 외부*/
-	border: none;
-	width:100%;
+	border:none;
+	width: 100%;
 }
 
 .hangtoggler:focus {
@@ -175,155 +181,154 @@ html, body {
 		url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgb(135, 119, 236)' stroke-width='3' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
-
-
 .bug1 {
-  	text-align: center;
-  	height:80%;
-  	box-shadow: -1px 1px 5px rgb(98, 107, 233);
+	margin-top:7vh;
+	text-align: center;
+	height: 93vh;
 }
 
 /*로그인후 loginnav */
 
-
 /*오른쪽 aside 내부*/
-.bug1_1{
-   text-align: center; padding: 5px;
-   height: 650px;
-    box-shadow: -1px 1px 5px rgb(98, 107, 233);
-    background-color: #f5f5f5;
+.bug1_1 {
+	margin-top:7vh;
+	text-align: center;
+	padding: 5px;
+	height: 93vh;
+	background-color: #f5f5f5;
 }
 
-.userimpo{
-   font-family: 'moonhwa'; font-size: 1.4em; margin: 5px;
+.userimpo {
+	font-family: 'moonhwa';
+	font-size: 1.4em;
 }
-
 
 ul {
-   list-style-type: none;
+	list-style-type: none;
 }
 
 .SMN_effect-13 a {
-   text-decoration-line: none;
-   color: rgb(177, 49, 81);
-   text-shadow: none;
-   padding: 5px 0;
+	text-decoration-line: none;
+	color: rgb(177, 49, 81);
+	text-shadow: none;
+	padding: 5px 0;
 }
 
 .SMN_effect-13 a:before {
-   color: #686de0;
-   text-shadow: 0 0 1px rgba(255, 255, 255, 0.3);
-   content: attr(data-hover);
-   position: absolute;
-   -webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
-   -moz-transition: -moz-transform 0.3s, opacity 0.3s;
-   transition: transform 0.3s, opacity 0.3s;
-   pointer-events: none;
+	color: #686de0;
+	text-shadow: 0 0 1px rgba(255, 255, 255, 0.3);
+	content: attr(data-hover);
+	position: absolute;
+	-webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
+	-moz-transition: -moz-transform 0.3s, opacity 0.3s;
+	transition: transform 0.3s, opacity 0.3s;
+	pointer-events: none;
 }
 
 .SMN_effect-13 a:after {
-   content: '';
-   position: absolute;
-   left: 0;
-   bottom: 0;
-   width: 100%;
-   height: 2px;
-   background: #fff;
-   opacity: 0;
-   -webkit-transform: translateY(5px);
-   -moz-transform: translateY(5px);
-   transform: translateY(5px);
-   -webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
-   -moz-transition: -moz-transform 0.3s, opacity 0.3s;
-   transition: transform 0.3s, opacity 0.3s;
-   pointer-events: none;
+	content: '';
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 2px;
+	background: #fff;
+	opacity: 0;
+	-webkit-transform: translateY(5px);
+	-moz-transform: translateY(5px);
+	transform: translateY(5px);
+	-webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
+	-moz-transition: -moz-transform 0.3s, opacity 0.3s;
+	transition: transform 0.3s, opacity 0.3s;
+	pointer-events: none;
 }
 
-.SMN_effect-13 a:hover:before,
-.SMN_effect-13 a:focus:before {
-   opacity: 0;
-   -webkit-transform: translateY(-2px);
-   -moz-transform: translateY(-2px);
-   transform: translateY(-2px);
-   color: rgb(177, 49, 81);
+.SMN_effect-13 a:hover:before, .SMN_effect-13 a:focus:before {
+	opacity: 0;
+	-webkit-transform: translateY(-2px);
+	-moz-transform: translateY(-2px);
+	transform: translateY(-2px);
+	color: rgb(177, 49, 81);
 }
 
-.SMN_effect-13 a:hover:after,
-.SMN_effect-13 a:focus:after {
-   opacity: 1;
-   -webkit-transform: translateY(0px);
-   -moz-transform: translateY(0px);
-   transform: translateY(0px);
+.SMN_effect-13 a:hover:after, .SMN_effect-13 a:focus:after {
+	opacity: 1;
+	-webkit-transform: translateY(0px);
+	-moz-transform: translateY(0px);
+	transform: translateY(0px);
 }
 
 /*회원정보 수정 모달*/
-.edituserbar{ /*모달 내부 외부 색*/
-   box-shadow: 1px 1px 5px rgb(98, 107, 233); background-color: #f5f5f5;
+.edituserbar { /*모달 내부 외부 색*/
+	box-shadow: 1px 1px 5px rgb(98, 107, 233);
+	background-color: #f5f5f5;
 }
-.edituserbody{
-   padding: 20px;
+
+.edituserbody {
+	padding: 20px;
 }
 
 /*ssssss*/
 hr[role="tournament2"] {
-    border: 0px solid;
-    height: 3px;
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(124, 95, 253, 0.75), rgba(0, 0, 0, 0));
-    margin: 24px 0px;
-    display: block;
+	border: 0px solid;
+	height: 3px;
+	background-image: linear-gradient(to right, rgba(0, 0, 0, 0),
+		rgba(124, 95, 253, 0.75), rgba(0, 0, 0, 0));
+	margin: 24px 0px;
+	display: block;
 }
+
 hr[role="tournament2"]::before {
-    position: absolute;
-    background-color: #efefef;
-    border: 3px solid;
-    border-color: rgba(124, 95, 253, 0.75);
-    border-left: 0px solid;
-    border-top: 0px solid;
-    padding: 10px;
-    transform: rotate(45deg);
-    left: 50%;
-    margin: -10px 0px 0px -22px;
-    content: "";
+	position: absolute;
+	background-color: #efefef;
+	border: 3px solid;
+	border-color: rgba(124, 95, 253, 0.75);
+	border-left: 0px solid;
+	border-top: 0px solid;
+	padding: 10px;
+	transform: rotate(45deg);
+	left: 50%;
+	margin: -10px 0px 0px -22px;
+	content: "";
 }
 /*=======================nav 끝========================*/
-
-
-
-
-
+.rightsidebar {
+	z-index: -1;
+	width: 0%;
+	height: 7vh;
+}
 
 .sidebar {
 	width: 350px;
-	height: 100%;
-	background: rgb(223, 228, 239);
+	height: 93%; background : rgb( 223, 228, 239);
 	position: fixed;
-	top: 0px;
+	top: 7vh;
 	left: -350px;
 	z-index: 1;
 	transition: all .35s;
+	background: rgb(223, 228, 239);
 }
 
-.searchTop{
+.searchTop {
 	text-align: center;
 	background: rgb(223, 228, 239);
-	position:fixed;
-	top:0;
-	left:-350px;
-	width:350px;
+	position: fixed;
+	top: 7vh;
+	left: -350px;
+	width: 350px;
 	z-index: 2;
 	transition: all .35s;
 	overflow: auto;
 }
 
-#searchCount{
+#searchCount {
 	background: rgb(223, 228, 239);
 }
 
 #searchResult {
-	overflow:auto;
-	height:100%;
+	overflow: auto;
+	height: 100%;
 }
-
 
 /*검색결과 스크롤바 디자인*/
 .scrollBarDesign::-webkit-scrollbar {
@@ -340,10 +345,6 @@ hr[role="tournament2"]::before {
 	background-color: #575757; /*스크롤바 뒷 배경 색상*/
 	border-radius: 25px;
 }
-
-
-
-
 
 /*검색결과 div 박스 디자인*/
 #searchResult>div { /* 결과 1개 당 */
@@ -362,103 +363,101 @@ hr[role="tournament2"]::before {
 }
 
 #searchResult>div>a { /* 자세히보기 */
-  border: 1px solid rgb(223, 228, 239);
-  background-color: rgb(190, 205, 238);
-  color:rgb(140, 145, 236);
-  padding: 5px 10px;
-  text-decoration: none;
-  border-radius: 10px;
-}
-#searchResult>div>a:hover { /* 자세히보기 */
-  color:red;
-  border: 1px solid rgb(140, 145, 236);
-  background-color: rgb(140, 145, 236);
-  padding: 5px 10px;
-  font-weight: bold;
+	border: 1px solid rgb(223, 228, 239);
+	background-color: rgb(190, 205, 238);
+	color: rgb(140, 145, 236);
+	padding: 5px 10px;
+	text-decoration: none;
+	border-radius: 10px;
 }
 
-.reviewbackimg:hover{
+#searchResult>div>a:hover { /* 자세히보기 */
+	color: red;
+	border: 1px solid rgb(140, 145, 236);
+	background-color: rgb(140, 145, 236);
+	padding: 5px 10px;
+	font-weight: bold;
+}
+
+.reviewbackimg:hover {
 	background-image: url("../img/backimg.png");
 }
 
-
-
-
-
-
-
 /*회원가입 입력창 변화*/
 #username:required:valid {
-        background-color: #cff8ff;
+	background-color: #cff8ff;
 }
+
 #useridInput:required:valid {
-        background-color: #cff8ff;
+	background-color: #cff8ff;
 }
+
 #userpw:required:valid {
-        background-color: #cff8ff;
+	background-color: #cff8ff;
 }
+
 #userpw2:required:valid {
-        background-color: #cff8ff;
+	background-color: #cff8ff;
 }
+
 #phone:required:valid {
-        background-color: #cff8ff;
+	background-color: #cff8ff;
 }
+
 #email:required:valid {
-        background-color: #cff8ff;
+	background-color: #cff8ff;
 }
 
-
-/* 대기중 문양 빙글빙글 도는 애니메이션*/
-.nugiimg {
-	width: 100px;
-	height: 100px;
- 	animation: rotate_updown 4s linear infinite;
-  	transform-origin: 50% 50%;
+/* 방문자 버튼*/
+.visitorToast{
+	position:fixed; 
+	right:10px; 
+	bottom:10px; 
+	background-color: rgb(255,255,255); 
+	border-radius: 10px; 
+	z-index: 11000;
+	width:5%;
 }
-
-@keyframes rotate_updown {
-  0% {
-    transform: rotate(0deg) translateY(0px);
-  }
-  50% {
-    transform: rotate(180deg) translateY(200px);
-  }
-  100% {
-    transform: rotate(360deg) translateY(0px);
-  }
-}
-
 
 
 /*==========모바일 nav=========*/
 @media only screen and (max-width: 480px) {
 	@font-face {
-	   font-family: 'moonhwa';
-	   src: url('font/moonhwa-bold.woff') format('truetype');
+		font-family: 'moonhwa';
+		src: url('font/moonhwa-bold.woff') format('truetype');
 	}
 	
 	.hangnav {
-	   /*nav바 전체 : hang_01 */
-	   z-index: 9999;
-	   background-color: rgb(223, 228, 239);
-	   border-bottom: 4px solid rgb(140, 145, 236);
-	   width: 100%;
-	   margin: 0 auto;
-	   border-radius: 0px 0px 30px 30px;
-	   font-family: 'moonhwa';
+		/*nav바 전체 : hang_01 */
+		z-index: 9999;
+		background-color: rgb(223, 228, 239);
+		width: 100%;
+		margin: 0 auto;
+		font-family: 'moonhwa';
+		box-shadow: 0px 3px 3px rgb(98, 107, 233);
 	}
 	
-	.navbutton{
-	   font-size:0.4em ;
-	   padding: 15px;
+	.hangtogglerdiv{
+		margin-right:2%;
+	}
+		
+	.navbutton {
+		padding:10px;
+		letter-spacing: 0px;
+		font-size: 0.5em;
+		width:100%;
+	}
+	
+	.visitorToast{
+		width:20%;
+	}
+	
+	#visitorCountBtn{
+		width:100%;
 	}
 }
 
 /*=============================*/
-
-
-
-
-.form-switch > input {
-	margin:0 auto;
+.form-switch>input {
+	margin: 0 auto;
 }

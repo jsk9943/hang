@@ -1,6 +1,17 @@
 /**
  * 방문 시 자동으로 방문기록 쿠키 생성 및 카운터 후 DB 저장
  */
+// 버튼 클릭 인식 토스트 창 출력
+const visitorCountTrigger = document.getElementById('visitorCountBtn')
+const visitorCountToast = document.getElementById('visitorCountToast')
+if (visitorCountTrigger) {
+	visitorCountTrigger.addEventListener('click', () => {
+		const toast = new bootstrap.Toast(visitorCountToast)
+		toast.show()
+		checkVisitorCount()
+	})
+}
+
 // 쿠키를 설정하는 함수
 function setCookie(name, value, days) {
 	let expires = "";
@@ -59,15 +70,25 @@ function checkVisitorCount() {
 	if (visitorCount === null) {
 		visitorCount = 1;
 		setCookie(visitorKey, visitorCount, 1);
-		newVisitorCountFetch(todayData)
+		visitorCountFetch(todayData)
 			.then(data => {
-				if (data === 'true') {
-					visitorCountFetch(todayData)
+				if (data !== null && data !== undefined) {
+					plusVisitorCountFetch(todayData)
 						.then(data => {
-							let visitor_count = data.visitor_count;
-							let visitor_totalcount = data.visitor_totalcount;
-							document.querySelector('#total_visitor').innerHTML = visitor_totalcount;
-							document.querySelector('#today_visitor').innerHTML = visitor_count;
+							if (data === 'true') {
+								visitorCountFetch(todayData)
+									.then(data => {
+										let visitor_count = data.visitor_count;
+										let visitor_totalcount = data.visitor_totalcount;
+										document.querySelector('#total_visitor').innerHTML = visitor_totalcount;
+										document.querySelector('#today_visitor').innerHTML = visitor_count;
+									})
+							} else if (data === 'false') {
+								alert(`방문자 통계 데이터를 불러오는데 실패하였습니다\n${data}`);
+							}
+						})
+						.catch(error => {
+							alert(`방문자 통계 데이터를 불러오는데 실패하였습니다\n${error}`);
 						})
 				}
 			})
@@ -88,7 +109,7 @@ function checkVisitorCount() {
 	}
 }
 // 당일 첫 방문자 일 경우 방문자수 늘려서 가져오는 fetch 통신
-function newVisitorCountFetch(todayData) {
+function plusVisitorCountFetch(todayData) {
 	return fetch(`/visitor/update`, {
 		method: 'PATCH',
 		headers: {
