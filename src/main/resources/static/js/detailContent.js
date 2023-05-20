@@ -137,7 +137,7 @@ export function detailContentLoad(data) {
 	let loginPleaseButton = document.querySelector('.loginPlease');
 	if (loginPleaseButton !== null) {
 		loginPleaseButton.addEventListener('click', () => {
-			document.querySelector('.logbtn').click();
+			document.querySelector('.navLoginBtn').click();
 		})
 	}
 

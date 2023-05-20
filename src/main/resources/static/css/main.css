@@ -368,6 +368,11 @@ hr[role="tournament2"]::before {
   margin-bottom:10px;
 }
 
+/*리뷰쓰기보기 버튼*/
+.reviewbackimg:hover {
+	background-image: url("../img/backimg.png");
+}
+
 /*회원가입 입력창 변화*/
 #username:required:valid {
 	background-color: #cff8ff;
