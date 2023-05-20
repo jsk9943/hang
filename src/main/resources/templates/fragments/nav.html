@@ -7,15 +7,17 @@
   <div class="col-4 relative hangsearch">
     <form id="heritagename" method="post">
       <input id="searchInput" type="text" class="form-control" name="heritagename" placeholder="검색 (지역, 문화재명)" aria-label="Recipient's username" aria-describedby="button-addon2" maxlength="50">
-      <a id="searchButton" role="button"><img class="shabsolute" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+      <a class="searchButton" role="button"><img class="shabsolute" src="./img/searchIcon.png"></a>
     </form>
   </div>
   
-  <div style="width:5%;"></div>
+  <div class="col-1 searchButtondiv">
+  	<a class="searchButton" role="button"><img class="shabsolute2" src="./img/searchIconButton.png"></a>
+  </div>
 
   <ul class="col-4 nav nav-pills">
     <li class="nav-item hanglogin">
-      <button type="button" class="btn btn-primary buttonbackimg logbtn navbutton" data-bs-toggle="modal" data-bs-target="#login">로그인</button>
+      <button type="button" class="btn btn-primary buttonbackimg navbutton navLoginBtn" data-bs-toggle="modal" data-bs-target="#login">로그인</button>
       <div class="container">
         <div class="modal fade" id="login" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered sm">
@@ -70,7 +72,7 @@
       <div style="font-size: 1.5em; text-align: center; margin-bottom:8%;">여기는 무슨 사이트인가요?</div>
       <button type="button" class="btn btn-info introduce" style="width:50%; margin-bottom:20%;">알아보기</button>
       <div style="font-size: 1.5em; text-align: center; margin-bottom:5%;">모든 기능을 사용하려면</div>
-      <button type="button" class="btn btn-primary buttonbackimg logbtn offcanvasLogin" data-bs-toggle="modal" data-bs-target="#login" style="width:50%; margin-bottom:20%;">로그인</button>
+      <button type="button" class="btn btn-primary buttonbackimg offcanvasLogin" data-bs-toggle="modal" data-bs-target="#login" style="width:50%; margin-bottom:20%;">로그인</button>
       <div style="font-size: 1.5em; text-align: center; margin-bottom:5%;">아직 가입하지 않았다면</div>
       <button type="button" class="btn btn-primary buttonbackimg " data-bs-toggle="modal" data-bs-target="#regist" style="width:50%;">회원가입</button>
     </div>

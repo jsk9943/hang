@@ -26,9 +26,11 @@ if (document.querySelector('.introduce') !== null) {
 
 let heritageSearch = document.querySelector("#searchInput"); //검색창
 //검색 아이콘을 눌렀을 때
-document.querySelector("#searchButton").addEventListener("click", (event) => {
-	event.preventDefault();
-	keywordSearch(heritageSearch.value);
+document.querySelectorAll(".searchButton").forEach(button => {
+	button.addEventListener("click", (event) => {
+		event.preventDefault();
+		keywordSearch(heritageSearch.value);
+	});
 });
 
 // 엔터키를 쳤을 때
@@ -75,81 +77,74 @@ function searchHeritage(keyword) {
 						let item = data[i];
 						if (item.latitude === "0" && item.ccbaMnm2 === "") { // 둘 다 없을 때
 							html += `
-					        <div class="card">
-					        <p class="card-header" style="font-family:'moonhwa';">${item.ccbaMnm1}</p>
+					        <button class="card detail-link">
+					        <p class="card-header" style="font-family:'moonhwa'; width:100%; pointer-events: auto;">${item.ccbaMnm1}</p>
 					        <p>종목 : ${item.ccmaName}</p>
 					        <p>위치 : ${item.ccbaCtcdNm} ${item.ccbaAdmin}</p>
-					        <a class="detail-link btn btn-primary" style="cursor: pointer;">
-									자세히보기
-									<input type="hidden" id="${item.ccbaKdcd}" name="ccbaKdcd" value="${item.ccbaKdcd}">
-									<input type="hidden" id="${item.ccbaAsno}" name="ccbaAsno" value="${item.ccbaAsno}">
-									<input type="hidden" id="${item.ccbaCtcd}" name="ccbaCtcd" value="${item.ccbaCtcd}">
-									<input type="hidden" id="${item.latitude}" name="latitude" value="${item.latitude}">
-									<input type="hidden" id="${item.longitude}" name="longitude" value="${item.longitude}">
-					        </a>
-					        </div>
+							<input type="hidden" id="${item.ccbaKdcd}" name="ccbaKdcd" value="${item.ccbaKdcd}">
+							<input type="hidden" id="${item.ccbaAsno}" name="ccbaAsno" value="${item.ccbaAsno}">
+							<input type="hidden" id="${item.ccbaCtcd}" name="ccbaCtcd" value="${item.ccbaCtcd}">
+							<input type="hidden" id="${item.latitude}" name="latitude" value="${item.latitude}">
+							<input type="hidden" id="${item.longitude}" name="longitude" value="${item.longitude}">
+					        </button>
 					        `;
 						} else if (item.latitude === '0') { // 좌표값이 없을때
 							html += `
-					        <div class="card">
-					        <p class="card-header" style="font-family:'moonhwa';">${item.ccbaMnm1}<br>(${item.ccbaMnm2})</p>
+					        <button class="card detail-link">
+					        <p class="card-header" style="font-family:'moonhwa'; width:100%; pointer-events: auto;">${item.ccbaMnm1}<br>(${item.ccbaMnm2})</p>
 					        <p>종목 : ${item.ccmaName}</p>
 					        <p>위치 : ${item.ccbaCtcdNm} ${item.ccbaAdmin}</p>
 					        <p style="font-weight:bold; color:red; font-size:0.7em;">※ 해당 문화재는 위치정보가 확인되지 않아<br>ㅤ정상적으로 지도에 마커되지 않습니다</p>
-					        <a class="detail-link btn btn-primary" style="cursor: pointer;">
-									자세히보기
-									<input type="hidden" id="${item.ccbaKdcd}" name="ccbaKdcd" value="${item.ccbaKdcd}">
-									<input type="hidden" id="${item.ccbaAsno}" name="ccbaAsno" value="${item.ccbaAsno}">
-									<input type="hidden" id="${item.ccbaCtcd}" name="ccbaCtcd" value="${item.ccbaCtcd}">
-									<input type="hidden" id="${item.latitude}" name="latitude" value="${item.latitude}">
-									<input type="hidden" id="${item.longitude}" name="longitude" value="${item.longitude}">
-					        </a>
-					        </div>
+							<input type="hidden" id="${item.ccbaKdcd}" name="ccbaKdcd" value="${item.ccbaKdcd}">
+							<input type="hidden" id="${item.ccbaAsno}" name="ccbaAsno" value="${item.ccbaAsno}">
+							<input type="hidden" id="${item.ccbaCtcd}" name="ccbaCtcd" value="${item.ccbaCtcd}">
+							<input type="hidden" id="${item.latitude}" name="latitude" value="${item.latitude}">
+							<input type="hidden" id="${item.longitude}" name="longitude" value="${item.longitude}">
+					        </button>
 					        `;
 						} else if (item.ccbaMnm2 === "") { // 한자명이 없을 때
 							html += `
-					        <div class="card">
-					        <p class="card-header" style="font-family:'moonhwa';">${item.ccbaMnm1}</p>
+					        <button class="card detail-link">
+					        <p class="card-header" style="font-family:'moonhwa'; width:100%; pointer-events: auto;">${item.ccbaMnm1}</p>
 					        <p>종목 : ${item.ccmaName}</p>
 					        <p>위치 : ${item.ccbaCtcdNm} ${item.ccbaAdmin}</p>
-					        <a class="detail-link btn btn-primary" style="cursor: pointer;">
-									자세히보기
-									<input type="hidden" id="${item.ccbaKdcd}" name="ccbaKdcd" value="${item.ccbaKdcd}">
-									<input type="hidden" id="${item.ccbaAsno}" name="ccbaAsno" value="${item.ccbaAsno}">
-									<input type="hidden" id="${item.ccbaCtcd}" name="ccbaCtcd" value="${item.ccbaCtcd}">
-									<input type="hidden" id="${item.latitude}" name="latitude" value="${item.latitude}">
-									<input type="hidden" id="${item.longitude}" name="longitude" value="${item.longitude}">
-					        </a>
-					        </div>
+							<input type="hidden" id="${item.ccbaKdcd}" name="ccbaKdcd" value="${item.ccbaKdcd}">
+							<input type="hidden" id="${item.ccbaAsno}" name="ccbaAsno" value="${item.ccbaAsno}">
+							<input type="hidden" id="${item.ccbaCtcd}" name="ccbaCtcd" value="${item.ccbaCtcd}">
+							<input type="hidden" id="${item.latitude}" name="latitude" value="${item.latitude}">
+							<input type="hidden" id="${item.longitude}" name="longitude" value="${item.longitude}">
+					        </button>
 					        `;
 						} else { // 모두 정상일 때
 							html += `
-						        <div class="card">
-						        <p class="card-header" style="font-family:'moonhwa';">${item.ccbaMnm1}<br>(${item.ccbaMnm2})</p>
+						        <button class="card detail-link">
+						        <p class="card-header" style="font-family:'moonhwa'; width:100%; pointer-events: auto;">${item.ccbaMnm1}<br>(${item.ccbaMnm2})</p>
 						        <p>종목 : ${item.ccmaName}</p>
 						        <p>위치 : ${item.ccbaCtcdNm} ${item.ccbaAdmin}</p>
-						        <a class="detail-link btn btn-primary" style="cursor: pointer;">
-										자세히보기
-										<input type="hidden" id="${item.ccbaKdcd}" name="ccbaKdcd" value="${item.ccbaKdcd}">
-										<input type="hidden" id="${item.ccbaAsno}" name="ccbaAsno" value="${item.ccbaAsno}">
-										<input type="hidden" id="${item.ccbaCtcd}" name="ccbaCtcd" value="${item.ccbaCtcd}">
-										<input type="hidden" id="${item.latitude}" name="latitude" value="${item.latitude}">
-										<input type="hidden" id="${item.longitude}" name="longitude" value="${item.longitude}">
-						        </a>
-						        </div>
+								<input type="hidden" id="${item.ccbaKdcd}" name="ccbaKdcd" value="${item.ccbaKdcd}">
+								<input type="hidden" id="${item.ccbaAsno}" name="ccbaAsno" value="${item.ccbaAsno}">
+								<input type="hidden" id="${item.ccbaCtcd}" name="ccbaCtcd" value="${item.ccbaCtcd}">
+								<input type="hidden" id="${item.latitude}" name="latitude" value="${item.latitude}">
+								<input type="hidden" id="${item.longitude}" name="longitude" value="${item.longitude}">
+						        </button>
 						        `;
 						}
 					}
 				}
 				document.getElementById('searchResult').innerHTML = "";
 				document.getElementById('searchResult').innerHTML = html;
-				// 자세히 보기 버튼 클릭 시 
+				// 검색 결과 클릭 시 
 				let detailbutton = document.querySelectorAll('.detail-link');
 				if (detailbutton !== null) {
 					detailbutton.forEach(button => {
 						button.addEventListener('click', (event) => {
 							detailContent(event);
 						});
+						let pElements = button.getElementsByTagName('p');
+						for (let i = 0; i < pElements.length; i++) {
+							let pElement = pElements[i];
+							pElement.addEventListener('click', handleParagraphClick);
+						}
 					});
 				}
 			} else {
@@ -161,7 +156,7 @@ function searchHeritage(keyword) {
 		});
 }
 
-//자세히 보기 클릭 시 문화재에 대한 세부항목 전송 및 마커 지도에 찍기
+//문화재에 대한 세부항목 전송 및 마커 지도에 찍기
 function detailContent(event) {
 	event.preventDefault();
 	let ccbaKdcd = event.target.querySelector('input[name="ccbaKdcd"]').value;
@@ -169,10 +164,14 @@ function detailContent(event) {
 	let ccbaCtcd = event.target.querySelector('input[name="ccbaCtcd"]').value;
 	heritageKeywordSearchDetail(ccbaKdcd, ccbaAsno, ccbaCtcd)
 		.then(data => {
-			if(data !== null){
+			if (data !== null) {
 				marker.setMap(null);
 				infowindow.close();
-				detailContentLoad(data);				
+				detailContentLoad(data);
+				let menuicon = document.getElementById('menuicon');
+				if (menuicon.checked == true) {
+					menuicon.click();
+				}
 			} else {
 				alert(`문화재청에서 데이터를 정상적으로 조회하지 못했습니다\n잠시 후 다시 시도해주세요`);
 			}
@@ -180,6 +179,32 @@ function detailContent(event) {
 		.catch(error => {
 			alert(`관리자에게 문의해주세요\n${error}`);
 		})
+}
+
+function handleParagraphClick(event) {
+	event.stopPropagation();
+	let targetParagraph = event.target;
+	let parentButton = targetParagraph.closest('.detail-link');
+	let ccbaKdcd = parentButton.querySelector('input[name="ccbaKdcd"]').value;
+	let ccbaAsno = parentButton.querySelector('input[name="ccbaAsno"]').value;
+	let ccbaCtcd = parentButton.querySelector('input[name="ccbaCtcd"]').value;
+	heritageKeywordSearchDetail(ccbaKdcd, ccbaAsno, ccbaCtcd)
+		.then(data => {
+			if (data !== null) {
+				marker.setMap(null);
+				infowindow.close();
+				detailContentLoad(data);
+				let menuicon = document.getElementById('menuicon');
+				if (menuicon.checked == true) {
+					menuicon.click();
+				}
+			} else {
+				alert(`문화재청에서 데이터를 정상적으로 조회하지 못했습니다\n잠시 후 다시 시도해주세요`);
+			}
+		})
+		.catch(error => {
+			alert(`관리자에게 문의해주세요\n${error}`);
+		});
 }
 
 // 마커 클릭 시 마커 지워짐

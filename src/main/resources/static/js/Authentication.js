@@ -96,8 +96,17 @@ if (lostMyPasswordChangeButton !== null) {
 		window.open("changeMyPassword", "changeMyPassword.html", "width=" + width + ", height=" + height + ", left=" + left + ", top=" + top);
 	})
 }
+// 상단 네비 바 로그인 버튼 클릭 시 사이드바 닫기
+let navLoginButton = document.querySelector('.navLoginBtn');
+if (navLoginButton !== null) {
+	navLoginButton.addEventListener('click', () => {
+		if (menuicon.checked == true) {
+			menuicon.click();
+		}
+	})
+}
 
-// 어사이드 바에서 로그인 버튼 눌렀을 시 사이드바 닫기
+// 오른쪽 사이드 바 로그인 버튼 클릭 시 사이드바 닫기
 let logbtnButton = document.querySelector('.offcanvasLogin');
 if (logbtnButton !== null) {
 	logbtnButton.addEventListener('click', () => {

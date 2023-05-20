@@ -119,7 +119,20 @@ export function detailContentLoad(data) {
 	let infowindowCloseButton = document.querySelector('.infowindowClose');
 	infowindowCloseButton.addEventListener('click', () => {
 		markerClose();
+		let menuicon = document.getElementById('menuicon');
+		if (menuicon.checked == false) {
+			menuicon.click();
+		}
 	})
+	document.addEventListener('keydown', (event) => {
+		if (event.key === 'Escape') {
+			markerClose();
+			let menuicon = document.getElementById('menuicon');
+			if (menuicon.checked == false) {
+				menuicon.click();
+			}
+		}
+	});
 	//로그인 후 리뷰쓰기 클릭시 로그인 창 호출
 	let loginPleaseButton = document.querySelector('.loginPlease');
 	if (loginPleaseButton !== null) {

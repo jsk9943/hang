@@ -63,11 +63,20 @@ html, body {
 }
 
 .shabsolute {
-	/* 검색창 돋보기*/
 	position: absolute;
-	width: 17px;
-	top: 10px;
+	width: 20px;
+	top: 8px;
 	right: 12px;
+}
+
+.searchButtondiv{
+	text-align:center;
+	
+}
+
+.shabsolute2 {
+	margin-right:40%;
+	width: 50px;
 }
 
 /*로그인/회원가입 버튼 사이즈 (li안에 싸여있음)*/
@@ -332,55 +341,31 @@ hr[role="tournament2"]::before {
 
 /*검색결과 스크롤바 디자인*/
 .scrollBarDesign::-webkit-scrollbar {
-	width: 5px; /* 스크롤바의 너비 */
-	border-radius: 25px;
+	width: 8px; /* 스크롤바의 너비 */
+	border-radius: 2px;
 }
 
 .scrollBarDesign::-webkit-scrollbar-thumb {
 	background: rgb(140, 145, 236); /* 스크롤바의 색상 */
-	border-radius: 25px;
+	border-radius: 2px;
 }
 
 .scrollBarDesign::-webkit-scrollbar-track {
 	background-color: #575757; /*스크롤바 뒷 배경 색상*/
-	border-radius: 25px;
+	border-radius: 2px;
 }
 
 /*검색결과 div 박스 디자인*/
-#searchResult>div { /* 결과 1개 당 */
-	border: 1px solid black;
-	margin-bottom: 20px;
-	padding: 10px;
-}
-
-#searchResult>div>p:nth-child(1) { /* 타이틀 */
-	font-size: 1.2em;
-	font-weight: bold;
-}
-
-#searchResult>div>p { /* 내용 */
-	margin-bottom: 5px;
-}
-
-#searchResult>div>a { /* 자세히보기 */
-	border: 1px solid rgb(223, 228, 239);
-	background-color: rgb(190, 205, 238);
-	color: rgb(140, 145, 236);
+.detail-link { /* 지도에 핀 찍고 자세히 보기 */
+	margin:0 auto;
+	width:95%;
 	padding: 5px 10px;
-	text-decoration: none;
 	border-radius: 10px;
+	margin-bottom:10px;
 }
 
-#searchResult>div>a:hover { /* 자세히보기 */
-	color: red;
-	border: 1px solid rgb(140, 145, 236);
-	background-color: rgb(140, 145, 236);
-	padding: 5px 10px;
-	font-weight: bold;
-}
-
-.reviewbackimg:hover {
-	background-image: url("../img/backimg.png");
+.card-header{
+  margin-bottom:10px;
 }
 
 /*회원가입 입력창 변화*/
@@ -426,7 +411,15 @@ hr[role="tournament2"]::before {
 		font-family: 'moonhwa';
 		src: url('font/moonhwa-bold.woff') format('truetype');
 	}
+
+	.searchButtondiv{
+		width:5%;
+	}
 	
+	.shabsolute2 {
+		width:100% ;
+	}
+
 	.hangnav {
 		/*nav바 전체 : hang_01 */
 		z-index: 9999;
