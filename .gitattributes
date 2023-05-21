@@ -1,4 +1,5 @@
 * linguist-vendored
+* linguist-documentation=false
 *.java linguist-vendored=false
 *.JavaScript linguist-vendored=false
 *.html linguist-vendored=false
