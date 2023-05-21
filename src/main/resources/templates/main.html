@@ -9,6 +9,7 @@
 		<link th:href="@{/css/main.css}" rel="stylesheet" />
 		<link th:href="@{/css/star.css}" rel="stylesheet" />
 		<link th:href="@{/css/map.css}" rel="stylesheet" />
+		<link th:href="@{/css/notice.css}" rel="stylesheet" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type="text/javascript" th:src="@{/js/main.js}" defer></script>
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -24,6 +25,7 @@
 		<script type="module" th:src="@{/js/bookMark.js}" defer></script>
 		<script type="text/javascript" th:src="@{/js/admin.js}" defer></script>
 		<script type="text/javascript" th:src="@{/js/visitorCount.js}" defer></script>
+		<script type="text/javascript" th:src="@{/js/notice.js}" defer></script>
 		<title>Hang, 문화재의 길을 따라..</title>
 	</head>
 	<body>
@@ -33,6 +35,9 @@
 		    <nav th:if="${session.member == null}" id="nav-default" th:insert="~{fragments/nav :: nav}" th:onclick="sessionStorageClear()"></nav>
 		    <nav th:if="${session.member != null}" id="nav-login" th:insert="~{fragments/loginnav :: loginnav}"></nav>
 		  </div>
+		</div>
+		
+		<div class="notice-container">
 		</div>
 		
 		<div class="rightsidebar" style="z-index: 9999; position: relative;">

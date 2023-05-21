@@ -1,0 +1,264 @@
+<div th:fragment="noticeChangePage">
+	<div class="notice-container" style="width: 70%; margin: 0 auto;">
+		<div class="mb-3">
+			<label for="previousNoticeDate" class="form-label">이전 공지일자</label> <input
+				type="text" class="form-control" id="previousNoticeDate" disabled>
+		</div>
+		<div class="mb-3">
+			<label for="previousNoticeTitle" class="form-label">이전 공지제목</label> <input
+				type="text" class="form-control" id="previousNoticeTitle" disabled>
+		</div>
+		<div class="mb-3">
+			<label for="previousNoticeContents" class="form-label">이전
+				공지내용</label>
+			<textarea class="form-control" id="previousNoticeContents" rows="4"
+				disabled></textarea>
+		</div>
+		<div class="mb-3 row justify-content-end">
+			<div class="mb-3 col-2">
+				<label for="previousNoticeUse" class="form-label"
+					style="font-size: 0.8em;">현재 사용여부</label> <input type="text"
+					class="form-control" id="previousNoticeUse" disabled>
+			</div>
+		</div>
+		<button type="button" class="btn btn-danger previousNoticeStop"
+			style="float: right; margin-right: 5%;">사용중지</button>
+		<button type="button" class="btn btn-warning previousNoticeReuse"
+			style="float: right; margin-right: 1%;">재사용</button>
+
+		<div class="mb-3" style="margin-top: 10%;">
+			<label for="previousNoticeDate" class="form-label">신규 공지일자</label> <input
+				type="text" class="form-control" id="newNoticeDate" disabled>
+		</div>
+		<div class="mb-3">
+			<label for="noticeTitle" class="form-label">신규 공지제목</label> <input
+				type="text" class="form-control" id="newNoticeTitle">
+		</div>
+		<div class="mb-3">
+			<label for="noticeContents" class="form-label">신규 공지내용</label>
+			<textarea class="form-control" id="newNoticeContents" rows="4"></textarea>
+		</div>
+		<button type="button" class="btn btn-primary noticeSend"
+			style="float: right; margin-right: 5%; margin-bottom:10%;">전송</button>
+			
+			<div class="toast-container bottom-50 d-flex justify-content-center align-items-center w-100">
+		      <div id="noticeChangeToast" class="toast" role="alert"
+		        aria-live="assertive" aria-atomic="true">
+		        <div class="toast-header">
+		          <strong class="me-auto">최종확인</strong>
+		          <button type="button" class="btn-close"
+		            data-bs-dismiss="toast" aria-label="Close"></button>
+		        </div>
+		        <div class="toast-body">
+		          공지사항을 신규등록 하시겠습니까?<br>
+		          <button type="button" class="btn btn-danger btn-sm"
+		            id="finalNoticeChangeButton" data-bs-dismiss="modal">등록</button>
+		          <button type="button" class="btn btn-secondary btn-sm"
+		            data-bs-dismiss="toast"
+		            id="noticeChangeToastCloseButton">닫기</button>
+		        </div>
+		      </div>
+		    </div>
+
+
+		<script type="text/javascript">
+  	function noticeAdminidConfirm(fetchData) {
+  		return fetch('/admin/notice',{
+	  			method: 'POST',
+	  	        headers: { "Content-Type": "application/json" },
+	  	        body: JSON.stringify(fetchData)
+	  		})
+		  		.then(response => {
+		          return response.text();
+	        	})
+  	}
+  	let noticeChangeAdminid = sessionStorage.getItem('userid');
+  	let adminIdData = {
+            "adminid": noticeChangeAdminid
+    }
+  	document.querySelector('#noticeChangeButton').addEventListener('click', () => {
+	  	noticeAdminidConfirm(adminIdData)
+	  	.then(data => {
+	  		if(data === 'Y') {
+	  			fetch('/notice/show', {
+	  				method: 'GET'
+	  			})
+	  				.then(response => {
+	  					return response.json();
+	  				})
+	  				.then(data => {
+	  					let today = new Date();
+	  					let year = today.getFullYear();
+	  					let month = String(today.getMonth() + 1).padStart(2, '0');
+	  					let day = String(today.getDate()).padStart(2, '0');
+	  					let formattedDate = `${year}-${month}-${day}`;
+	  					let previousNoticeDateInput = document.querySelector('#previousNoticeDate');
+	  					let previousNoticeTitleInput = document.querySelector('#previousNoticeTitle');
+	  					let previousNoticeContentsInput = document.querySelector('#previousNoticeContents');
+	  					let previousNoticeUseInput = document.querySelector('#previousNoticeUse');
+	  					let newNoticeDateInput = document.querySelector('#newNoticeDate');
+	  					previousNoticeDateInput.disabled = false;
+	  					previousNoticeTitleInput.disabled = false;
+	  					previousNoticeContentsInput.disabled = false;
+	  					previousNoticeUseInput.disabled = false;
+	  					newNoticeDateInput.disabled = false;
+	  					previousNoticeDateInput.value = data.stringConvertNoticeDate;
+	  					previousNoticeTitleInput.value = data.noticeTitle;
+	  					previousNoticeContentsInput.value = data.noticeContents;
+	  					previousNoticeUseInput.value = data.noticeUse;
+	  					newNoticeDateInput.value = formattedDate;
+	  					previousNoticeDateInput.disabled = true;
+	  					previousNoticeTitleInput.disabled = true;
+	  					previousNoticeContentsInput.disabled = true;
+	  					previousNoticeUseInput.disabled = true;
+	  					newNoticeDateInput.disabled = true;
+	  				})
+	  				.catch(error => {
+						alert(`공지를 가져오는 도중 오류가 발생하였습니다\n관리자에게 문의해주세요\n${error}`)
+					})
+	  		}
+	  	})
+	  	.catch(error => {
+			alert(`접근불가\n${error}`)
+		})
+  	})
+  	
+  	function stopNoticeShowFetch() {
+		return fetch('/notice/show/stop.do', {
+			method: 'GET'
+		})
+				.then(response => {
+					return response.text();
+				})
+	}
+  	let previousNoticeStopButton = document.querySelector('.previousNoticeStop');
+  	if (previousNoticeStopButton !== null) {
+  		previousNoticeStopButton.addEventListener('click', () => {
+  			noticeAdminidConfirm(adminIdData)
+  		  	.then(data => {
+  		  		if(data === 'Y') {
+		  			stopNoticeShowFetch()
+		  				.then(data => {
+		  					if (data === 'true') {
+		  						alert('공지가 중단되었습니다')
+		  						location.reload();
+		  					} else if (data === 'false') {
+		  						alert('공지는 게시되어 있지 않습니다')
+		  					}
+		  				})
+		  				.catch(error => {
+		  					alert(`공지 게시를 중단하던 도중 오류가 발생하였습니다\n관리자에게 문의해주세요\n${error}`)
+		  				})  		  			
+  		  		}
+  			})
+  		})
+  	}
+  	
+  	function showPreviousNoticeReuseFetch(fetchData) {
+  		return fetch('/notice/show/reuse.do',{
+  			method: 'POST',
+  			headers: {
+  				"Content-Type": "application/json"
+  			},
+  			body: JSON.stringify(fetchData)
+  		})
+  			.then(response => {
+  				return response.text();
+  			})
+  	}
+  	let previousNoticeReuseButton = document.querySelector('.previousNoticeReuse');
+  	if (previousNoticeReuseButton !== null) {
+  		previousNoticeReuseButton.addEventListener('click', () => {
+  			let previousNoticeDateValue = document.querySelector('#previousNoticeDate').value;
+			let previousNoticeTitleValue = document.querySelector('#previousNoticeTitle').value;
+			let previousNoticeContentsValue = document.querySelector('#previousNoticeContents').value;
+			let previousNoticeUseValue = document.querySelector('#previousNoticeUse').value;
+			if(previousNoticeUseValue === "Y") {
+				alert('현재 사용중인 공지로 재사용 신청은 불가능합니다');
+				return;
+			} else {
+				let fetchData = [{
+						"noticeDate" : previousNoticeDateValue,
+						"noticeTitle" : previousNoticeTitleValue,
+						"noticeContents" : previousNoticeContentsValue
+				}]
+				noticeAdminidConfirm(adminIdData)
+			  	.then(data => {
+			  		if(data === 'Y') {
+						showPreviousNoticeReuseFetch(fetchData)
+							.then(data => {
+								if(data === 'true') {
+									alert('정상적으로 재사용 신청이 되어 공지사항이 게시되었습니다');
+									location.reload();
+								} else if(data === 'false') {
+									alert('재사용 신청이 실패하였습니다')
+								}
+							})
+							.catch(error => {
+								alert(`재사용 신청 도중 오류가 발생하였습니다\n관리자에게 문의해주세요\n${error}`)
+							})
+			  		}
+				})
+  			}
+  		})
+  	}
+  	
+  	function newNoticeInsertFetch(fetchData){
+  		return fetch('/notice/show',{
+  			method: 'POST',
+  			headers: {
+  				"Content-Type": "application/json"
+  			},
+  			body: JSON.stringify(fetchData)
+  		})
+  			.then(response => {
+  				return response.text();
+  			})
+  	}
+  	let noticeChangeToast = document.querySelector('#noticeChangeToast');
+  	let noticeSendButton = document.querySelector('.noticeSend');
+  	if(noticeSendButton !== null){
+  		noticeSendButton.addEventListener('click', () => {
+  			let finalNoticeToast = bootstrap.Toast.getOrCreateInstance(noticeChangeToast);
+  			finalNoticeToast.show();
+  		})
+  	}
+  	let finalNoticeChangeButton = document.querySelector('#finalNoticeChangeButton');
+  	if(finalNoticeChangeButton !== null){
+  		finalNoticeChangeButton.addEventListener('click', () => {
+  			let newNoticeDateValue = document.querySelector('#newNoticeDate').value;
+			let newNoticeTitleValue = document.querySelector('#newNoticeTitle').value;
+			let newNoticeContentsValue = document.querySelector('#newNoticeContents').value;
+			let fetchData = [{
+				"noticeDate" : newNoticeDateValue,
+				"noticeTitle" : newNoticeTitleValue,
+				"noticeContents" : newNoticeContentsValue
+			}]
+  			console.log(fetchData)
+			noticeAdminidConfirm(adminIdData)
+		  	.then(data => {
+		  		if(data === 'Y') {
+					newNoticeInsertFetch(fetchData)
+						.then(data => {
+							if(data === 'true') {
+								alert('신규 공지사항이 등록되었습니다');
+								document.querySelector('#noticeChangeToastCloseButton').click();
+								location.reload();
+							} else if(data === 'false') {
+								alert('공지사항 등록에 실패하였습니다')
+								document.querySelector('#noticeChangeToastCloseButton').click();
+							}
+						})
+						.catch(error => {
+							alert(`등록 도중 오류가 발생하였습니다\n관리자에게 문의해주세요\n${error}`)
+						})
+		  		}
+		  	})
+  		})
+  	}
+  	
+  	
+  	
+  </script>
+	</div>
+</div>

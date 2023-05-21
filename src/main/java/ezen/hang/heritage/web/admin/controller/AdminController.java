@@ -119,4 +119,16 @@ public class AdminController {
 		}
 		return result;
 	}
+	
+	/**
+	 * 공지사항 사용 전 관리자 권한 유무 체크
+	 */
+	@PostMapping("/notice")
+	public String adminIdConfirm(@RequestBody Map<String, Object> adminId) {
+		String result = null;
+		try {
+			result = adminService.adminIdConfirm(adminId);
+		} catch (Exception e) {}
+		return result;
+	}
 }

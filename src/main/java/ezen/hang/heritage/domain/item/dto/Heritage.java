@@ -5,10 +5,12 @@ package ezen.hang.heritage.domain.item.dto;
  */
 
 public class Heritage {
+	
     private String sn, no, ccbaKdcd, ccbaAsno, ccbaCtcd, ccbaCpno, longitude, latitude,
     			   ccmaName, crltsnoNm, ccbaMnm1, ccbaMnm2, gcodeName, bcodeName, mcodeName,
     			   scodeName, ccbaQuan, ccbaAsdt, ccbaCtcdNm, ccsiName, ccbaLcad, ccceName,
     			   ccbaPoss, ccbaAdmin, ccbaCncl, ccbaCndt, imageUrl, content;
+    
 	private CommentStarRate starRate;
 	
 	public Heritage() {

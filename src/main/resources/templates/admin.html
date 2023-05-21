@@ -32,7 +32,7 @@
 								<a class="nav-link" type="button" id="userForcedWithdrawalbutton">강제탈퇴</a>
 							</li>
 							<li class="nav-item" style="width: 25%; text-align: center;">
-								<a class="nav-link" type="button">차단유저</a>
+								<a class="nav-link" type="button" id="noticeChangeButton">공지사항</a>
 							</li>
 						</ul>
 					</div>
@@ -43,5 +43,6 @@
 		<div id="commentPage" th:insert="~{fragments/commentManage :: commentManagePage}" style="display:none;"></div>
 		<div id="adminAuthorityPage" th:insert="~{fragments/userAuthority :: userAuthorityPage}" style="display:none;"></div>
 		<div id="userForcedWithdrawalPage" th:insert="~{fragments/userForcedWithdrawal :: userForcedWithdrawalPage}" style="display:none;"></div>
+		<div id="noticeChangePage" th:insert="~{fragments/noticeChange :: noticeChangePage}" style="display:none;"></div>
 	</body>
 </html>

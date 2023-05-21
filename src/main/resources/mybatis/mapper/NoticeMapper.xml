@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ezen.hang.heritage.domain.notice.mapper.NoticeMapper">
+	<select id="noticeCount" resultType="int">
+		SELECT COUNT(*) FROM NOTICE;
+	</select>
+
+	<select id="showPreviousNotice" resultType="Notice">
+		SELECT *
+		FROM NOTICE
+		ORDER BY noticeNum DESC
+		LIMIT 1;
+	</select>
+	
+	<update id="noticeShowStop">
+		UPDATE NOTICE
+		SET noticeUse = 'N'
+		WHERE noticeUse = 'Y';
+	</update>
+	
+	<update id="showPreviousNoticeReuse" parameterType="Notice">
+		UPDATE NOTICE
+		SET noticeDate = #{noticeDate},
+		    noticeTitle = #{noticeTitle},
+		    noticeContents = #{noticeContents},
+		    noticeUse = #{noticeUse}
+		WHERE noticeDate = #{noticeDate}
+			AND noticeTitle = #{noticeTitle}
+			AND noticeContents = #{noticeContents};
+	</update>
+	
+	<insert id="newNoticeInsert" parameterType="Notice">
+		INSERT INTO NOTICE (noticeNum, noticeDate, noticeTitle, noticeContents, noticeUse)
+		VALUES (#{noticeNum}, NOW(), #{noticeTitle}, #{noticeContents}, 'Y');
+	</insert>
+	
+</mapper>
+
+	
+	

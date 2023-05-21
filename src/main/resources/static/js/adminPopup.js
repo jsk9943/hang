@@ -5,15 +5,18 @@ let adminid = sessionStorage.getItem('userid'); //접속한 아이디
 let commentPageButton = document.querySelector('#commentPageButton'); // 댓글 페이지 보기 버튼
 let userAuthorityButton = document.querySelector('#userAuthorityButton'); // 권한 페이지 보기 버튼
 let userForcedWithdrawalbuttonButton = document.querySelector('#userForcedWithdrawalbutton'); // 강제탈퇴 페이지 보기 버튼
+let noticeChangeButton = document.querySelector('#noticeChangeButton'); // 강제탈퇴 페이지 보기 버튼
 let commentPageDiv = document.querySelector('#commentPage'); // 댓글 페이지
 let adminAuthorityPageDiv = document.querySelector('#adminAuthorityPage'); // 권한 페이지
-let userForcedWithdrawalPageDiv = document.querySelector('#userForcedWithdrawalPage'); // 권한 페이지
+let userForcedWithdrawalPageDiv = document.querySelector('#userForcedWithdrawalPage'); // 강제탈퇴 페이지
+let noticeChangePageDiv = document.querySelector('#noticeChangePage'); // 공지사항 페이지
 // commentPageButton 버튼 클릭 시 commentPage 보이게 처리
 if (commentPageButton !== null) {
 	commentPageButton.addEventListener('click', () => {
 		commentPageDiv.style.display = 'block';
 		adminAuthorityPageDiv.style.display = 'none';
 		userForcedWithdrawalPageDiv.style.display = 'none';
+		noticeChangePageDiv.style.display = 'none';
 		let fetchData = {
 			"adminid": commentAdminId
 		}
@@ -26,6 +29,7 @@ if (userAuthorityButton !== null) {
 		commentPageDiv.style.display = 'none';
 		adminAuthorityPageDiv.style.display = 'block';
 		userForcedWithdrawalPageDiv.style.display = 'none';
+		noticeChangePageDiv.style.display = 'none';
 		let fetchData = {
 			"adminid": userAuthorityAdminId
 		}
@@ -38,13 +42,22 @@ if (userForcedWithdrawalbuttonButton !== null) {
 		commentPageDiv.style.display = 'none';
 		adminAuthorityPageDiv.style.display = 'none';
 		userForcedWithdrawalPageDiv.style.display = 'block';
+		noticeChangePageDiv.style.display = 'none';
 		let fetchData = {
 			"adminid": userForcedWithdrawalAdminId
 		}
 		userForcedWithdrawalTableStart(fetchData);
 	});
 }
-
+// noticeChangeButton 버튼 클릭 시 noticeChangePage 보이게 처리
+if (noticeChangeButton !== null) {
+	noticeChangeButton.addEventListener('click', () => {
+		commentPageDiv.style.display = 'none';
+		adminAuthorityPageDiv.style.display = 'none';
+		userForcedWithdrawalPageDiv.style.display = 'none';
+		noticeChangePageDiv.style.display = 'block';
+	});
+}
 
 
 

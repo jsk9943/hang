@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>공지사항</title>
+</head>
+
+<body>
+  <div>
+    <h3 class="date"></h3>
+    <hr>
+    <p style="font-size:1.2em; font-weight: bold;">공지 제목</p>
+    <p class="title" style="font-size:1.2em;"></p>
+    <hr>
+    <p style="font-size:1em; font-weight: bold;">공지 내용</p>
+    <p class="contents" style="font-size:1em;"></p>
+  </div>
+
+  <script>
+    const queryString = window.location.search;
+    console.log(queryString)
+    const urlParams = new URLSearchParams(queryString);
+
+    const noticeDate = urlParams.get('stringConvertNoticeDate');
+    const noticeTitle = urlParams.get('noticeTitle');
+    const noticeContents = urlParams.get('noticeContents');
+
+    const dateElement = document.querySelector('.date');
+    const titleElement = document.querySelector('.title');
+    const contentsElement = document.querySelector('.contents');
+
+    dateElement.textContent = `공지 게시일 ${noticeDate}`;
+    titleElement.textContent = noticeTitle;
+    contentsElement.textContent = noticeContents;
+  </script>
+</body>
+
+</html>

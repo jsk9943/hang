@@ -48,6 +48,12 @@ public class WebController {
 		return "introducePage";
 	}
 	
+	//공지사항 페이지
+	@GetMapping("/notice")
+	public String noticePage() {
+		return "notice";
+	}
+	
 	//방문자 쿠키 유무에 따른 카운터 세기
 	@PostMapping("/visitor")
 	@ResponseBody

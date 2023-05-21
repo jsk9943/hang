@@ -155,4 +155,13 @@ public class AdminServiceImpl implements AdminService {
 		}
 	}
 
+	/**
+	 * 공지사항 사용 전 관리자 권한 유무 체크
+	 */
+	@Override
+	public String adminIdConfirm(Map<String, Object> adminId) throws Exception {
+		String adminid = adminId.get("adminid").toString();
+		return adminMapper.adminIdConfirm(adminid);
+	}
+
 }

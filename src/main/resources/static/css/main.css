@@ -405,7 +405,7 @@ hr[role="tournament2"]::before {
 	bottom:10px; 
 	background-color: rgb(255,255,255); 
 	border-radius: 10px; 
-	z-index: 11000;
+	z-index: 5;
 	width:5%;
 }
 

@@ -1,0 +1,26 @@
+.notice-container {
+	position: fixed;
+	top: 7vh;
+	width: 100%;
+	overflow: hidden;
+	background-color: rgba(0, 0, 0, 0.2);
+	cursor: pointer;
+	z-index: 9999;
+}
+
+.notice-container:hover a {
+	color: red;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.notice-text {
+	display: inline-flex;
+	white-space: nowrap;
+	animation: marquee 10s linear infinite;
+}
+
+.notice-text>a {
+	text-decoration: none;
+	color: black;
+}

@@ -5,6 +5,7 @@ import java.util.Map;
 
 
 
+
 /**
  * 회원 관련 비즈니스 메소드 선언
  */
@@ -39,4 +40,9 @@ public interface AdminService {
 	public List<Map<String, Object>> keywordUserForcedWithdrawalFind(Map<String, Object> keyword) throws Exception;
 	
 	public void deleteUserForcedWithdrawal(Map<String, Object> useridData) throws Exception;
+	
+	/**
+	 * 공지사항 사용 전 관리자 권한 유무 체크
+	 */
+	public String adminIdConfirm(Map<String, Object> adminId) throws Exception;
 }
