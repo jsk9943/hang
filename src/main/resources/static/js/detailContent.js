@@ -8,12 +8,12 @@ export function detailContentLoad(data) {
 	let moveLatLon; // 마커 이동할 좌표
 	if (markerLongitude === 0) {
 		moveLatLon = new kakao.maps.LatLng(37.559975, 126.975312);
-		var markerImage2 = new kakao.maps.MarkerImage('./img/koreaimg.png', new kakao.maps.Size(35, 35));
+		var markerImage2 = new kakao.maps.MarkerImage('./icon/koreaicon.png', new kakao.maps.Size(35, 35));
 		// 마커 이미지 변경
 		marker.setImage(markerImage2);
 	} else {
 		moveLatLon = new kakao.maps.LatLng(markerLatitude, markerLongitude);
-		var markerImage = new kakao.maps.MarkerImage('./img/ping.gif', new kakao.maps.Size(35, 35));
+		var markerImage = new kakao.maps.MarkerImage('./icon/ping.gif', new kakao.maps.Size(35, 35));
 		marker.setImage(markerImage);
 	}
 	marker.setPosition(moveLatLon);

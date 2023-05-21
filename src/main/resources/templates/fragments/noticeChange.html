@@ -15,10 +15,12 @@
 				disabled></textarea>
 		</div>
 		<div class="mb-3 row justify-content-end">
-			<div class="mb-3 col-2">
+			<div class="mb-3 col-3 d-flex">
 				<label for="previousNoticeUse" class="form-label"
-					style="font-size: 0.8em;">현재 사용여부</label> <input type="text"
-					class="form-control" id="previousNoticeUse" disabled>
+					style="font-size: 0.8em;">현재 사용여부</label>
+				<div class="previousNoticeUseIcon ms-auto" style="width:20%;">
+				</div>
+				<input type="hidden" id="previousNoticeUse" value="">
 			</div>
 		</div>
 		<button type="button" class="btn btn-danger previousNoticeStop"
@@ -95,23 +97,35 @@
 	  					let previousNoticeDateInput = document.querySelector('#previousNoticeDate');
 	  					let previousNoticeTitleInput = document.querySelector('#previousNoticeTitle');
 	  					let previousNoticeContentsInput = document.querySelector('#previousNoticeContents');
-	  					let previousNoticeUseInput = document.querySelector('#previousNoticeUse');
+	  					let previousNoticeUseValue = document.querySelector('#previousNoticeUse');
 	  					let newNoticeDateInput = document.querySelector('#newNoticeDate');
 	  					previousNoticeDateInput.disabled = false;
 	  					previousNoticeTitleInput.disabled = false;
 	  					previousNoticeContentsInput.disabled = false;
-	  					previousNoticeUseInput.disabled = false;
 	  					newNoticeDateInput.disabled = false;
 	  					previousNoticeDateInput.value = data.stringConvertNoticeDate;
 	  					previousNoticeTitleInput.value = data.noticeTitle;
 	  					previousNoticeContentsInput.value = data.noticeContents;
-	  					previousNoticeUseInput.value = data.noticeUse;
+	  					previousNoticeUseValue.value = data.noticeUse;
 	  					newNoticeDateInput.value = formattedDate;
 	  					previousNoticeDateInput.disabled = true;
 	  					previousNoticeTitleInput.disabled = true;
 	  					previousNoticeContentsInput.disabled = true;
-	  					previousNoticeUseInput.disabled = true;
 	  					newNoticeDateInput.disabled = true;
+	  					let previousNoticeUseIconDiv = document.querySelector('.previousNoticeUseIcon');
+	  					if(previousNoticeUseValue.value === 'Y'){
+	  						previousNoticeUseIconDiv.innerHTML = '';
+		  					let previousNoticeUseIconDom = `
+		  						<img alt="사용여부_아이콘" src="./icon/OKicon.png" style="width:100%;">
+		  					`;
+		  					previousNoticeUseIconDiv.innerHTML += previousNoticeUseIconDom;
+	  					} else if(previousNoticeUseValue.value === 'N'){
+	  						previousNoticeUseIconDiv.innerHTML = '';
+		  					let previousNoticeUseIconDom = `
+		  						<img alt="사용여부_아이콘" src="./icon/Xicon.png" style="width:100%;">
+		  					`;
+		  					previousNoticeUseIconDiv.innerHTML += previousNoticeUseIconDom;
+	  					}
 	  				})
 	  				.catch(error => {
 						alert(`공지를 가져오는 도중 오류가 발생하였습니다\n관리자에게 문의해주세요\n${error}`)
