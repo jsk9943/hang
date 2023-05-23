@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ezen.hang.heritage.domain.visitor.mapper.VisitorMapper">
+
 	<select id="dayVisitorExiste" parameterType="map" resultType="map">
 		SELECT visit_date, visitor_count, visitor_totalcount
         FROM VISITORCOUNT

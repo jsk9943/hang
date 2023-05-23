@@ -1,14 +1,22 @@
 package ezen.hang.heritage.domain.item.service;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.imageio.ImageIO;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -149,14 +157,36 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	@Override
-	public ResponseEntity<UrlResource> getImage(String filename) throws Exception {
+	public ResponseEntity<ByteArrayResource> getImage(String filename) throws Exception {
 		UrlResource resource = new UrlResource("file:/userfile/" + filename);
 		if (resource.exists() && resource.isReadable()) {
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.IMAGE_PNG);
-			return ResponseEntity.ok().headers(headers).body(resource);
+	        BufferedImage image = ImageIO.read(resource.getInputStream());
+	        int width = image.getWidth() / 2;
+	        int height = image.getHeight() / 2;
+	        BufferedImage resizedImage = new BufferedImage(width, height, image.getType());
+	        Graphics2D g2d = resizedImage.createGraphics();
+	        g2d.drawImage(image, 0, 0, width, height, null);
+	        g2d.dispose();
+	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+	        Path path = Paths.get(filename);
+	        String extension = "";
+	        if (filename.contains(".")) {
+	            extension = path.getFileName().toString().substring(filename.lastIndexOf(".") + 1);
+	        }
+	        
+	        if (extension.equalsIgnoreCase("png")) {
+	            ImageIO.write(resizedImage, "png", baos);
+	        } else if (extension.equalsIgnoreCase("jpg") || extension.equalsIgnoreCase("jpeg")) {
+	            ImageIO.write(resizedImage, "jpg", baos);
+	        }
+	        
+	        byte[] imageBytes = baos.toByteArray();
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.setContentType(MediaType.IMAGE_PNG);
+	        return ResponseEntity.ok().headers(headers).body(new ByteArrayResource(imageBytes));
 		} else {
-			throw new RuntimeException("Could not read image file: " + filename);
+			throw new RuntimeException(filename);
 		}
 	}
 

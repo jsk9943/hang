@@ -49,14 +49,17 @@ body {
   box-sizing: border-box;
 }
 
-.slide-content p {
+.title {
+  line-height: 25px;
+  font-family:'moonhwa';
   margin: 0;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  text-shadow: 4px 4px 4px rgb(0, 0, 0);
 }
 
-.subtitle-subject{
-  padding:20px;
+.subtitle{
+  line-height: 10px;
   font-size:0.4em;
+  text-shadow: 4px 4px 4px rgb(0, 0, 0);
 }
 
 .start-button {

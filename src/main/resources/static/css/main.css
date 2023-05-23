@@ -52,9 +52,14 @@ html, body {
 	position: fixed;
 	top: 0;
 	left: 0;
-	height: 7vh;
+	height: 10vh;
 	font-family: 'moonhwa';
 	box-shadow: 0px 3px 3px rgb(98, 107, 233);
+}
+
+.siteLogo {
+	width: 4vw;
+    margin: 0 auto;
 }
 
 .hangsearch {
@@ -62,29 +67,47 @@ html, body {
 	position: relative;
 }
 
-.shabsolute {
-	position: absolute;
-	width: 20px;
-	top: 8px;
-	right: 12px;
+.switchDiv {
+	background-color:transparent;
+	overflow:hidden;
+	width:50%;
+	margin-left:15%;
+	border:none;
+	display: flex;
+	align-items: center;
+	padding:10px 5px;
 }
 
-.searchButtondiv{
+#menuicon {
+	position:relative;
+	padding:15px;
+	width:100%;
+	height:100%;
+	margin: 0 auto;
+}
+
+.searchButtondiv {
 	text-align:center;
-	
 }
 
-.shabsolute2 {
-	margin-right:40%;
-	width: 50px;
+#searchInput {
+	line-height: 2;
+	border-radius: 30px;
+}
+
+#searchInput::placeholder {
+  font-size: 1em;
+}
+
+.shabsolute {
+	margin-right:65%;
+	width: 2.5vw;
 }
 
 /*로그인/회원가입 버튼 사이즈 (li안에 싸여있음)*/
 .navbutton {
 	width: 100%;
 	font-size: 0.8vw;
-	letter-spacing:20px;
-	padding-left:40px;
 }
 
 /* 로그인 구역 :hang_03 */
@@ -191,7 +214,7 @@ html, body {
 }
 
 .bug1 {
-	margin-top:7vh;
+	margin-top:10vh;
 	text-align: center;
 	height: 93vh;
 }
@@ -200,7 +223,7 @@ html, body {
 
 /*오른쪽 aside 내부*/
 .bug1_1 {
-	margin-top:7vh;
+	margin-top:10vh;
 	text-align: center;
 	padding: 5px;
 	height: 93vh;
@@ -309,9 +332,10 @@ hr[role="tournament2"]::before {
 
 .sidebar {
 	width: 350px;
-	height: 93%; background : rgb( 223, 228, 239);
+	height: 93vh;
+	background : rgb( 223, 228, 239);
 	position: fixed;
-	top: 7vh;
+	top: 10vh;
 	left: -350px;
 	z-index: 1;
 	transition: all .35s;
@@ -322,12 +346,26 @@ hr[role="tournament2"]::before {
 	text-align: center;
 	background: rgb(223, 228, 239);
 	position: fixed;
-	top: 7vh;
+	top: 10vh;
 	left: -350px;
 	width: 350px;
 	z-index: 2;
 	transition: all .35s;
-	overflow: auto;
+	overflow: hidden;
+	height:8vh;
+	display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchContent {
+  text-align: center;
+}
+
+.searchTitle, #searchCount {
+	white-space: normal;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 #searchCount {
@@ -336,7 +374,7 @@ hr[role="tournament2"]::before {
 
 #searchResult {
 	overflow: auto;
-	height: 100%;
+	height: 82vh;
 }
 
 /*검색결과 스크롤바 디자인*/
@@ -406,23 +444,63 @@ hr[role="tournament2"]::before {
 	background-color: rgb(255,255,255); 
 	border-radius: 10px; 
 	z-index: 5;
-	width:5%;
+	width:5vw;
 }
 
 
 /*==========모바일 nav=========*/
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 500px) {
 	@font-face {
 		font-family: 'moonhwa';
 		src: url('font/moonhwa-bold.woff') format('truetype');
 	}
-
-	.searchButtondiv{
-		width:5%;
+	
+	.siteLogo{
+		display:none;
 	}
 	
-	.shabsolute2 {
-		width:100% ;
+	.switchDiv {
+		background-color:transparent;
+		overflow:hidden;
+		width:100%;
+		margin-left:10%;
+		border:none;
+		display: flex;
+		align-items: center;
+	}
+	
+	#menuicon{
+		position: relative;
+	    padding: 10px;
+	    width: 100%;
+	    height: 100%;
+	    margin: 0 auto;
+	}
+
+	.searchButtondiv{
+		width:8%;
+	}
+	
+	.shabsolute {
+		margin-right:65%;
+		width: 100%;
+	}
+	
+	.nav-pills{
+		width:20%;
+	}
+	
+	.hanglogin{
+		width:49%;
+		padding-right: 0px;
+		white-space: nowrap;
+	}
+	
+	.newgestbtn {
+		width:50%;
+		margin-left:1%;
+	    padding-right: 0px;
+	    white-space: nowrap;
 	}
 
 	.hangnav {
@@ -441,13 +519,38 @@ hr[role="tournament2"]::before {
 		
 	.navbutton {
 		padding:10px;
-		letter-spacing: 0px;
 		font-size: 0.5em;
 		width:100%;
 	}
 	
+	
+	.searchTop {
+		width: 100%;
+    	left:100%;
+	}
+	
+	.sidebar {
+    	width: 100%;
+    	left:100%;
+	}
+	
+	.offcanvas.show:not(.hiding), .offcanvas.showing {
+	    width: 100%;
+	    transform: none;
+	}
+	
+	
+	
+	
+	
 	.visitorToast{
-		width:20%;
+		position:fixed; 
+		right:10px; 
+		bottom:10px; 
+		background-color: rgb(255,255,255); 
+		border-radius: 10px; 
+		z-index: 5;
+		width:15vw;
 	}
 	
 	#visitorCountBtn{
@@ -456,6 +559,3 @@ hr[role="tournament2"]::before {
 }
 
 /*=============================*/
-.form-switch>input {
-	margin: 0 auto;
-}

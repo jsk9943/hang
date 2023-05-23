@@ -51,9 +51,6 @@ export function detailContentLoad(data) {
         <br>
         ${star}
       </div>
-      <div class="scrollBarDesign" style="width:100%; max-height:80px; font-size:0.7em; overflow: auto; border:2px solid rgba(140, 145, 236, 0.5); padding: 1%; text-align: justify;">
-        ${itemContent.replace(/\. /g, ".<br><br>")}
-      </div>
       <div style="font-size: 1em; color:gray; text-align:center;">
       <a type="button" class="btn btn-outline-secondary" id="detailContentButton" style="font-family:'moonhwa'; font-size:0.9em; margin-top:10px; padding:5px 20px;">톺아보기</a>
       </div>
@@ -79,7 +76,7 @@ export function detailContentLoad(data) {
 	geocoder.coord2Address(markerLongitude, markerLatitude, callback);
 
 	// 정보창 출력
-	infowindow.setZIndex(10001);
+	infowindow.setZIndex(10005);
 	infowindow.setContent(content);
 	infowindow.open(map, marker);
 
@@ -242,7 +239,7 @@ export function detailContentLoad(data) {
       <label style="font-weight: bold; font-size:1em; padding-left:10px; font-family:'moonhwa';">문화재 리뷰 사진 올리기</label>
       <div style="padding:20px 20px;">
         <input type="file" id="fileupload" name="file">
-        <p style="color:red; font-size:0.7em;">파일은 최대 10MB을 초과할 수 없습니다 (jpg, png 파일만 가능)</p>
+        <p style="color:red; font-size:0.7em;">파일은 최대 10MB을 초과할 수 없습니다 (JPG, PNG 파일만 가능합니다)</p>
       </div>
       <div class="modal-footer">
         <button id="commentStarpointConfirmButton" class="btn btn-primary" style="width:20%;">등록</button>

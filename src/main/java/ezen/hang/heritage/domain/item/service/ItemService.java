@@ -3,8 +3,7 @@ package ezen.hang.heritage.domain.item.service;
 import java.util.List;
 import java.util.Map;
 
-
-import org.springframework.core.io.UrlResource;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,7 +33,7 @@ public interface ItemService {
 	
 	public void deleteCommentStarRate(List<Map<String, Object>> deleteData) throws Exception;
 	
-	public ResponseEntity<UrlResource> getImage(String filename) throws Exception;
+	public ResponseEntity<ByteArrayResource> getImage(String filename) throws Exception;
 	
 	public void deleteImage(String filename) throws Exception;
 	

@@ -19,7 +19,7 @@ public class VisitorServiceImpl implements VisitorService{
 	private VisitorMapper visitorMapper;
 	
 	@Override
-	public Map<String, Object> dayVisitorExiste(Map<String, Object> todayVisitorData) {
+	public Map<String, Object> dayVisitorExiste(Map<String, Object> todayVisitorData) throws Exception {
 		Map<String, Object> map = new HashMap<>();
 		if(visitorMapper.dayVisitorExiste(todayVisitorData) == null) {
 			Calendar calendar = Calendar.getInstance();

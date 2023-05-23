@@ -1,5 +1,6 @@
 package ezen.hang.heritage.web.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,11 @@ public class WebController {
 	@PostMapping("/visitor")
 	@ResponseBody
 	public Map<String, Object> dayVisitorExiste(@RequestBody Map<String, Object> todayData) {
-		return visitorService.dayVisitorExiste(todayData);
+		Map<String, Object> map = new HashMap<>();
+		try {
+			map.putAll(visitorService.dayVisitorExiste(todayData));
+		} catch (Exception e) {}
+		return map;
 	}
 	
 	@PatchMapping("/visitor/update")

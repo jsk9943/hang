@@ -17,8 +17,10 @@ function setCookie(name, value, days) {
 	let expires = "";
 	if (days) {
 		let date = new Date();
-		date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-		expires = "; expires=" + date.toUTCString();
+		date.setUTCDate(date.getUTCDate() + days);
+		date.setUTCHours(0, 0, 0, 0);
+		let dateString = date.toUTCString(); // UTC 기준의 날짜와 시간을 포함한 문자열
+		expires = "; expires=" + dateString;
 	}
 	document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
@@ -35,16 +37,6 @@ function getCookie(name) {
 	return null;
 }
 
-// 사용자를 식별하는 임의의 키 값을 생성
-function getVisitorKey() {
-	let key = getCookie("visitorKey");
-	if (key === null) {
-		key = generateRandomKey();
-		setCookie("visitorKey", key, 1);
-	}
-	return key;
-}
-
 // 랜덤 키 생성 함수
 function generateRandomKey() {
 	let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -59,23 +51,20 @@ function generateRandomKey() {
 
 // 방문자 수 체크
 function checkVisitorCount() {
-	let visitorKey = getVisitorKey();
-	let visitorCount = getCookie(visitorKey);
 	let todayOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
 	let today = new Date().toLocaleDateString('ko-KR', todayOptions).replaceAll('.', '-').trim();
 	today = today.replace(/-$/, '');
 	let todayData = {
 		"day": today.replace(/\s/g, "")
 	};
-	if (visitorCount === null) {
-		visitorCount = 1;
-		setCookie(visitorKey, visitorCount, 1);
+	if (getCookie("visitorKey") === null) {
 		visitorCountFetch(todayData)
 			.then(data => {
 				if (data !== null && data !== undefined) {
 					plusVisitorCountFetch(todayData)
 						.then(data => {
 							if (data === 'true') {
+								setCookie("visitorKey", generateRandomKey(), 1);
 								visitorCountFetch(todayData)
 									.then(data => {
 										let visitor_count = data.visitor_count;
@@ -95,7 +84,7 @@ function checkVisitorCount() {
 			.catch(error => {
 				alert(`방문자 통계 데이터를 불러오는데 실패하였습니다\n${error}`);
 			})
-	} else {
+	} else if(getCookie("visitorKey") !== null) {
 		visitorCountFetch(todayData)
 			.then(data => {
 				let visitor_count = data.visitor_count;

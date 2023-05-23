@@ -1,11 +1,11 @@
 .notice-container {
 	position: fixed;
-	top: 7vh;
+	top: 10vh;
 	width: 100%;
 	overflow: hidden;
 	background-color: rgba(0, 0, 0, 0.2);
 	cursor: pointer;
-	z-index: 9999;
+	z-index: 500;
 }
 
 .notice-container:hover a {

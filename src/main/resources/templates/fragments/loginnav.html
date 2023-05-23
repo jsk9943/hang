@@ -1,24 +1,25 @@
 <nav th:fragment="loginnav" class="navbar fixed-top hangnav">
-  <div class="col-2">
-	  <div class="form-check form-switch col-1" style="background-color:transparent; overflow:hidden; width:50%; padding:5px 5px; margin:0 auto; margin-left:35%; border:none; display: flex; align-items: center;">
-	    <input style="position:relative; padding:15px; margin:0; width:50%; height:100%;" class="form-check-input" type="checkbox" role="switch" id="menuicon">
+	<div class="col-1 siteLogo">
+	  	<a type="button" onclick="refreshPage(); return false;"><img alt="사이트로고" src="./icon/siteIcon.png" style="width:100%;"></a>
+	</div>
+  <div class="col-1">
+	  <div class="switchDiv form-switch" style="margin-left:0;">
+	    <input class="form-check-input" type="checkbox" role="switch" id="menuicon">
 	  </div>
   </div>
 
-  <div class="col-5 relative hangsearch">
+  <div class="col-6 relative hangsearch">
     <form id="heritagename" method="post">
-      <input id="searchInput" type="text" class="form-control" name="heritagename" placeholder="검색 (지역, 문화재명)" aria-label="Recipient's username" aria-describedby="button-addon2" maxlength="50">
-      <a class="searchButton" role="button"><img class="shabsolute" src="./img/searchIcon.png">
-      </a>
+      <input id="searchInput" type="text" class="form-control" name="heritagename" placeholder="검색 (2개 이상의 단어)" aria-label="Recipient's username" aria-describedby="button-addon2" maxlength="50">
     </form>
   </div>
 
   <div class="col-1 searchButtondiv">
-  	<a class="searchButton" role="button"><img class="shabsolute2" src="./img/searchIconButton.png"></a>
+  	<a class="searchButton" role="button"><img class="shabsolute" src="./icon/searchIcon.png"></a>
   </div>
 
-  <div class="col-2 nav nav-pills">
-    <button class="btn btn-primary buttonbackimg logoutButton navbutton" style="width: 100%; font-size: 0.8vw;" onclick="sessionStorageClear()">
+  <div class="col-1 nav nav-pills">
+    <button class="btn btn-primary buttonbackimg logoutButton navbutton" onclick="sessionStorageClear()">
     로그아웃
     </button>
   </div>

@@ -5,7 +5,7 @@ import java.util.Map;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.UrlResource;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -101,7 +101,7 @@ public class ItemController {
 	}
 	
 	@GetMapping("/image")
-	public ResponseEntity<UrlResource> getImage(@RequestParam("filename") String filename) {
+	public ResponseEntity<ByteArrayResource> getImage(@RequestParam("filename") String filename) {
 		try {
 			return itemService.getImage(filename);
 		} catch (Exception e) {}

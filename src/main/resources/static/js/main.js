@@ -7,11 +7,6 @@ var options = {
 	level: 9
 };
 var map = new kakao.maps.Map(container, options);
-
-var mapTypeControl = new kakao.maps.MapTypeControl();
-map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
-var zoomControl = new kakao.maps.ZoomControl();
-map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 var marker = new kakao.maps.Marker();
 var infowindow = new kakao.maps.InfoWindow({ disableAutoPan: true });
 
@@ -32,10 +27,13 @@ if (menuicon && sidebar) {
 }
 var searchTopHeight = document.querySelector('.searchTop').offsetHeight;
 var searchCountHeight = document.querySelector('#searchCount').offsetHeight;
-var maxHeight = document.querySelector('.sidebar').offsetHeight - (searchTopHeight + searchCountHeight + 40);
+var maxHeight = document.querySelector('.sidebar').offsetHeight - (searchTopHeight + searchCountHeight);
 document.getElementById('searchResult').style.maxHeight = maxHeight + 'px';
-document.getElementById('searchResult').style.marginTop = (searchTopHeight + searchCountHeight + 40) + 'px';
+document.getElementById('searchResult').style.marginTop = (searchTopHeight + searchCountHeight) + 'px';
 
+function refreshPage() {
+	location.reload();
+}
 
 
 /**
