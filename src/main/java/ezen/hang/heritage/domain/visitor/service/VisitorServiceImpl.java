@@ -20,17 +20,18 @@ public class VisitorServiceImpl implements VisitorService{
 	
 	@Override
 	public Map<String, Object> dayVisitorExiste(Map<String, Object> todayVisitorData) throws Exception {
-		Map<String, Object> map = new HashMap<>();
-		if(visitorMapper.dayVisitorExiste(todayVisitorData) == null) {
+		Map<String, Object> map = visitorMapper.dayVisitorExiste(todayVisitorData);
+		if(map == null) {
+			Map<String, Object> yesterdayMap = new HashMap<>();
 			Calendar calendar = Calendar.getInstance();
 			calendar.add(Calendar.DAY_OF_YEAR, -1);
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			String yesterday = dateFormat.format(calendar.getTime());
-			map.put("day", yesterday);
-			int newTotalCount = Integer.parseInt(visitorMapper.dayVisitorExiste(map).get("visitor_totalcount").toString());
+			yesterdayMap.put("day", yesterday);
+			int newTotalCount = Integer.parseInt(visitorMapper.dayVisitorExiste(yesterdayMap).get("visitor_totalcount").toString());
 			visitorMapper.insertTodayVisitorCount(String.valueOf(newTotalCount));
 		}
-		return visitorMapper.dayVisitorExiste(todayVisitorData);
+		return map;
 	}
 
 	@Override

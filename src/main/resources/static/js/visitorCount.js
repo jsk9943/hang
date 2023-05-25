@@ -60,31 +60,29 @@ function checkVisitorCount() {
 	if (getCookie("visitorKey") === null) {
 		visitorCountFetch(todayData)
 			.then(data => {
-				if (data !== null && data !== undefined) {
-					plusVisitorCountFetch(todayData)
-						.then(data => {
-							if (data === 'true') {
-								setCookie("visitorKey", generateRandomKey(), 1);
-								visitorCountFetch(todayData)
-									.then(data => {
-										let visitor_count = data.visitor_count;
-										let visitor_totalcount = data.visitor_totalcount;
-										document.querySelector('#total_visitor').innerHTML = visitor_totalcount;
-										document.querySelector('#today_visitor').innerHTML = visitor_count;
-									})
-							} else if (data === 'false') {
-								alert(`방문자 통계 데이터를 불러오는데 실패하였습니다\n${data}`);
-							}
-						})
-						.catch(error => {
-							alert(`방문자 통계 데이터를 불러오는데 실패하였습니다\n${error}`);
-						})
-				}
+				plusVisitorCountFetch(todayData)
+					.then(data2 => {
+						if (data2 === 'true') {
+							setCookie("visitorKey", generateRandomKey(), 1);
+							visitorCountFetch(todayData)
+								.then(data3 => {
+									let visitor_count = data3.visitor_count;
+									let visitor_totalcount = data3.visitor_totalcount;
+									document.querySelector('#total_visitor').innerHTML = visitor_totalcount;
+									document.querySelector('#today_visitor').innerHTML = visitor_count;
+								})
+						} else if (data2 === 'false') {
+							alert(`방문자 통계 데이터를 불러오는데 실패하였습니다\n${data2}`);
+						}
+					})
+					.catch(error => {
+						alert(`방문자 통계 데이터를 불러오는데 실패하였습니다\n${error}`);
+					})
 			})
 			.catch(error => {
 				alert(`방문자 통계 데이터를 불러오는데 실패하였습니다\n${error}`);
 			})
-	} else if(getCookie("visitorKey") !== null) {
+	} else if (getCookie("visitorKey") !== null) {
 		visitorCountFetch(todayData)
 			.then(data => {
 				let visitor_count = data.visitor_count;
