@@ -1,23 +1,24 @@
 package ezen.hang;
 
 
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import ezen.hang.heritage.domain.notice.service.NoticeService;
+import ezen.hang.heritage.domain.message.mapper.MessageMapper;
 
 @SpringBootTest
-class NoticeTest {
-	
+class messageTest {
 	@Autowired
-	private NoticeService ns;
+	private MessageMapper mm;
 
 	@Test
 	@Disabled
-	void test() {
-		System.out.println(ns.showPreviousNotice());
+	void contextLoads() {
+		String userid = "jsk9943";
+		System.out.println(mm.myReceiveMessage(userid));
 	}
 
 }

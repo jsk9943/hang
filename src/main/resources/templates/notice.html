@@ -15,13 +15,12 @@
     <p style="font-size:1.2em; font-weight: bold;">공지 제목</p>
     <p class="title" style="font-size:1.2em;"></p>
     <hr>
-    <p style="font-size:1em; font-weight: bold;">공지 내용</p>
+    <p style="font-size:1.2em; font-weight: bold;">공지 내용</p>
     <p class="contents" style="font-size:1em;"></p>
   </div>
 
   <script>
     const queryString = window.location.search;
-    console.log(queryString)
     const urlParams = new URLSearchParams(queryString);
 
     const noticeDate = urlParams.get('stringConvertNoticeDate');
@@ -31,10 +30,11 @@
     const dateElement = document.querySelector('.date');
     const titleElement = document.querySelector('.title');
     const contentsElement = document.querySelector('.contents');
+    const formattedContents = noticeContents.replace(/\./g, '.<br><br>');
 
     dateElement.textContent = `공지 게시일 ${noticeDate}`;
     titleElement.textContent = noticeTitle;
-    contentsElement.textContent = noticeContents;
+    contentsElement.innerHTML = formattedContents;
   </script>
 </body>
 

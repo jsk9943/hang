@@ -11,8 +11,8 @@
 		<link th:href="@{/css/star.css}" rel="stylesheet" />
 		<link th:href="@{/css/map.css}" rel="stylesheet" />
 		<link th:href="@{/css/notice.css}" rel="stylesheet" />
+		<link rel="stylesheet" href="/css/message.css">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script type="text/javascript" th:src="@{/js/main.js}" defer></script>
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script
 		  th:src="@{https://dapi.kakao.com/v2/maps/sdk.js(appkey=f51f22a3699fa4000697e5b37ae2ffe4)}"
@@ -24,9 +24,11 @@
 		<script type="module" th:src="@{/js/myreviews.js}" defer></script>
 		<script type="module" th:src="@{/js/memberUpdate.js}" defer></script>
 		<script type="module" th:src="@{/js/bookMark.js}" defer></script>
+        <script type="text/javascript" th:src="@{/js/main.js}" defer></script>
 		<script type="text/javascript" th:src="@{/js/admin.js}" defer></script>
 		<script type="text/javascript" th:src="@{/js/visitorCount.js}" defer></script>
 		<script type="text/javascript" th:src="@{/js/notice.js}" defer></script>
+		<script type="text/javascript" src="/js/message.js" defer></script>
 		<title>Hang, 문화재의 길을 따라..</title>
 	</head>
 	<body>
@@ -66,6 +68,7 @@
 		<div id="modalPoint3"></div>
 		<div id="modalBookmark"></div>
 		<div id="modalWithdrawal"></div>
+		<div class="message_modal_show"></div>
 		<div class="visitorToast">
 	        <div style="vertical-align: middle;">
 	            <a type="button" class="btn" id="visitorCountBtn"><img alt="방문자수" src="./icon/visitorCount.png" style="width:100%;"></a>

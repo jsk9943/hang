@@ -191,27 +191,169 @@ html, body {
 /*회원 가입 끝*/
 
 /* 어사이드 오른쪽 버튼 : hang_05 */
-.hangtoggler { /* 햄버거 버튼 외부*/
+.hangtogglerdiv{
+	text-align:center;
 	border:none;
-	width: 100%;
+}
+.hangtoggler{
+	outline:none !important;
+	box-shadow:none !important;
+	border:none;
+	background: transparent;
 }
 
-.hangtoggler:focus {
-	/*이거 안하면 클릭시 이상한 선 생김*/
-	box-shadow: none;
+.menu-trigger,
+.menu-trigger span {
+  display: inline-block;
+  transition: all .4s;
+  box-sizing: border-box;
 }
 
-.hangtoggler-icon:hover {
-	/*햄버거 호버시 색깔 두께*/
-	background-image:
-		url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgb(177, 49, 81)' stroke-width='3' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+.menu-trigger {
+  position: relative;
+  width: 30px;
+  height: 30px;
 }
 
-.hangtoggler-icon {
-	/*햄버거 평소 색깔 두께*/
-	background-image:
-		url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgb(135, 119, 236)' stroke-width='3' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+.menu-trigger span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: #686de0;
+  border-radius: 4px;
 }
+
+.menu-trigger span:nth-of-type(1) {
+  top: 0;
+}
+
+.menu-trigger span:nth-of-type(2) {
+  top: 13px;
+}
+
+.menu-trigger span:nth-of-type(3) {
+  bottom: 0;
+}
+.menu-trigger.type7 span:nth-of-type(1) {
+  -webkit-animation : menu-bar07-01 .75s forwards;
+  animation : menu-bar07-01 .75s forwards;
+}
+@-webkit-keyframes menu-bar07-01 {
+  0% {
+    -webkit-transform : translateY(14px) rotate(45deg);
+  }
+  50% {
+    -webkit-transform : translateY(14px) rotate(0);
+  }
+  100% {
+    -webkit-transform : translateY(0) rotate(0);
+  }
+}
+@keyframes menu-bar07-01 {
+  0% {
+    transform : translateY(14px) rotate(45deg);
+  }
+  50% {
+    transform : translateY(14px) rotate(0);
+  }
+  100% {
+    transform : translateY(0) rotate(0);
+  }
+}
+.menu-trigger.type7 span:nth-of-type(2) {
+  transition : all .25s .25s;
+  opacity : 1;
+}
+.menu-trigger.type7 span:nth-of-type(3) {
+  -webkit-animation : menu-bar07-02 .75s forwards;
+  animation : menu-bar07-02 .75s forwards;
+}
+@-webkit-keyframes menu-bar07-02 {
+  0% {
+    -webkit-transform : translateY(-14px) rotate(-45deg);
+  }
+  50% {
+    -webkit-transform : translateY(-14px) rotate(0);
+  }
+  100% {
+    -webkit-transform : translateY(0) rotate(0);
+  }
+}
+@keyframes menu-bar07-02 {
+  0% {
+    transform : translateY(-14px) rotate(-45deg);
+  }
+  50% {
+    transform : translateY(-14px) rotate(0);
+  }
+  100% {
+    transform : translateY(0) rotate(0);
+  }
+}
+.menu-trigger.active-7 span:nth-of-type(1) {
+  -webkit-animation : active-menu-bar07-01 .75s forwards;
+  animation : active-menu-bar07-01 .75s forwards;
+}
+@-webkit-keyframes active-menu-bar07-01 {
+  0% {
+    -webkit-transform : translateY(0) rotate(0);
+  }
+  50% {
+    -webkit-transform : translateY(14px) rotate(0);
+  }
+  100% {
+    -webkit-transform : translateY(14px) rotate(45deg);
+  }
+}
+@keyframes active-menu-bar07-01 {
+  0% {
+    transform : translateY(0) rotate(0);
+  }
+  50% {
+    transform : translateY(14px) rotate(0);
+  }
+  100% {
+    transform : translateY(14px) rotate(45deg);
+  }
+}
+.menu-trigger.active-7 span:nth-of-type(2) {
+  opacity : 0;
+}
+.menu-trigger.active-7 span:nth-of-type(3) {
+  -webkit-animation : active-menu-bar07-02 .75s forwards;
+  animation : active-menu-bar07-02 .75s forwards;
+}
+@-webkit-keyframes active-menu-bar07-02 {
+  0% {
+    -webkit-transform : translateY(0) rotate(0);
+  }
+  50% {
+    -webkit-transform : translateY(-13px) rotate(0);
+  }
+  100% {
+    -webkit-transform : translateY(-13px) rotate(-45deg);
+  }
+}
+@keyframes active-menu-bar07-02 {
+  0% {
+    transform : translateY(0) rotate(0);
+  }
+  50% {
+    transform : translateY(-13px) rotate(0);
+  }
+  100% {
+    transform : translateY(-13px) rotate(-45deg);
+  }
+}
+
+
+
+
+
+
+
+
 
 .bug1 {
 	margin-top:10vh;
@@ -514,7 +656,21 @@ hr[role="tournament2"]::before {
 	}
 	
 	.hangtogglerdiv{
+		text-align:center;
 		margin-right:2%;
+	}
+	
+	.menu-trigger{
+		width:5vw;
+	}
+	.menu-trigger span:nth-of-type(1) {
+		height:3vw;
+	}
+	.menu-trigger span:nth-of-type(2) {
+		height:3vw;
+	}
+	.menu-trigger span:nth-of-type(3) {
+		height:3vw;
 	}
 		
 	.navbutton {
@@ -538,10 +694,6 @@ hr[role="tournament2"]::before {
 	    width: 100%;
 	    transform: none;
 	}
-	
-	
-	
-	
 	
 	.visitorToast{
 		position:fixed; 

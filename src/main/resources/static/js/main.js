@@ -35,6 +35,21 @@ function refreshPage() {
 	location.reload();
 }
 
+let burgers = document.querySelectorAll('.menu-trigger');
+burgers.forEach(function(burger) {
+  burger.addEventListener('click', function(e) {
+    e.preventDefault();
+    this.classList.toggle('active-' + (7));
+  });
+});
+
+
+let offcanvasCloseButton = document.querySelector('.offcanvasCloseButton');
+if(offcanvasCloseButton !== null) {
+	offcanvasCloseButton.addEventListener('click', () => {
+		burger.click();
+	})
+}
 
 /**
  * 나의리뷰 게시판

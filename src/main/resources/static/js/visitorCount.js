@@ -60,7 +60,10 @@ function checkVisitorCount() {
 	if (getCookie("visitorKey") === null) {
 		visitorCountFetch(todayData)
 			.then(data => {
-				plusVisitorCountFetch(todayData)
+				let todayData2 = {
+					"day": data.visit_date
+				}
+				plusVisitorCountFetch(todayData2)
 					.then(data2 => {
 						if (data2 === 'true') {
 							setCookie("visitorKey", generateRandomKey(), 1);
@@ -72,7 +75,7 @@ function checkVisitorCount() {
 									document.querySelector('#today_visitor').innerHTML = visitor_count;
 								})
 						} else if (data2 === 'false') {
-							alert(`방문자 통계 데이터를 불러오는데 실패하였습니다\n${data2}`);
+							alert(`신규 방문자 데이터를 추가하는데 실패하였습니다\n${data2}`);
 						}
 					})
 					.catch(error => {

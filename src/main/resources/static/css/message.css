@@ -1,0 +1,119 @@
+#message_modal {
+  z-index: 10000;
+}
+
+#message_modalLabel {
+  font-weight: bold;
+}
+
+#message_sendtitle {
+  font-weight: bold;
+  margin:2vh 0px;
+}
+
+.message_container {
+  font-family: sans-serif;
+  padding: 10px;
+}
+
+.message_button {
+  width: 1.5vw;
+  min-width: 1.5em;
+}
+
+.message_icon {
+  width: 100%;
+}
+
+.modal-body {
+  text-align: left;
+}
+
+.message_category {
+  width: 100%;
+}
+
+.message_category>a {
+  color: black;
+  float: left;
+  width: 7vw;
+  padding: 10px;
+  white-space: nowrap;
+  text-align: center;
+  text-decoration: none;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.message_category>a:first-child {
+  margin-right: 10px;
+}
+
+.message_category>a:hover {
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.receiveMessageTable1 {
+  width: 5vw;
+  font-size: 0.8em;
+}
+
+.receiveMessageTable2 {
+  width: 10vw;
+  font-size: 0.8em;
+}
+
+.receiveMessageTable3 {
+  width: 70vw;
+  font-size: 0.8em;
+}
+
+.receiveMessageTable4 {
+  width: 15vw;
+  font-size: 0.8em;
+}
+
+
+.sendMessageTable1 {
+  width: 5vw;
+  font-size: 0.8em;
+}
+
+.sendMessageTable2 {
+  width: 10vw;
+  font-size: 0.8em;
+}
+
+.sendMessageTable3 {
+  width: 65vw;
+  font-size: 0.8em;
+}
+
+.sendMessageTable4 {
+  width: 15vw;
+  font-size: 0.8em;
+}
+
+.sendMessageTable5 {
+  width: 5vw;
+  font-size: 0.8em;
+}
+
+.messageReadCheckIcon {
+  min-width: 1.5vw;
+}
+
+@media only screen and (max-width: 480px) {
+  .message_category>a:first-child {
+    width: 30vw;
+  }
+  .message_category>a:last-child {
+    width: 30vw;
+  }
+  .messageReadCheckIcon {
+    min-width: 8vw;
+  }
+}

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ezen.hang.heritage.domain.message.mapper.MessageMapper">
+
+	<select id="myReceiveMessage" parameterType="string" resultType="map">
+		SELECT DISTINCT M.mess_no, M.mess_from, M.mess_to, M.mess_to_read, MC.mess_contents, MC.mess_date
+		FROM MESSAGE M
+		JOIN MESSAGE_CONTENTS MC ON M.mess_no = MC.mess_no
+		WHERE M.mess_to = #{userid} AND M.mess_state = 'receive'
+		ORDER BY MC.mess_date DESC;
+	</select>
+	
+	<select id="mySendMessage" parameterType="string" resultType="map">
+		SELECT DISTINCT M.mess_from, M.mess_to, M.mess_to_read, MC.mess_contents, MC.mess_date
+		FROM MESSAGE M
+		JOIN MESSAGE_CONTENTS MC ON M.mess_no = MC.mess_no
+		WHERE M.mess_from = #{userid} AND M.mess_state = 'send'
+		ORDER BY MC.mess_date DESC;
+	</select>
+	
+	<select id="newMessageCheck" parameterType="string" resultType="int">
+		SELECT COUNT(*)
+		FROM MESSAGE
+		WHERE mess_to = #{userid} AND mess_to_read = 'N';
+	</select>
+	
+	<update id="readMessageStateChange" parameterType="int">
+		UPDATE MESSAGE
+		SET mess_to_read = 'Y'
+		WHERE mess_no = #{messageNumber};
+	</update>
+	
+	<select id="checkMessageNumber" resultType="int">
+		SELECT COUNT(*)
+		FROM MESSAGE_CONTENTS;
+	</select>
+	
+	<select id="reciveUserCheck" parameterType="Message" resultType="int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE userid = #{mess_to};
+	</select>
+	
+	<insert id="newSendMessageContents" parameterType="Message">
+		INSERT INTO MESSAGE_CONTENTS (mess_no, mess_contents, mess_date)
+		VALUES (#{mess_no}, #{mess_contents}, NOW());
+	</insert>
+	
+	<insert id="newSendMessage" parameterType="Message">
+		INSERT INTO MESSAGE (mess_no, mess_from, mess_to, mess_state)
+		VALUES (#{mess_no}, #{mess_from}, #{mess_to}, 'send'),
+		       (#{mess_no}, #{mess_from}, #{mess_to}, 'receive');
+	</insert>
+	
+	
+</mapper>
