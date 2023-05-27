@@ -13,5 +13,7 @@ public interface MessageService {
 	public int newMessageCheck(String userid);
 	
 	public void newSendMessage(Map<String, Object> messageData) throws Exception;
+	
+	public String withdrawMessage(Map<String, Object> withdrawMessageData) throws Exception;
 
 }

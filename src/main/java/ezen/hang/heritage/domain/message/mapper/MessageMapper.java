@@ -17,13 +17,21 @@ public interface MessageMapper {
 	int newMessageCheck(String userid);
 	
 	void readMessageStateChange(int messageNumber);
-
-	int checkMessageNumber();
 	
 	int reciveUserCheck(Message newMessage);
 	
 	void newSendMessageContents(Message newMessage);
 	
+	int registMessageNumber(Message newMessage);
+	
 	void newSendMessage(Message newMessage);
+	
+	int withdrawMessageCheck(String mess_no);
+	
+	String withdrawBeforeReadCheck(String mess_no);
+	
+	void withdrawMessage(Map<String, Object> withdrawMessageData);
+	
+	void withdrawMessageStateChange(Map<String, Object> withdrawMessageData);
 
 }

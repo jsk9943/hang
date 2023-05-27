@@ -3,55 +3,92 @@
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ezen.hang.heritage.domain.message.mapper.MessageMapper">
 
+	<!-- 수신받은 메세지 -->
 	<select id="myReceiveMessage" parameterType="string" resultType="map">
 		SELECT DISTINCT M.mess_no, M.mess_from, M.mess_to, M.mess_to_read, MC.mess_contents, MC.mess_date
 		FROM MESSAGE M
 		JOIN MESSAGE_CONTENTS MC ON M.mess_no = MC.mess_no
 		WHERE M.mess_to = #{userid} AND M.mess_state = 'receive'
-		ORDER BY MC.mess_date DESC;
+		ORDER BY M.mess_no DESC;
 	</select>
 	
+	<!-- 발송한 메세지 -->
 	<select id="mySendMessage" parameterType="string" resultType="map">
-		SELECT DISTINCT M.mess_from, M.mess_to, M.mess_to_read, MC.mess_contents, MC.mess_date
+		SELECT DISTINCT M.mess_no, M.mess_from, M.mess_to, M.mess_to_read, M.mess_withdraw, MC.mess_contents, MC.mess_date
 		FROM MESSAGE M
 		JOIN MESSAGE_CONTENTS MC ON M.mess_no = MC.mess_no
 		WHERE M.mess_from = #{userid} AND M.mess_state = 'send'
-		ORDER BY MC.mess_date DESC;
+		ORDER BY M.mess_no DESC;
 	</select>
 	
+	<!-- 수신된 신규메세지 여부 -->
 	<select id="newMessageCheck" parameterType="string" resultType="int">
 		SELECT COUNT(*)
 		FROM MESSAGE
 		WHERE mess_to = #{userid} AND mess_to_read = 'N';
 	</select>
 	
+	<!-- 수신된 신규메세지 읽으면 읽음으로 변경 -->
 	<update id="readMessageStateChange" parameterType="int">
 		UPDATE MESSAGE
 		SET mess_to_read = 'Y'
 		WHERE mess_no = #{messageNumber};
 	</update>
 	
-	<select id="checkMessageNumber" resultType="int">
-		SELECT COUNT(*)
-		FROM MESSAGE_CONTENTS;
-	</select>
-	
+	<!-- 신규메세지 발송 전 수신받을 유저가 있는지 숫자로 확인 -->
 	<select id="reciveUserCheck" parameterType="Message" resultType="int">
 		SELECT COUNT(*)
 		FROM MEMBER
 		WHERE userid = #{mess_to};
 	</select>
 	
+	<!-- 신규메세지 내용 등록 -->
 	<insert id="newSendMessageContents" parameterType="Message">
-		INSERT INTO MESSAGE_CONTENTS (mess_no, mess_contents, mess_date)
-		VALUES (#{mess_no}, #{mess_contents}, NOW());
+		INSERT INTO MESSAGE_CONTENTS (mess_from, mess_to, mess_contents, mess_date)
+		VALUES (#{mess_from}, #{mess_to}, #{mess_contents}, NOW());
 	</insert>
 	
+	<!-- 방금 등록한 신규메세지 번호 확인 -->
+	<select id="registMessageNumber" parameterType="Message" resultType="int">
+		SELECT mess_no
+		FROM MESSAGE_CONTENTS
+		WHERE mess_contents = #{mess_contents} AND mess_from = #{mess_from};
+	</select>
+	
+	<!-- 등록한 신규메세지 발신자, 수신자, 상태, 번호 등록 -->
 	<insert id="newSendMessage" parameterType="Message">
 		INSERT INTO MESSAGE (mess_no, mess_from, mess_to, mess_state)
 		VALUES (#{mess_no}, #{mess_from}, #{mess_to}, 'send'),
 		       (#{mess_no}, #{mess_from}, #{mess_to}, 'receive');
 	</insert>
+	
+	<!-- 메세지 회수 전 현재 메세지 회수 또는 삭제인지 상태 확인 -->
+	<select id="withdrawMessageCheck" parameterType="string" resultType="int">
+		SELECT COUNT(*)
+		FROM MESSAGE
+		WHERE mess_no = #{mess_no};
+	</select>
+	
+	<!-- 메세지 회수 전 읽었는지 여부 확인 -->
+	<select id="withdrawBeforeReadCheck" parameterType="string" resultType="string">
+		SELECT mess_to_read
+		FROM MESSAGE
+		WHERE mess_no = #{mess_no} AND mess_state='receive';
+	</select>
+	
+	<!-- 발송한 메세지 회수 처리 -->
+	<delete id="withdrawMessage" parameterType="map">
+		DELETE FROM MESSAGE
+		WHERE mess_no = #{mess_no} AND mess_state = 'receive';
+	</delete>
+	
+	<!-- 회수 후 회수상태처리 -->
+	<update id="withdrawMessageStateChange" parameterType="map">
+		UPDATE MESSAGE
+		SET mess_withdraw = 'Y',
+		    mess_to_read = 'Y'
+		WHERE mess_no = #{mess_no} AND mess_state = 'send';
+	</update>
 	
 	
 </mapper>

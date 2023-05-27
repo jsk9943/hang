@@ -40,16 +40,37 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	public void newSendMessage(Map<String, Object> messageData) throws Exception {
 		Message newMessage = new Message();
-		int checkMessageNumber = messageMapper.checkMessageNumber();
-		newMessage.setMess_no(checkMessageNumber + 1);
 		newMessage.setMess_from(messageData.get("sendUserid").toString());
 		newMessage.setMess_to(messageData.get("receiveUserid").toString());
 		newMessage.setMess_contents(messageData.get("sendMessage").toString());
 		if(messageMapper.reciveUserCheck(newMessage) > 0) {
 			messageMapper.newSendMessageContents(newMessage);
+			int mess_no = messageMapper.registMessageNumber(newMessage);
+			newMessage.setMess_no(mess_no);
 			messageMapper.newSendMessage(newMessage);
-		} else if (messageMapper.reciveUserCheck(newMessage) == 0){
-			throw new NullPointerException();
+		} else {
+			throw new Exception();
 		}
+	}
+
+	@Override
+	public String withdrawMessage(Map<String, Object> withdrawMessageData) throws Exception {
+		String result = "true";
+		for (int i = 0; i < withdrawMessageData.size(); i++) {
+			int mess_no = messageMapper.withdrawMessageCheck(withdrawMessageData.get("mess_no").toString());
+			if(mess_no == 2) {
+				if(messageMapper.withdrawBeforeReadCheck(withdrawMessageData.get("mess_no").toString()).equals("N")) {
+					messageMapper.withdrawMessage(withdrawMessageData);
+					messageMapper.withdrawMessageStateChange(withdrawMessageData);
+				} else if(messageMapper.withdrawBeforeReadCheck(withdrawMessageData.get("mess_no").toString()).equals("Y")) {
+					result = "mess_no ALREADY READ";
+				}
+			} else if(mess_no == 1) {
+				result = "mess_no NOT ENOUGH";
+			} else if(mess_no == 0) {
+				result = "mess_no NOT EXIST";
+			}
+		}
+		return result;
 	}
 }

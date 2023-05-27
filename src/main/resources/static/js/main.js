@@ -35,17 +35,15 @@ function refreshPage() {
 	location.reload();
 }
 
-let burgers = document.querySelectorAll('.menu-trigger');
-burgers.forEach(function(burger) {
-  burger.addEventListener('click', function(e) {
-    e.preventDefault();
-    this.classList.toggle('active-' + (7));
-  });
+let burger = document.querySelector('.menu-trigger');
+burger.addEventListener('click', function(e) {
+	e.preventDefault();
+	this.classList.toggle('active-' + (7));
 });
 
 
 let offcanvasCloseButton = document.querySelector('.offcanvasCloseButton');
-if(offcanvasCloseButton !== null) {
+if (offcanvasCloseButton !== null) {
 	offcanvasCloseButton.addEventListener('click', () => {
 		burger.click();
 	})

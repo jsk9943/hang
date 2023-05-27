@@ -9,6 +9,8 @@
 #message_sendtitle {
   font-weight: bold;
   margin:2vh 0px;
+  border-top: 0.5px solid #DEE2E6;
+  padding-top: 20px;
 }
 
 .message_container {
@@ -49,9 +51,16 @@
   margin-right: 10px;
 }
 
-.message_category>a:hover {
+.message_category>a:hover{
   font-weight: bold;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  text-decoration: none;
+}
+.message_category>a.clicked {
+  font-weight: bold;
+  color:white;
+  background-color:black;
   border-radius: 10px;
   text-decoration: none;
 }
@@ -76,33 +85,39 @@
   font-size: 0.8em;
 }
 
-
 .sendMessageTable1 {
   width: 5vw;
   font-size: 0.8em;
 }
-
 .sendMessageTable2 {
+  width: 5vw;
+  font-size: 0.8em;
+}
+.sendMessageTable3 {
   width: 10vw;
   font-size: 0.8em;
 }
-
-.sendMessageTable3 {
-  width: 65vw;
+.sendMessageTable4 {
+  width: 55vw;
   font-size: 0.8em;
 }
-
-.sendMessageTable4 {
+.sendMessageTable5 {
   width: 15vw;
   font-size: 0.8em;
 }
-
-.sendMessageTable5 {
+.sendMessageTable6 {
+  width: 5vw;
+  font-size: 0.8em;
+}
+.sendMessageTable7 {
   width: 5vw;
   font-size: 0.8em;
 }
 
 .messageReadCheckIcon {
+  min-width: 1.5vw;
+}
+.messageWithdrawCheckIcon{
   min-width: 1.5vw;
 }
 
@@ -114,6 +129,9 @@
     width: 30vw;
   }
   .messageReadCheckIcon {
+    min-width: 8vw;
+  }
+  .messageWithdrawCheckIcon{
     min-width: 8vw;
   }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,6 +43,17 @@ public class MessageController {
 			messageService.newSendMessage(messageData);
 			result = "true";
 		} catch (Exception e) {}
+		return result;
+	}
+	
+	@DeleteMapping
+	public String withdrawMessage(@RequestBody Map<String, Object> withdrawMessageData) {
+		String result = null;
+		try {
+			result = messageService.withdrawMessage(withdrawMessageData);
+		} catch (Exception e) {
+			result = "error";
+		}
 		return result;
 	}
 }
