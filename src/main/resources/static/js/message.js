@@ -4,7 +4,7 @@ if (navHangtogglerButton !== null) {
 	navHangtogglerButton.addEventListener('click', () => {
 		newMessageCheck()
 			.then(data => {
-				if (data === 2) {
+				if (data == 2) {
 					messageStatePoint.classList.add('bg-danger', 'border', 'border-light', 'rounded-circle');
 				}
 			})
