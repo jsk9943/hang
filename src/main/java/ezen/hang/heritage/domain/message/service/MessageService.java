@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 
+
 public interface MessageService {
 	
 	public List<Map<String, Object>> myReceiveMessage(Map<String, Object> useridData);
@@ -15,5 +16,9 @@ public interface MessageService {
 	public void newSendMessage(Map<String, Object> messageData) throws Exception;
 	
 	public String withdrawMessage(Map<String, Object> withdrawMessageData) throws Exception;
+	
+	public void receiveMessageDelete(List<Map<String, Object>> receiveDeleteData) throws Exception;
+	
+	public void sendMessageDelete(List<Map<String, Object>> sendDeleteData) throws Exception;
 
 }

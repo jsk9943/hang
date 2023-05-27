@@ -56,4 +56,28 @@ public class MessageController {
 		}
 		return result;
 	}
+	
+	@DeleteMapping("/receive.delete")
+	public String receiveMessageDelete(@RequestBody List<Map<String, Object>> receiveDeleteData) {
+		String result = null;
+		try {
+			messageService.receiveMessageDelete(receiveDeleteData);
+			result = "true";
+		} catch (Exception e) {
+			result = "false";
+		}
+		return result;
+	}
+	
+	@DeleteMapping("/send.delete")
+	public String sendMessageDelete(@RequestBody List<Map<String, Object>> sendDeleteData) {
+		String result = null;
+		try {
+			messageService.sendMessageDelete(sendDeleteData);
+			result = "true";
+		} catch (Exception e) {
+			result = "false";
+		}
+		return result;
+	}
 }

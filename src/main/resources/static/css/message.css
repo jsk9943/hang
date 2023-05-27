@@ -65,25 +65,31 @@
   text-decoration: none;
 }
 
+
+
+
 .receiveMessageTable1 {
   width: 5vw;
   font-size: 0.8em;
 }
-
 .receiveMessageTable2 {
+  width: 5vw;
+  font-size: 0.8em;
+}
+.receiveMessageTable3 {
   width: 10vw;
   font-size: 0.8em;
 }
-
-.receiveMessageTable3 {
-  width: 70vw;
+.receiveMessageTable4 {
+  width: 65vw;
   font-size: 0.8em;
 }
-
-.receiveMessageTable4 {
+.receiveMessageTable5 {
   width: 15vw;
   font-size: 0.8em;
 }
+
+
 
 .sendMessageTable1 {
   width: 5vw;

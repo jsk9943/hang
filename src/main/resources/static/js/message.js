@@ -4,18 +4,18 @@ if (navHangtogglerButton !== null) {
 	navHangtogglerButton.addEventListener('click', () => {
 		newMessageCheck()
 			.then(data => {
-				if (data >= 2) {
+				if (data === 2) {
 					messageStatePoint.classList.add('bg-danger', 'border', 'border-light', 'rounded-circle');
 				}
 			})
 	})
 }
 
-function newMessageCheck() {
-	return fetch(`/message?userid=${sessionStorage.getItem('userid')}`, {
+async function newMessageCheck() {
+	const response = await fetch(`/message?userid=${sessionStorage.getItem('userid')}`, {
 		method: 'GET'
-	})
-		.then(response => { return response.text() })
+	});
+	return await response.text();
 }
 
 
@@ -53,10 +53,28 @@ let messageDOM = `
             <button type="button" class="btn btn-success newMessageSendButton">전송</button>
             <button type="button" class="btn btn-secondary message_modal_close" data-bs-dismiss="modal">닫기</button>
           </div>
+          <div class="messageToast"></div>
         </div>
       </div>
     </div>
 `;
+
+let messageDeleteliveToast = `
+			<div class="toast-container bottom-50 d-flex justify-content-center align-items-center w-100">
+	          <div id="messageDeleteliveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+	            <div class="toast-header">
+	              <strong class="me-auto">최종확인</strong>
+	              <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+	            </div>
+	            <div class="toast-body">
+	              정말로 삭제하시겠습니까?<br>
+	              <span style="font-weight:bold; color:red; font-size:0.8em;">※ 주의 : 회수하지 않은 쪽지는 상대방에게 계속 보여질 수 있습니다</span><br>
+	              <button type="button" class="btn btn-danger btn-sm" id="finalMessageDeleteButton">삭제</button>
+	              <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="toast" id="messageToastCloseButton">닫기</button>
+	            </div>
+	          </div>
+	        </div>
+	        `;
 
 let messageModalShow = document.querySelector('.message_modal_show');
 if (messageModalShow.childElementCount > 0) {
@@ -89,8 +107,8 @@ if (messageButton !== null) {
 			});
 		});
 
-		let receiveMessageButton = document.querySelector('.receiveMessage_button');
-		receiveMessageButton.addEventListener('click', () => {
+		let receiveMessageBoxButton = document.querySelector('.receiveMessage_button');
+		receiveMessageBoxButton.addEventListener('click', () => {
 			let messageBox = document.querySelector('.message_box');
 			if (messageBox.childElementCount > 0) {
 				messageBox.innerHTML = "";
@@ -105,8 +123,8 @@ if (messageButton !== null) {
 				})
 		})
 
-		let sendMessageButton = document.querySelector('.sendMessage_button');
-		sendMessageButton.addEventListener('click', () => {
+		let sendMessageBoxButton = document.querySelector('.sendMessage_button');
+		sendMessageBoxButton.addEventListener('click', () => {
 			let messageBox = document.querySelector('.message_box');
 			if (messageBox.childElementCount > 0) {
 				messageBox.innerHTML = "";
@@ -121,86 +139,195 @@ if (messageButton !== null) {
 				})
 		})
 
-		let messageWithdrawButton = document.querySelector('.messageWithdrawButton');
-		if (messageWithdrawButton !== null) {
-			messageWithdrawButton.addEventListener('click', () => {
-				let sendMessageNumbers = document.querySelectorAll('.sendMessageNumber');
-				let withdrawMessageData = {};
-				let selectedCount = 0;
-				sendMessageNumbers.forEach((element) => {
-					if (element.checked) {
-						withdrawMessageData.mess_no = element.value;
-						selectedCount++;
-					}
-				});
-				if (selectedCount > 1) {
-					alert(`한번에 여러개의 쪽지는 회수 할 수 없습니다\n하나씩 회수만 가능합니다`);
-					return;
-				}
-				mySendMessageWithdraw(withdrawMessageData)
-					.then(data => {
-						if (data === 'true') {
-							alert('정상적으로 쪽지가 회수되었습니다');
-						} else if (data === 'mess_no ALREADY READ') {
-							alert(`사용자가 메세지를 확인하여 회수가 불가능합니다`);
-						} else if (data === 'mess_no NOT ENOUGH') {
-							alert(`이미 메세지가 회수되어 있습니다`);
-						} else if (data === 'mess_no NOT EXIST') {
-							alert(`이미 메세지가 삭제되었습니다`);
-						} else if (data === 'error') {
-							alert(`메세지 회수 도중 오류가 발생하였습니다\n관리자에게 문의해주세요\n${error}`)
-						}
-					})
-					.catch(error => {
-						alert(`메세지 회수 도중 오류가 발생하였습니다\n관리자에게 문의해주세요\n${error}`)
-					})
-			})
-		}
+		/**************************/
 
-		let newMessageSendButton = document.querySelector('.newMessageSendButton');
-		if (newMessageSendButton !== null) {
-			newMessageSendButton.addEventListener('click', () => {
-				let receiveUserid = document.querySelector('#receive_userid');
-				let receiveMessage = document.querySelector('#receive_message');
-				if (receiveUserid.value === "관리자") {
-					alert(`해당 관리자에게 메세지 발송은 어렵습니다\n문의사항은 admin에게 문의 바랍니다`)
-					return;
-				} else if (receiveUserid.value === sessionStorage.getItem('userid')) {
-					alert('자기 자신에게 메세지를 보낼 수 없습니다')
+		let messageDeleteButton = document.querySelector('.messageDeleteButton');
+		if (messageDeleteButton !== null) {
+			messageDeleteButton.addEventListener('click', () => {
+				let messageToast = document.querySelector('.messageToast');
+				if (messageToast.childElementCount > 0) {
+					messageToast.innerHTML = "";
 				}
-				if (receiveMessage.value === null || receiveMessage.value === '') {
-					alert('빈 메세지는 전송 할 수 없습니다')
-					return;
-				}
-				newMessageSending(sessionStorage.getItem('userid'), receiveUserid.value, receiveMessage.value)
-					.then(data => {
-						if (data === 'true') {
-							alert(`정상적으로 ${receiveUserid.value}님에게 메세지를 전송하였습니다`)
-							receiveUserid.value = '';
-							receiveMessage.value = '';
-						} else if (data === 'false') {
-							alert(`요청하신 메세지 전송을 실패하였습니다\n아이디를 다시 확인해주세요`)
+				messageToast.innerHTML += messageDeleteliveToast;
+
+				let messageDeleteToast = document.querySelector('#messageDeleteliveToast');
+				let messageDeleteToastLive = bootstrap.Toast.getOrCreateInstance(messageDeleteToast);
+				messageDeleteToastLive.show();
+
+				let finalMessageDeleteButton = document.querySelector('#finalMessageDeleteButton');
+				if (finalMessageDeleteButton !== null) {
+					finalMessageDeleteButton.addEventListener('click', () => {
+						let receiveMessageNumbers = document.querySelectorAll('.receiveMessageNumber');
+						if (receiveMessageNumbers !== null && receiveMessageNumbers.length > 0) {
+							let hasReceiveMessageCheckedItem = false;
+							let deleteReceiveMessageData = [];
+							receiveMessageNumbers.forEach((element) => {
+								if (element.checked) {
+									let mess_no = element.value;
+									let mess_fromElement = element.closest('tr').querySelector('td:nth-child(3)');
+									let mess_from = mess_fromElement.textContent
+									hasReceiveMessageCheckedItem = true;
+									deleteReceiveMessageData.push({ "mess_no": mess_no, "mess_from": mess_from });
+								}
+							})
+							if (!hasReceiveMessageCheckedItem) {
+								alert('선택한 메세지가 없어 삭제할 수 없습니다.');
+								return;
+							}
+							receiveMessageDelete(deleteReceiveMessageData)
+								.then(data => {
+									if (data === 'true') {
+										alert('삭제되었습니다');
+										document.querySelector('#messageToastCloseButton').click();
+									} else if (data === 'false') {
+										alert('삭제실패')
+									}
+								})
+								.catch(error => {
+									alert(`삭제 도중 서버 오류가 발생하였습니다\n관리자에게 문의해주세요\n${error}`)
+								})
+						}
+						async function receiveMessageDelete(deleteReceiveMessageData) {
+							const response = await fetch('/message/receive.delete', {
+								method: 'DELETE',
+								headers: {
+									'Content-Type': 'application/json'
+								},
+								body: JSON.stringify(deleteReceiveMessageData)
+							});
+							return await response.text();
+						}
+
+
+
+
+						let sendMessageNumbers = document.querySelectorAll('.sendMessageNumber');
+						if (sendMessageNumbers !== null && sendMessageNumbers.length > 0) {
+							let hasSendMessageCheckedItem = false;
+							let deleteSendMessageData = [];
+							sendMessageNumbers.forEach((element) => {
+								if (element.checked) {
+									let mess_no = element.value;
+									let mess_toElement = element.closest('tr').querySelector('td:nth-child(3)');
+									let mess_to = mess_toElement.textContent
+									hasSendMessageCheckedItem = true;
+									deleteSendMessageData.push({ "mess_no": mess_no, "mess_to": mess_to });
+								}
+							})
+							if (!hasSendMessageCheckedItem) {
+								alert('선택한 메세지가 없어 삭제할 수 없습니다.');
+								return;
+							}
+							sendMessageDelete(deleteSendMessageData)
+								.then(data => {
+									if (data === 'true') {
+										alert('삭제되었습니다');
+										document.querySelector('#messageToastCloseButton').click();
+									} else if (data === 'false') {
+										alert('삭제실패')
+									}
+								})
+								.catch(error => {
+									alert(`삭제 도중 서버 오류가 발생하였습니다\n관리자에게 문의해주세요\n${error}`)
+								})
+						}
+						async function sendMessageDelete(deleteSendMessageData) {
+							const response = await fetch('/message/send.delete', {
+								method: 'DELETE',
+								headers: {
+									'Content-Type': 'application/json'
+								},
+								body: JSON.stringify(deleteSendMessageData)
+							});
+							return await response.text();
 						}
 					})
+				}
 			})
 		}
+		/**************************/
 	})
 }
 
-function mySendMessageWithdraw(withdrawMessageData) {
-	return fetch('/message', {
+let messageWithdrawButton = document.querySelector('.messageWithdrawButton');
+if (messageWithdrawButton !== null) {
+	messageWithdrawButton.addEventListener('click', () => {
+		let sendMessageNumbers = document.querySelectorAll('.sendMessageNumber');
+		let withdrawMessageData = {};
+		let selectedCount = 0;
+		sendMessageNumbers.forEach((element) => {
+			if (element.checked) {
+				withdrawMessageData.mess_no = element.value;
+				selectedCount++;
+			}
+		});
+		if (selectedCount > 1) {
+			alert(`한번에 여러개의 쪽지는 회수 할 수 없습니다\n하나씩 회수만 가능합니다`);
+			return;
+		}
+		mySendMessageWithdraw(withdrawMessageData)
+			.then(data => {
+				if (data === 'true') {
+					alert('정상적으로 쪽지가 회수되었습니다');
+				} else if (data === 'mess_no ALREADY READ') {
+					alert(`사용자가 메세지를 확인하여 회수가 불가능합니다`);
+				} else if (data === 'mess_no NOT ENOUGH') {
+					alert(`이미 메세지가 회수되어 있습니다`);
+				} else if (data === 'mess_no NOT EXIST') {
+					alert(`이미 메세지가 삭제되었습니다`);
+				} else if (data === 'error') {
+					alert(`메세지 회수 도중 오류가 발생하였습니다\n관리자에게 문의해주세요\n${error}`)
+				}
+			})
+			.catch(error => {
+				alert(`메세지 회수 도중 오류가 발생하였습니다\n관리자에게 문의해주세요\n${error}`)
+			})
+	})
+}
+
+let newMessageSendButton = document.querySelector('.newMessageSendButton');
+if (newMessageSendButton !== null) {
+	newMessageSendButton.addEventListener('click', () => {
+		let receiveUserid = document.querySelector('#receive_userid');
+		let receiveMessage = document.querySelector('#receive_message');
+		if (receiveUserid.value === "관리자") {
+			alert(`해당 관리자에게 메세지 발송은 어렵습니다\n문의사항은 admin에게 문의 바랍니다`)
+			return;
+		} else if (receiveUserid.value === sessionStorage.getItem('userid')) {
+			alert('자기 자신에게 메세지를 보낼 수 없습니다')
+		}
+		if (receiveMessage.value === null || receiveMessage.value === '') {
+			alert('빈 메세지는 전송 할 수 없습니다')
+			return;
+		}
+		newMessageSending(sessionStorage.getItem('userid'), receiveUserid.value, receiveMessage.value)
+			.then(data => {
+				if (data === 'true') {
+					alert(`정상적으로 ${receiveUserid.value}님에게 메세지를 전송하였습니다`)
+					receiveUserid.value = '';
+					receiveMessage.value = '';
+				} else if (data === 'false') {
+					alert(`요청하신 메세지 전송을 실패하였습니다\n아이디를 다시 확인해주세요`)
+				}
+			})
+	})
+}
+
+
+async function mySendMessageWithdraw(withdrawMessageData) {
+	const response = await fetch('/message', {
 		method: 'DELETE',
 		headers: {
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify(withdrawMessageData)
-	})
-		.then(response => { return response.text() })
+	});
+	return await response.text();
 }
 
 
-function myReceiveMessage(userid) {
-	return fetch('/message', {
+async function myReceiveMessage(userid) {
+	const response = await fetch('/message', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -208,13 +335,13 @@ function myReceiveMessage(userid) {
 		body: JSON.stringify({
 			userid: userid
 		})
-	})
-		.then(response => { return response.json() })
+	});
+	return await response.json();
 }
 
 
-function mySendMessage(userid) {
-	return fetch('/message/send', {
+async function mySendMessage(userid) {
+	const response = await fetch('/message/send', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -222,10 +349,8 @@ function mySendMessage(userid) {
 		body: JSON.stringify({
 			"userid": userid
 		})
-	})
-		.then(response => {
-			return response.json()
-		})
+	});
+	return await response.json();
 }
 
 var messageTableList = [];
@@ -252,23 +377,28 @@ function receiveMessageBox() {
 
 	const th1 = document.createElement('th');
 	th1.className = 'table-col-1 receiveMessageTable1';
-	th1.textContent = '번호';
+	th1.textContent = '선택';
 	tr.appendChild(th1);
 
 	const th2 = document.createElement('th');
 	th2.className = 'table-col-2 receiveMessageTable2';
-	th2.textContent = '보낸 유저';
+	th2.textContent = '번호';
 	tr.appendChild(th2);
 
 	const th3 = document.createElement('th');
 	th3.className = 'table-col-3 receiveMessageTable3';
-	th3.textContent = '내용';
+	th3.textContent = '보낸 유저';
 	tr.appendChild(th3);
 
 	const th4 = document.createElement('th');
 	th4.className = 'table-col-4 receiveMessageTable4';
-	th4.textContent = '전송일자';
+	th4.textContent = '내용';
 	tr.appendChild(th4);
+
+	const th5 = document.createElement('th');
+	th5.className = 'table-col-5 receiveMessageTable5';
+	th5.textContent = '전송일자';
+	tr.appendChild(th5);
 
 	const tbody = document.createElement('tbody');
 	tbody.id = 'recive_dyn_tbody';
@@ -296,6 +426,7 @@ function receiveTableInsert(data) {
 	messageTableList = [];
 	for (var i = 0; i < data.length; i++) {
 		var jsonObject = {
+			"mess_no": data[i].mess_no,
 			"messageIdx": i + 1,
 			"mess_from": data[i].mess_from,
 			"mess_contents": data[i].mess_contents,
@@ -385,13 +516,15 @@ function receiveNewPage(pageCurrent) {
 				return;
 			}
 			var receiveMessageData = JSON.parse(JSON.stringify(messageTableList[i]));
-			var mess_no = receiveMessageData.messageIdx;
+			var mess_no = receiveMessageData.mess_no;
+			var messageIdx = receiveMessageData.messageIdx;
 			var mess_from = receiveMessageData.mess_from;
 			var mess_contents = receiveMessageData.mess_contents;
 			var mess_date = receiveMessageData.mess_date;
 			var insertTr = "";
 			insertTr += "<tr>";
-			insertTr += `<td>${mess_no}</td>`;
+			insertTr += `<td><input class="receiveMessageNumber" type="checkbox" value="${mess_no}"></td>`;
+			insertTr += `<td>${messageIdx}</td>`;
 			insertTr += `<td>${mess_from}</td>`;
 			insertTr += `<td>${mess_contents}</td>`;
 			insertTr += `<td>${mess_date}</td>`;
@@ -404,7 +537,7 @@ function receiveNewPage(pageCurrent) {
 			function handleTdClick(event) {
 				let clickedTd = event.target;
 				let tdIndex = Array.from(clickedTd.parentElement.children).indexOf(clickedTd);
-				if (tdIndex === 1) {
+				if (tdIndex === 2) {
 					let tdValue = clickedTd.innerText;
 					let inputElement = document.getElementById('receive_userid');
 					inputElement.value = tdValue;
@@ -634,8 +767,8 @@ function sendNewPage(pageCurrent) {
 };
 
 
-function newMessageSending(sendUserid, receiveUserid, sendMessage) {
-	return fetch('/message/send.do', {
+async function newMessageSending(sendUserid, receiveUserid, sendMessage) {
+	const response = await fetch('/message/send.do', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -645,6 +778,6 @@ function newMessageSending(sendUserid, receiveUserid, sendMessage) {
 			"receiveUserid": receiveUserid,
 			"sendMessage": sendMessage
 		})
-	})
-		.then(response => { return response.text() })
+	});
+	return await response.text();
 }

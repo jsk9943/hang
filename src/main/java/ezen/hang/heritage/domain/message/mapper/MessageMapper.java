@@ -26,12 +26,20 @@ public interface MessageMapper {
 	
 	void newSendMessage(Message newMessage);
 	
-	int withdrawMessageCheck(String mess_no);
+	int messageCountCheck(String mess_no);
 	
 	String withdrawBeforeReadCheck(String mess_no);
 	
 	void withdrawMessage(Map<String, Object> withdrawMessageData);
 	
 	void withdrawMessageStateChange(Map<String, Object> withdrawMessageData);
+	
+	void singleReceiveMessageDelete(String mess_no);
+	
+	void deleteRemainingReceiveMessages(Map<String, Object> receiveDeleteData);
 
+	void singleSendMessageDelete(String mess_no);
+	
+	void deleteRemainingSendMessages(Map<String, Object> sendDeleteData);
+	
 }

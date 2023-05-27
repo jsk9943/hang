@@ -63,7 +63,7 @@
 	</insert>
 	
 	<!-- 메세지 회수 전 현재 메세지 회수 또는 삭제인지 상태 확인 -->
-	<select id="withdrawMessageCheck" parameterType="string" resultType="int">
+	<select id="messageCountCheck" parameterType="string" resultType="int">
 		SELECT COUNT(*)
 		FROM MESSAGE
 		WHERE mess_no = #{mess_no};
@@ -90,5 +90,32 @@
 		WHERE mess_no = #{mess_no} AND mess_state = 'send';
 	</update>
 	
+	<!-- 받은쪽지함 삭제처리 -->
+	<!-- send, receive 두개 다 존재 할 경우 -->
+	<delete id="singleReceiveMessageDelete" parameterType="string">
+		DELETE FROM MESSAGE
+		WHERE mess_no = #{mess_no} AND mess_state = 'receive';
+	</delete>
+	<!-- receive에만 존재할 경우 -->
+	<delete id="deleteRemainingReceiveMessages" parameterType="map">
+		DELETE M, MC
+		FROM MESSAGE M
+		JOIN MESSAGE_CONTENTS MC ON M.mess_no = MC.mess_no
+		WHERE M.mess_no = #{mess_no} AND M.mess_state = 'receive' AND MC.mess_from = #{mess_from};
+	</delete>
+	
+	<!-- 보낸쪽지함 삭제처리 -->
+	<!-- send, receive 두개 다 존재 할 경우 -->
+	<delete id="singleSendMessageDelete" parameterType="string">
+		DELETE FROM MESSAGE
+		WHERE mess_no = #{mess_no} AND mess_state = 'send';
+	</delete>
+	<!-- send에만 존재할 경우 -->
+	<delete id="deleteRemainingSendMessages" parameterType="map">
+		DELETE M, MC
+		FROM MESSAGE M
+		JOIN MESSAGE_CONTENTS MC ON M.mess_no = MC.mess_no
+		WHERE M.mess_no = #{mess_no} AND M.mess_state = 'send' AND MC.mess_to = #{mess_to};
+	</delete>
 	
 </mapper>

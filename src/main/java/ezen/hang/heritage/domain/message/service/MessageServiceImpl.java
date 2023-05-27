@@ -57,20 +57,46 @@ public class MessageServiceImpl implements MessageService {
 	public String withdrawMessage(Map<String, Object> withdrawMessageData) throws Exception {
 		String result = "true";
 		for (int i = 0; i < withdrawMessageData.size(); i++) {
-			int mess_no = messageMapper.withdrawMessageCheck(withdrawMessageData.get("mess_no").toString());
-			if(mess_no == 2) {
+			int count = messageMapper.messageCountCheck(withdrawMessageData.get("mess_no").toString());
+			if(count == 2) {
 				if(messageMapper.withdrawBeforeReadCheck(withdrawMessageData.get("mess_no").toString()).equals("N")) {
 					messageMapper.withdrawMessage(withdrawMessageData);
 					messageMapper.withdrawMessageStateChange(withdrawMessageData);
 				} else if(messageMapper.withdrawBeforeReadCheck(withdrawMessageData.get("mess_no").toString()).equals("Y")) {
 					result = "mess_no ALREADY READ";
 				}
-			} else if(mess_no == 1) {
+			} else if(count == 1) {
 				result = "mess_no NOT ENOUGH";
-			} else if(mess_no == 0) {
+			} else if(count == 0) {
 				result = "mess_no NOT EXIST";
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public void receiveMessageDelete(List<Map<String, Object>> receiveDeleteData) throws Exception {
+		for (Map<String, Object> map : receiveDeleteData) {
+			String mess_no = map.get("mess_no").toString();
+			int count = messageMapper.messageCountCheck(map.get("mess_no").toString());
+			if(count == 2) {
+				messageMapper.singleReceiveMessageDelete(mess_no);
+			} else if (count == 1) {
+				messageMapper.deleteRemainingReceiveMessages(map);
+			}
+		}
+	}
+
+	@Override
+	public void sendMessageDelete(List<Map<String, Object>> sendDeleteData) throws Exception {
+		for (Map<String, Object> map : sendDeleteData) {
+			String mess_no = map.get("mess_no").toString();
+			int count = messageMapper.messageCountCheck(map.get("mess_no").toString());
+			if(count == 2) {
+				messageMapper.singleSendMessageDelete(mess_no);
+			} else if (count == 1) {
+				messageMapper.deleteRemainingSendMessages(map);
+			}
+		}
 	}
 }
