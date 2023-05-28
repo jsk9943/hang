@@ -591,7 +591,7 @@ function sendMessageBox() {
 
 	const th6 = document.createElement('th');
 	th6.className = 'table-col-6 sendMessageTable6';
-	th6.textContent = '확인';
+	th6.textContent = '읽음';
 	tr.appendChild(th6);
 
 	const th7 = document.createElement('th');

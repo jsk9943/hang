@@ -118,7 +118,7 @@ if (toastDeleteButton !== null) {
 						alert('정상적으로 삭제되었습니다');
 						document.querySelector('#toastCloseButton').click();
 						location.reload();
-					} else {
+					} else if (data === 'false') {
 						alert(`삭제가 실패하였습니다\n이미 삭제되었을 수 있습니다`);
 					}
 				})

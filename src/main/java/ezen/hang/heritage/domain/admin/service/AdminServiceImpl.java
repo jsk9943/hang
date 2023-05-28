@@ -2,7 +2,6 @@ package ezen.hang.heritage.domain.admin.service;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -50,17 +49,15 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public void checkCommentDelete(List<Map<String, Object>> deleteCommentList) throws Exception {
-		List<String> filenamesToDelete = new ArrayList<>();
 		for (Map<String, Object> map : deleteCommentList) {
 			String adminid = map.get("adminid").toString();
 			String filename = map.get("filename").toString();
 			if (adminMapper.adminIdConfirm(adminid).equals("Y")) {
 				adminMapper.checkCommentDelete(map);
-				filenamesToDelete.add(filename);
+				if(!filename.equals("undefined")) {
+					deleteImage(filename);
+				}
 			}
-		}
-		for (String filenames : filenamesToDelete) {
-			deleteImage(filenames);
 		}
 	}
 	
@@ -68,6 +65,7 @@ public class AdminServiceImpl implements AdminService {
 	public void deleteImage(String filename) throws Exception {
 		String filePath = "/userfile/" + filename;
 		File fileToDelete = new File(filePath);
+		System.out.println(fileToDelete);
 		if (fileToDelete.exists()) {
 			fileToDelete.delete();
 		} else {

@@ -41,11 +41,10 @@ burger.addEventListener('click', function(e) {
 	this.classList.toggle('active-' + (7));
 });
 
-
 let offcanvasCloseButton = document.querySelector('.offcanvasCloseButton');
 if (offcanvasCloseButton !== null) {
 	offcanvasCloseButton.addEventListener('click', () => {
-		burger.click();
+		burger.classList.toggle('active-' + (7));
 	})
 }
 
