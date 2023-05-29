@@ -50,80 +50,66 @@ function generateRandomKey() {
 }
 
 // 방문자 수 체크
-function checkVisitorCount() {
+async function checkVisitorCount() {
 	let todayOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
 	let today = new Date().toLocaleDateString('ko-KR', todayOptions).replaceAll('.', '-').trim();
 	today = today.replace(/-$/, '');
 	let todayData = {
 		"day": today.replace(/\s/g, "")
 	};
-	if (getCookie("visitorKey") === null) {
-		visitorCountFetch(todayData)
-			.then(data => {
-				let todayData2 = {
-					"day": data.visit_date
-				}
-				plusVisitorCountFetch(todayData2)
-					.then(data2 => {
-						if (data2 === 'true') {
-							setCookie("visitorKey", generateRandomKey(), 1);
-							visitorCountFetch(todayData)
-								.then(data3 => {
-									let visitor_count = data3.visitor_count;
-									let visitor_totalcount = data3.visitor_totalcount;
-									document.querySelector('#total_visitor').innerHTML = visitor_totalcount;
-									document.querySelector('#today_visitor').innerHTML = visitor_count;
-								})
-						} else if (data2 === 'false') {
-							alert(`신규 방문자 데이터를 추가하는데 실패하였습니다\n${data2}`);
-						}
-					})
-					.catch(error => {
-						alert(`방문자 통계 데이터를 불러오는데 실패하였습니다\n${error}`);
-					})
-			})
-			.catch(error => {
-				alert(`방문자 통계 데이터를 불러오는데 실패하였습니다\n${error}`);
-			})
-	} else if (getCookie("visitorKey") !== null) {
-		visitorCountFetch(todayData)
-			.then(data => {
-				let visitor_count = data.visitor_count;
-				let visitor_totalcount = data.visitor_totalcount;
+	try {
+		if (getCookie("visitorKey") === null) {
+			let data = await visitorCountFetch(todayData)
+
+			let todayData2 = {
+				"day": data.visit_date
+			}
+			let data2 = await plusVisitorCountFetch(todayData2)
+			if (data2 === 'true') {
+				setCookie("visitorKey", generateRandomKey(), 1);
+				let data3 = await visitorCountFetch(todayData)
+				let visitor_count = data3.visitor_count;
+				let visitor_totalcount = data3.visitor_totalcount;
 				document.querySelector('#total_visitor').innerHTML = visitor_totalcount;
 				document.querySelector('#today_visitor').innerHTML = visitor_count;
-			})
-			.catch(error => {
-				alert(`방문자 통계 데이터를 불러오는데 실패하였습니다\n${error}`);
-			})
+			} else if (data2 === 'false') {
+				alert(`신규 방문자 데이터를 추가하는데 실패하였습니다\n${data2}`);
+			}
+
+		} else if (getCookie("visitorKey") !== null) {
+			let data = await visitorCountFetch(todayData)
+			let visitor_count = data.visitor_count;
+			let visitor_totalcount = data.visitor_totalcount;
+			document.querySelector('#total_visitor').innerHTML = visitor_totalcount;
+			document.querySelector('#today_visitor').innerHTML = visitor_count;
+
+		}
+	} catch (error) {
+		alert(`방문자 통계 데이터를 불러오는데 실패하였습니다\n${error}`);
 	}
 }
 // 당일 첫 방문자 일 경우 방문자수 늘려서 가져오는 fetch 통신
-function plusVisitorCountFetch(todayData) {
-	return fetch(`/visitor/update`, {
+async function plusVisitorCountFetch(todayData) {
+	const response = await fetch(`/visitor/update`, {
 		method: 'PATCH',
 		headers: {
 			"Content-Type": "application/json"
 		},
 		body: JSON.stringify(todayData)
 	})
-		.then(response => {
-			return response.text();
-		})
+	return await response.text()
 }
 
 // 기방문자 일 경우 방문자수 가져오는 fetch 통신
-function visitorCountFetch(todayData) {
-	return fetch(`/visitor`, {
+async function visitorCountFetch(todayData) {
+	const response = await fetch(`/visitor`, {
 		method: 'POST',
 		headers: {
 			"Content-Type": "application/json"
 		},
 		body: JSON.stringify(todayData)
 	})
-		.then(response => {
-			return response.json()
-		})
+	return await response.json()
 }
 
 // 페이지 로드 시 방문자 수 체크
