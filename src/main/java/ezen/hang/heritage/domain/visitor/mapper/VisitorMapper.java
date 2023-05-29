@@ -7,9 +7,9 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface VisitorMapper {
 	
-	public Map<String, Object> dayVisitorExiste(Map<String, Object> todayVisitorData);
+	public Map<String, Object> dayVisitorExiste(Map<String, Object> todayData);
 	
-	public int insertTodayVisitorCount(String totalVisitorCount);
+	public int insertTodayVisitorCount(String visitor_totalcount);
 	
-	public void updateTodayVisitorCount(Map<String, Object> updateVisitorCountData);
+	public void updateTodayVisitorCount(Map<String, Object> todayData);
 }

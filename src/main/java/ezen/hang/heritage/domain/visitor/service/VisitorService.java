@@ -7,8 +7,8 @@ import java.util.Map;
  */
 public interface VisitorService {
 	
-	public Map<String, Object> dayVisitorExiste(Map<String, Object> todayVisitorData) throws Exception;
+	public Map<String, Object> dayVisitorExiste(Map<String, Object> todayData) throws Exception;
 	
-	public void updateTodayVisitorCount(Map<String, Object> visitorCountData) throws Exception;
+	public Map<String, Object> updateTodayVisitorCount(Map<String, Object> todayData) throws Exception;
 	
 }

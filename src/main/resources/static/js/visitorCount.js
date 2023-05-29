@@ -60,19 +60,17 @@ async function checkVisitorCount() {
 	try {
 		if (getCookie("visitorKey") === null) {
 			let data = await visitorCountFetch(todayData)
-
 			let todayData2 = {
 				"day": data.visit_date
 			}
 			let data2 = await plusVisitorCountFetch(todayData2)
-			if (data2 === 'true') {
-				setCookie("visitorKey", generateRandomKey(), 1);
-				let data3 = await visitorCountFetch(todayData)
-				let visitor_count = data3.visitor_count;
-				let visitor_totalcount = data3.visitor_totalcount;
+			if (data2 !== null || data2 !== undefined) {
+				let visitor_count = data2.visitor_count;
+				let visitor_totalcount = data2.visitor_totalcount;
 				document.querySelector('#total_visitor').innerHTML = visitor_totalcount;
 				document.querySelector('#today_visitor').innerHTML = visitor_count;
-			} else if (data2 === 'false') {
+				setCookie("visitorKey", generateRandomKey(), 1);
+			} else if (data2 === null || data2 === undefined) {
 				alert(`신규 방문자 데이터를 추가하는데 실패하였습니다\n${data2}`);
 			}
 
@@ -90,7 +88,7 @@ async function checkVisitorCount() {
 }
 // 당일 첫 방문자 일 경우 방문자수 늘려서 가져오는 fetch 통신
 async function plusVisitorCountFetch(todayData) {
-	const response = await fetch(`/visitor/update`, {
+	const response = await fetch(`/visitor`, {
 		method: 'PATCH',
 		headers: {
 			"Content-Type": "application/json"

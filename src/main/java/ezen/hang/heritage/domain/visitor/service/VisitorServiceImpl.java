@@ -19,8 +19,8 @@ public class VisitorServiceImpl implements VisitorService{
 	private VisitorMapper visitorMapper;
 	
 	@Override
-	public Map<String, Object> dayVisitorExiste(Map<String, Object> todayVisitorData) throws Exception {
-		Map<String, Object> returnVisitorData = visitorMapper.dayVisitorExiste(todayVisitorData);
+	public Map<String, Object> dayVisitorExiste(Map<String, Object> todayData) throws Exception {
+		Map<String, Object> returnVisitorData = visitorMapper.dayVisitorExiste(todayData);
 		if(returnVisitorData == null) {
 			Map<String, Object> yesterdayMap = new HashMap<>();
 			Calendar calendar = Calendar.getInstance();
@@ -28,10 +28,10 @@ public class VisitorServiceImpl implements VisitorService{
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			String yesterday = dateFormat.format(calendar.getTime());
 			yesterdayMap.put("day", yesterday);
-			int newTotalCount = Integer.parseInt(visitorMapper.dayVisitorExiste(yesterdayMap).get("visitor_totalcount").toString());
-			visitorMapper.insertTodayVisitorCount(String.valueOf(newTotalCount));
+			int visitor_totalcount = Integer.parseInt(visitorMapper.dayVisitorExiste(yesterdayMap).get("visitor_totalcount").toString());
+			visitorMapper.insertTodayVisitorCount(String.valueOf(visitor_totalcount));
 			Map<String, Object> map = new HashMap<>();
-	        map = visitorMapper.dayVisitorExiste(todayVisitorData);
+	        map = visitorMapper.dayVisitorExiste(todayData);
 	        returnVisitorData = new HashMap<>();
 	        returnVisitorData.putAll(map);
 		}
@@ -39,7 +39,7 @@ public class VisitorServiceImpl implements VisitorService{
 	}
 
 	@Override
-	public void updateTodayVisitorCount(Map<String, Object> todayData) throws Exception {
+	public Map<String, Object> updateTodayVisitorCount(Map<String, Object> todayData) throws Exception {
 		Map<String, Object> updateVisitorCountData = new HashMap<>();
 		int visitor_count = Integer.parseInt(dayVisitorExiste(todayData).get("visitor_count").toString());
 		int visitor_totalcount = Integer.parseInt(dayVisitorExiste(todayData).get("visitor_totalcount").toString());
@@ -48,6 +48,8 @@ public class VisitorServiceImpl implements VisitorService{
 		updateVisitorCountData.put("visitor_count", visitor_count + 1);
 		updateVisitorCountData.put("visitor_totalcount", visitor_totalcount + 1);
 		visitorMapper.updateTodayVisitorCount(updateVisitorCountData);
+		Map<String, Object> returnVisitorData = visitorMapper.dayVisitorExiste(todayData);
+		return returnVisitorData;
 	}
 	
 }
