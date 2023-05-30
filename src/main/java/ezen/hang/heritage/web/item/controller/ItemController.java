@@ -3,7 +3,6 @@ package ezen.hang.heritage.web.item.controller;
 import java.util.List;
 import java.util.Map;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
@@ -63,15 +62,16 @@ public class ItemController {
 	@PostMapping("/input")
 	public String createCommentStarRate(@RequestParam("inputData") String inputDataString,
 			@RequestParam(value = "file", required = false) MultipartFile file) {
-		String result = "DENIED";
+		String result = null;
 		try {
 			Map<String, Object> inputData = new ObjectMapper().readValue(inputDataString,
 					new TypeReference<Map<String, Object>>() {
 					});
 			itemService.createCommentStarRate(inputData, file);
 			result = "true";
+		} catch (NullPointerException ne) {
+			result = "DENIED";
 		} catch (Exception e) {
-			e.printStackTrace();
 			result = "false";
 		}
 		return result;
@@ -99,12 +99,13 @@ public class ItemController {
 		}
 		return result;
 	}
-	
+
 	@GetMapping("/image")
 	public ResponseEntity<ByteArrayResource> getImage(@RequestParam("filename") String filename) {
 		try {
 			return itemService.getImage(filename);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+		}
 		return null;
 	}
 }

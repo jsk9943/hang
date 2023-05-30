@@ -38,19 +38,29 @@ public interface AdminMapper {
 	/**
 	 * 유저를 강제 탈퇴시킬 수 있는 기능
 	 */
-	public List<Map<String, Object>> allUserForcedWithdrawal();
+	List<Map<String, Object>> allUserForcedWithdrawal();
 
-	public List<Map<String, Object>> keywordUserForcedWithdrawalFind(Map<String, Object> keyword);
+	List<Map<String, Object>> keywordUserForcedWithdrawalFind(Map<String, Object> keyword);
 	
-	public void userWithdrawalHERITAGEREVIEW(Map<String, Object> useridData);
+	void userWithdrawalHERITAGEREVIEW(Map<String, Object> useridData);
 	
-	public void userWithdrawalRATE(Map<String, Object> useridData);
+	void userWithdrawalRATE(Map<String, Object> useridData);
 	
-	public void userWithdrawalBOOKMARK(Map<String, Object> useridData);
+	void userWithdrawalBOOKMARK(Map<String, Object> useridData);
 	
-	public void userWithdrawalPROFILEIMAGE(Map<String, Object> useridData);
+	void userWithdrawalPROFILEIMAGE(Map<String, Object> useridData);
 
-	public void userWithdrawalAUTHORITY(Map<String, Object> useridData);
+	void userWithdrawalAUTHORITY(Map<String, Object> useridData);
 	
-	public void userWithdrawalMEMBER(Map<String, Object> useridData);
+	List<Map<String, Object>> remainingMessageNumberState(Map<String, Object> useridData);
+	
+	void deleteReceiveMessage(int mess_no);
+	
+	void deleteSendMessage(int mess_no);
+	
+	int remainingMessageCount(int mess_no);
+	
+	void deleteMessageContents(int mess_no);
+	
+	void userWithdrawalMEMBER(Map<String, Object> useridData);
 }

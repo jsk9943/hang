@@ -120,7 +120,7 @@ public class ItemServiceImpl implements ItemService {
 				itemMapper.starRatingCreate(commentStarRate);
 			}
 		} else {
-			throw new Exception();
+			throw new NullPointerException();
 		}
 	}
 

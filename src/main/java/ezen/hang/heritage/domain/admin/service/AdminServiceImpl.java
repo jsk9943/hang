@@ -54,13 +54,13 @@ public class AdminServiceImpl implements AdminService {
 			String filename = map.get("filename").toString();
 			if (adminMapper.adminIdConfirm(adminid).equals("Y")) {
 				adminMapper.checkCommentDelete(map);
-				if(!filename.equals("undefined")) {
+				if (!filename.equals("undefined")) {
 					deleteImage(filename);
 				}
 			}
 		}
 	}
-	
+
 	@Override
 	public void deleteImage(String filename) throws Exception {
 		String filePath = "/userfile/" + filename;
@@ -124,7 +124,7 @@ public class AdminServiceImpl implements AdminService {
 		}
 		return data;
 	}
-	
+
 	@Override
 	public List<Map<String, Object>> keywordUserForcedWithdrawalFind(Map<String, Object> keyword) {
 		List<Map<String, Object>> data = null;
@@ -136,7 +136,7 @@ public class AdminServiceImpl implements AdminService {
 		}
 		return data;
 	}
-	
+
 	@Override
 	public void deleteUserForcedWithdrawal(Map<String, Object> useridData) throws Exception {
 		String adminid = useridData.get("adminid").toString();
@@ -149,6 +149,22 @@ public class AdminServiceImpl implements AdminService {
 			adminMapper.userWithdrawalBOOKMARK(useridData);
 			adminMapper.userWithdrawalPROFILEIMAGE(useridData);
 			adminMapper.userWithdrawalAUTHORITY(useridData);
+			while (adminMapper.remainingMessageNumberState(useridData).size() != 0) {
+				for (Map<String, Object> map : adminMapper.remainingMessageNumberState(useridData)) {
+					int mess_no = Integer.parseInt(map.get("mess_no").toString());
+					String mess_state = map.get("mess_state").toString();
+					if (mess_state.equals("receive")) {
+						adminMapper.deleteReceiveMessage(mess_no);
+					}
+					if (mess_state.equals("send")) {
+						adminMapper.deleteSendMessage(mess_no);
+					}
+					int messageCount = adminMapper.remainingMessageCount(mess_no);
+					if (messageCount == 0) {
+						adminMapper.deleteMessageContents(mess_no);
+					}
+				}
+			}
 			adminMapper.userWithdrawalMEMBER(useridData);
 		}
 	}

@@ -464,11 +464,7 @@ export function detailContentLoad(data) {
 								return;
 							}
 						}
-						if (files.length > 0) {
-							commentStaRateCreate(sessionStorage.getItem("userid"), heritageCcbaKdcd, heritageCcbaAsno, heritageCcbaCtcd, heritageCcbaMnm1, commentInputResult, starPointInputResult, files[0]);
-						} else {
-							commentStaRateCreate(sessionStorage.getItem("userid"), heritageCcbaKdcd, heritageCcbaAsno, heritageCcbaCtcd, heritageCcbaMnm1, commentInputResult, starPointInputResult, null);
-						}
+						commentStaRateCreate(sessionStorage.getItem("userid"), heritageCcbaKdcd, heritageCcbaAsno, heritageCcbaCtcd, heritageCcbaMnm1, commentInputResult, starPointInputResult, files.length > 0 ? files[0] : null);
 						markerClose();
 						// 별점 등록창 종료 시 검색결과 창 다시 보여주기
 						commentCreateCloseButton.click();

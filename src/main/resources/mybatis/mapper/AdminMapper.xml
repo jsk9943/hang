@@ -135,6 +135,50 @@
 		WHERE USERID = #{userid};
    </delete>
    
+   <!-- 
+   <select id="remainingMessageNumber" parameterType="map" resultType="int">
+	    SELECT COUNT(*)
+		FROM MESSAGE
+		WHERE mess_to = #{userid} OR mess_from = #{userid};
+   </select>
+    -->
+   
+   
+   <select id="remainingMessageNumberState" parameterType="map" resultType="map">
+	    SELECT mess_no, mess_state
+		FROM MESSAGE
+		WHERE mess_to = #{userid} OR mess_from = #{userid};
+   </select>
+   
+   <delete id="deleteReceiveMessage" parameterType="int">
+	    DELETE FROM MESSAGE
+		WHERE mess_no = #{mess_no} AND mess_state = 'receive';
+   </delete>
+   
+   
+   <delete id="deleteSendMessage" parameterType="int">
+	    DELETE FROM MESSAGE
+		WHERE mess_no = #{mess_no} AND mess_state = 'send';
+   </delete>
+   
+   <select id="remainingMessageCount" parameterType="int" resultType="int">
+	    SELECT COUNT(*) 
+		FROM MESSAGE
+		WHERE mess_no = #{mess_no};
+   </select>
+
+   <delete id="deleteMessageContents" parameterType="int">
+	    DELETE FROM MESSAGE_CONTENTS
+		WHERE mess_no = #{mess_no};
+   </delete>
+   
+   
+   
+   
+   
+   
+   
+   
    <delete id="userWithdrawalMEMBER" parameterType="map">
 		DELETE 
 		FROM MEMBER 
