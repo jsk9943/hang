@@ -41,6 +41,8 @@ public class VisitorServiceImpl implements VisitorService{
 						minusDay--;
 					}
 				}
+			} else if (visitorMapper.dayVisitorExiste(yesterdayMap) != null) {
+				visitor_totalcount = Integer.parseInt(visitorMapper.dayVisitorExiste(yesterdayMap).get("visitor_totalcount").toString());
 			}
 			visitorMapper.insertTodayVisitorCount(String.valueOf(visitor_totalcount));
 			Map<String, Object> map = new HashMap<>();
