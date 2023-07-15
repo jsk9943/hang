@@ -30,17 +30,8 @@ public class VisitorServiceImpl implements VisitorService{
 			yesterdayMap.put("day", yesterday);
 			int visitor_totalcount = 0;
 			if(visitorMapper.dayVisitorExiste(yesterdayMap) == null) {
-				int minusDay = -1;
-				while(visitor_totalcount == 0) {
-					calendar.add(Calendar.DAY_OF_YEAR, minusDay);
-					yesterday = dateFormat.format(calendar.getTime());
-					yesterdayMap.put("day", yesterday);
-					try {
-						visitor_totalcount = Integer.parseInt(visitorMapper.dayVisitorExiste(yesterdayMap).get("visitor_totalcount").toString());						
-					} catch (Exception e) {
-						minusDay--;
-					}
-				}
+				Map<String, Object> data = visitorMapper.latestDateData();
+				visitor_totalcount = Integer.parseInt(data.get("visitor_totalcount").toString());
 			} else if (visitorMapper.dayVisitorExiste(yesterdayMap) != null) {
 				visitor_totalcount = Integer.parseInt(visitorMapper.dayVisitorExiste(yesterdayMap).get("visitor_totalcount").toString());
 			}

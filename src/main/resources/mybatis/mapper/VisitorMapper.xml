@@ -9,6 +9,13 @@
         WHERE visit_date = #{day};
 	</select>
 	
+	<select id="latestDateData" resultType="map">
+		SELECT *
+		FROM VISITORCOUNT 
+		ORDER BY visit_date DESC
+		LIMIT 1;
+	</select>
+	
 	<insert id="insertTodayVisitorCount" parameterType="string">
 	    INSERT INTO VISITORCOUNT (visit_date, visitor_count, visitor_totalcount)
 	    VALUES (NOW(), 0, #{visitor_totalcount})

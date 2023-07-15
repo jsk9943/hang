@@ -9,6 +9,8 @@ public interface VisitorMapper {
 	
 	public Map<String, Object> dayVisitorExiste(Map<String, Object> todayData);
 	
+	public Map<String,Object> latestDateData();
+	
 	public int insertTodayVisitorCount(String visitor_totalcount);
 	
 	public void updateTodayVisitorCount(Map<String, Object> todayData);
