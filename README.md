@@ -12,6 +12,7 @@
 
 > 카카오Dev에 제공되는 MAP API를 통해 베이스 화면 구성
 >> 클라이언트 브라우저는 bootstrap으로 구현
+>> 
 >> 클라이언트에서 화면처리를 높이기 위해 javascript 코드로 DOM 및 fetch 비동기화 구현
 >> Server는 개인용 NAS로 docker를 활용 java11 springboot 실행
 > DB는 mariaDB 10(NAS 구축)로 구동되며 SQL 역시 mariaDB 기준
