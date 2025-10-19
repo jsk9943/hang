@@ -1,6 +1,4 @@
-<div style="font-size:1.5em; color:red; font-weight:bold">↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓  Click!!  ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓</div>
 
-# [ Hang 구현 사이트 ](http://kjnas7486.synology.me)
   
 
 1. 문화재(Heritage)를 카카오 지도를 통해 위치 탐색 및 리뷰 작성
